@@ -7,7 +7,7 @@
     <title>Iterative Algorithms</title>
 </head>
 
-<body onload="loaded()">
+<body>
     <div class="container">
         <h1>Iterative Algorithms</h1>
         <h2>Logan H</h2>
@@ -86,15 +86,110 @@
     <div class="container">
         <h2>Merging (Array A+B)</h2>
         <p>
-            <button onclick="concatGo()">Concatenating Merge</button>
-            <button onclick="interGo()">Interweaving Merge</button>
+            <button onclick="concatMergeButton()">Concatenating Merge</button>
+            <button onclick="interweavingMergeButton()">Interweaving Merge</button>
         </p>
         <h3>Concatenating Results</h3>
-        <div id="concat">Content for id "concat" Goes Here</div>
+        <textarea id="concat" disabled></textarea>
         <h3>Interweaving Results</h3>
-        <div id="inter">Content for id "inter" Goes Here</div>
+        <textarea id="inter" disabled>Content for id "inter" Goes Here</textarea>
     </div>
     <script type="text/javascript" src="script.js"></script>
+    <script>
+        ///// Button Functions /////
+
+        /**
+         * Randomises arrays a and b and displays it
+         */
+        function newArrays() {
+            var arrayASize = parseInt(getElement('arrayASize').value);
+            var arrayAMin = parseInt(getElement('arrayAMin').value);
+            var arrayAMax = parseInt(getElement('arrayAMax').value);
+            arrA = createRandomArray(arrayASize, arrayAMin, arrayAMax);
+
+            var arrayBSize = parseInt(getElement('arrayBSize').value);
+            var arrayBMin = parseInt(getElement('arrayBMin').value);
+            var arrayBMax = parseInt(getElement('arrayBMax').value);
+            arrB = createRandomArray(arrayBSize, arrayBMin, arrayBMax);
+
+            displayArray(arrA, "originalA");
+            displayArray(arrB, "originalB");
+        }
+
+        /**
+         * Linear searches for a value in array a.
+         */
+        function linearSearchButton() {
+            var value = parseInt(getElement("searchInputField").value)
+            var result = linearSearch(arrA, value)
+            if (result == -1) {
+                alert("Value not found in array")
+            } else {
+                alert("Value found at index: " + result)
+            }
+        }
+
+        /**
+         * Binary searches for a value in array a.
+         */
+        function binarySearchButton() {
+            var value = parseInt(getElement("searchInputField").value)
+            var result = binarySearch(arrA, value)
+            if (result == -1) {
+                alert("Value not found in array")
+            } else {
+                alert("Value found at index: " + result)
+            }
+        }
+
+        /**
+         * Preforms a bubble sort on array a an displays the sorted array
+         */
+        function bubbleSortButton() {
+            var startTime = performance.now()
+            var sorted = bubbleSort(arrA)
+            var endTime = performance.now()
+            getElement('bubbleTime').innerText = (endTime - startTime).toFixed(1)
+            displayArray(sorted, "bubble")
+        }
+
+        /**
+         * Preforms an insertion sort on array a an displays the sorted array
+         */
+        function insertionSortButton() {
+            var startTime = performance.now()
+            var sorted = insertionSort(arrA)
+            var endTime = performance.now()
+            getElement('insertionTime').innerText = (endTime - startTime).toFixed(1)
+            displayArray(sorted, "insertion")
+        }
+        /**
+         * Preforms a selection sort on array a an displays the sorted array
+         */
+        function selectionSortButton() {
+            var startTime = performance.now()
+            var sorted = selectionSort(arrA)
+            var endTime = performance.now()
+            getElement('selectionTime').innerText = (endTime - startTime).toFixed(1)
+            displayArray(sorted, "selection")
+        }
+        /**
+         * Preforms an quick sort on array a an displays the sorted array
+         */
+        function quickSortButton() {
+            getElement('quick').innerText = "Can't do yet"
+            getElement('quickTime').innerText = "Infinity"
+            console.error('your mother')
+        }
+
+        function concatMergeButton() {
+            displayArray(concatMerge(arrA, arrB), 'concat')
+        }
+
+        function interweavingMergeButton() {
+            displayArray(interweavingMerge(arrA, arrB), 'inter')
+        }
+    </script>
 </body>
 
 </html>

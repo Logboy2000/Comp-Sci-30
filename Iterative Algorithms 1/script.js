@@ -3,101 +3,6 @@
 var arrA = new Array()
 var arrB = new Array()
 
-/**
- * This function is called automatically when the page body is loaded.
- */
-function loaded() {
-    console.log('loaded!')
-}// end of loaded
-
-/**
- * Randomises arrays a and b and displays it
- */
-function newArrays() {
-    var arrayASize = parseInt(getElement('arrayASize').value);
-    var arrayAMin = parseInt(getElement('arrayAMin').value);
-    var arrayAMax = parseInt(getElement('arrayAMax').value);
-    arrA = createRandomArray(arrayASize, arrayAMin, arrayAMax);
-
-    var arrayBSize = parseInt(getElement('arrayBSize').value);
-    var arrayBMin = parseInt(getElement('arrayBMin').value);
-    var arrayBMax = parseInt(getElement('arrayBMax').value);
-    arrB = createRandomArray(arrayBSize, arrayBMin, arrayBMax);
-
-    displayArray(arrA, "originalA");
-    displayArray(arrB, "originalB");
-}
-
-///// Button Functions /////
-
-/**
- * Linear searches for a value in array a.
- */
-function linearSearchButton() {
-    var value = parseInt(getElement("searchInputField").value)
-    var result = linearSearch(arrA, value)
-    if (result == -1) {
-        alert("Value not found in array")
-    } else {
-        alert("Value found at index: " + result)
-    }
-}
-
-/**
- * Binary searches for a value in array a.
- */
-function binarySearchButton() {
-    var value = parseInt(getElement("searchInputField").value)
-    var result = binarySearch(arrA, value)
-    if (result == -1) {
-        alert("Value not found in array")
-    } else {
-        alert("Value found at index: " + result)
-    }
-}
-
-/**
- * Preforms a bubble sort on array a an displays the sorted array
- */
-function bubbleSortButton() {
-    var startTime = performance.now()
-    var sorted = bubbleSort(arrA)
-    var endTime = performance.now()
-    var time = endTime - startTime
-    getElement('bubbleTime').innerText = time
-    displayArray(sorted, "bubble")
-}
-
-/**
- * Preforms an insertion sort on array a an displays the sorted array
- */
-function insertionSortButton() {
-    var startTime = performance.now()
-    var sorted = insertionSort(arrA)
-    var endTime = performance.now()
-    var time = endTime - startTime
-    getElement('insertionTime').innerText = time
-    displayArray(sorted, "insertion")
-}
-/**
- * Preforms a selection sort on array a an displays the sorted array
- */
-function selectionSortButton() {
-    var startTime = performance.now()
-    var sorted = selectionSort(arrA)
-    var endTime = performance.now()
-    var time = endTime - startTime
-    getElement('selectionTime').innerText = time
-    displayArray(sorted, "selection")
-}
-/**
- * Preforms an quick sort on array a an displays the sorted array
- */
-function quickSortButton(){
-    getElement('quick').innerText = "Can't do yet"
-    getElement('quickTime').innerText = "Infinity"
-    console.error('your mother')
-}
 
 ///// Searching Functions /////
 
@@ -142,23 +47,27 @@ function binarySearch(array, targetValue) {
 ///// Sorting Functions /////
 
 /**
- * Returns a bubble sorted array.
- * @param {Number[]} Input array 
- * @returns {Number[]} The sorted array.
+ * Does a bubble sort on 'array'
+ * @param {Number[]} array Unsorted array
+ * @returns {Number[]} Sorted array
  */
-function bubbleSort(array) {
-    var sorted = array.slice() // make a copy
-    for (var i = 0; i < sorted.length - 1; i++) {
-        for (var j = 0; j < sorted.length - i - 1; j++) {
-            if (sorted[j] > sorted[j + 1]) {
-                var temp = sorted[j]
-                sorted[j] = sorted[j + 1]
-                sorted[j + 1] = temp
+ function bubbleSort(array) {
+    sortedArray = array.slice()
+    var temp
+    var hasSwapped = true
+    while(hasSwapped){
+        hasSwapped = false
+        for (var i = 0; i < sortedArray.length; i++) {
+            if (sortedArray[i] > sortedArray[i + 1]) {
+                temp = sortedArray[i]
+                sortedArray[i] = sortedArray[i + 1]
+                sortedArray[i + 1] = temp
+                hasSwapped = true
             }
         }
     }
-    return sorted
-}//end of bubbleSort
+    return sortedArray
+}
 
 /**
  * Returns an insertion sorted array
@@ -208,9 +117,22 @@ function quickSort(array = []) {
 ///// Merge Functions /////
 
 function concatMerge(array1, array2) {
+    var outputArray = array1.slice()
+    var i
+    for (i = 0; i < array2.length; i++) {
+        outputArray[i + array1.length] = array2[i]
+    }
+    return outputArray
 }//end of concatMerge
 
 function interweavingMerge(array1, array2) {
+    var outputArray = []
+    var combinedLength = (array1.length + array2.length)
+    for(var i = 0; i < combinedLength; i += 2) {
+        outputArray[i] = array1[i/2]
+        outputArray[i+1] = array2[i/2]
+    }
+    return outputArray
 }//end of interweavingMerge
 
 ///// Helper Functions /////
@@ -221,7 +143,7 @@ function interweavingMerge(array1, array2) {
  * @returns {Number}
  */
 function randomRangeInt(min, max) {
-    if (min == max){
+    if (min == max) {
         return min
     }
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -259,9 +181,9 @@ function createRandomArray(length, minNumber, maxNumber) {
  */
 function displayArray(array, elementID) {
     var output = ''
-    document.getElementById(elementID).innerHTML = ""
+    var element = getElement(elementID)
     for (i = 0; i < array.length; i++) {
         output += array[i] + ", "
     }// end of for
-    document.getElementById(elementID).innerHTML = output
+    element.innerText = output
 }// end of displayArray
