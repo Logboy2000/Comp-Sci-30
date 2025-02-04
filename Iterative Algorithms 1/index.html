@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <title>Iterative Algorithms</title>
+</head>
+
+<body onload="loaded()">
+    <div class="container">
+        <h1>Iterative Algorithms</h1>
+        <h2>Logan H</h2>
+    </div>
+
+    <div class="container">
+        <h2>Original Arrays</h2>
+        <button onclick="newArrays()">Generate New Arrays</button>
+        <h3>Array A Size:
+            <input type="text" id="arrayASize" value="100">
+        </h3>
+        <h3>Array B Size:
+            <input type="text" id="arrayBSize" value="100">
+        </h3>
+
+
+
+        <h3>Array A</h3>
+        <textarea id="originalA" disabled>Content for id "originalA" Goes Here</textarea>
+
+        <h3>Array B</h3>
+        <textarea id="originalB" disabled>Content for id "originalB" Goes Here</textarea>
+    </div>
+    <div class="container">
+        <h2>Searching (Array A)</h2>
+        <p>Item to Find
+            <input type="text" id="searchInputField" value="0">
+        </p>
+        <p>
+            <button onclick="linearSearchButton()">Linear Search</button>
+            <button onclick="binarySearchButton()">Binary Search</button>
+        </p>
+    </div>
+    <div class="container">
+        <h2>Sorting (Array A)</h2>
+        <p>
+            <button onclick="bubbleSortButton()">Bubble Sort</button>
+            <button onclick="insertionSortButton()">Insertion Sort</button>
+            <button onclick="selectionSortButton()">Selection Sort</button>
+            <button onclick="quickSortButton()">Quick Sort</button>
+        </p>
+        <h3>Bubble Sort</h3>
+        <p>Time (ms): <span id="bubbleTime"></span></p>
+        <textarea id="bubble" placeholder="Sorted Output..." disabled></textarea>
+
+        <h3>Insertion Sort</h3>
+        <p>Time (ms): <span id="insertionTime"></span></p>
+        <textarea id="insertion" placeholder="Sorted Output..." disabled></textarea>
+
+        <h3>Selection Sort</h3>
+        <p>Time (ms): <span id="selectionTime"></span></p>
+        <textarea id="selection" placeholder="Sorted Output..." disabled></textarea>
+
+        <h3>Quick Sort</h3>
+        <p>Time (ms): <span id="quickTime"></span></p>
+        <textarea id="quicksort" placeholder="Sorted Output..." disabled></textarea>
+    </div>
+    <div class="container">
+        <h2>Merging (Array A+B)</h2>
+        <p>
+            <button onclick="concatGo()">Concatenating Merge</button>
+            <button onclick="interGo()">Interweaving Merge</button>
+        </p>
+        <h3>Concatenating Results</h3>
+        <div id="concat">Content for id "concat" Goes Here</div>
+        <h3>Interweaving Results</h3>
+        <div id="inter">Content for id "inter" Goes Here</div>
+    </div>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+
+</html>
