@@ -26,6 +26,7 @@ p {
 }
 
 .container {
+    max-width: 1000px;
     width: 80%;
     margin: 20px auto;
     padding: 20px;
@@ -87,8 +88,9 @@ input {
     padding: 10px;
     border-radius: 10px;
     border: none;
-    background-color: #333;
+    background-color: #5c5c5c;
     color: #e0e0e0;
+    width: calc(100% - 20px);
 }
 
 textarea {
@@ -100,4 +102,5 @@ textarea {
     background-color: #333;
     color: #e0e0e0;
     resize: none;
+    font-size: 0.5rem;
 }

@@ -15,21 +15,39 @@
 
     <div class="container">
         <h2>Original Arrays</h2>
-        <button onclick="newArrays()">Generate New Arrays</button>
-        <h3>Array A Size:
-            <input type="text" id="arrayASize" value="100">
-        </h3>
-        <h3>Array B Size:
-            <input type="text" id="arrayBSize" value="100">
-        </h3>
+        <button onclick="newArrays()">Generate Arrays!</button>
+        <table>
+            <tr>
+                <td></td>
+                <td>Size:</td>
+                <td>Min Value:</td>
+                <td>Max Value:</td>
+            </tr>
+            <tr>
+                <td>Array A</td>
+                <td><input type="text" id="arrayASize" value="100"></td>
+
+                <td><input type="text" id="arrayAMin" value="0"></td>
+
+                <td><input type="text" id="arrayAMax" value="100"></td>
+            </tr>
+            <tr>
+                <td>Array B</td>
+                <td><input type="text" id="arrayBSize" value="100"></td>
+
+                <td><input type="text" id="arrayBMin" value="0"></td>
+
+                <td><input type="text" id="arrayBMax" value="100"></td>
+            </tr>
+        </table>
 
 
 
         <h3>Array A</h3>
-        <textarea id="originalA" disabled>Content for id "originalA" Goes Here</textarea>
+        <textarea id="originalA" placeholder="Generate the arrays first!" disabled></textarea>
 
         <h3>Array B</h3>
-        <textarea id="originalB" disabled>Content for id "originalB" Goes Here</textarea>
+        <textarea id="originalB" placeholder="Generate the arrays first!" disabled></textarea>
     </div>
     <div class="container">
         <h2>Searching (Array A)</h2>
@@ -63,7 +81,7 @@
 
         <h3>Quick Sort</h3>
         <p>Time (ms): <span id="quickTime"></span></p>
-        <textarea id="quicksort" placeholder="Sorted Output..." disabled></textarea>
+        <textarea id="quick" placeholder="Sorted Output..." disabled></textarea>
     </div>
     <div class="container">
         <h2>Merging (Array A+B)</h2>
