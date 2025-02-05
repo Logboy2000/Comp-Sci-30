@@ -134,11 +134,11 @@
          */
         function binarySearchButton() {
             var value = parseInt(getElement("searchInputField").value)
-            var result = binarySearch(arrA, value)
+            var result = binarySearch(bubbleSort(arrA), value)
             if (result == -1) {
-                alert("Value not found in array")
+                alert("Value not found in Array A")
             } else {
-                alert("Value found at index: " + result)
+                alert("Value found at index " + result + " in the sorted array")
             }
         }
 
@@ -177,9 +177,11 @@
          * Preforms an quick sort on array a an displays the sorted array
          */
         function quickSortButton() {
-            getElement('quick').innerText = "Can't do yet"
-            getElement('quickTime').innerText = "Infinity"
-            console.error('your mother')
+            var startTime = performance.now()
+            var sorted = quickSort(arrA)
+            var endTime = performance.now()
+            getElement('quickTime').innerText = (endTime - startTime).toFixed(1)
+            displayArray(sorted, "quick")
         }
 
         function concatMergeButton() {

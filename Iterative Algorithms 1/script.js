@@ -28,21 +28,27 @@ function linearSearch(array, targetValue) {
  * @returns {Number} The index of the target value in the array or -1 if it is not found.
  */
 function binarySearch(array, targetValue) {
-    sorted = bubbleSort(array)
-    var min = 0
-    var max = sorted.length - 1
+    var sorted = bubbleSort(array);
+    console.log("Sorted Array: ", sorted);
+    var min = 0;
+    var max = sorted.length - 1;
     while (min <= max) {
-        var middle = Math.floor((min + max) / 2)
-        if (sorted[middle] == targetValue) {
-            return middle
-        } else if (sorted[middle] < targetValue) {
-            min = middle + 1
+        var middle = Math.floor((min + max) / 2);
+
+        if (sorted[middle] === targetValue) {
+            return middle;
+        }
+
+        if (sorted[middle] < targetValue) {
+            min = middle + 1;
         } else {
-            max = middle - 1
+            max = middle - 1;
         }
     }
-    return -1 // Could not be found
-}//end of binarySearch
+
+    return -1; // Target not found
+}
+
 
 ///// Sorting Functions /////
 
@@ -51,11 +57,11 @@ function binarySearch(array, targetValue) {
  * @param {Number[]} array Unsorted array
  * @returns {Number[]} Sorted array
  */
- function bubbleSort(array) {
+function bubbleSort(array) {
     sortedArray = array.slice()
     var temp
     var hasSwapped = true
-    while(hasSwapped){
+    while (hasSwapped) {
         hasSwapped = false
         for (var i = 0; i < sortedArray.length; i++) {
             if (sortedArray[i] > sortedArray[i + 1]) {
@@ -110,9 +116,33 @@ function selectionSort(array) {
     return sorted
 }//end of selectionSort
 
-function quickSort(array = []) {
-    return 'your mother'
+function quickSort(arr) {
+    // NOT MINE
+    if (arr.length <= 1) {
+        return arr;
+    }
+
+    // Make a copy of the array to avoid modifying the original one
+    const arrCopy = [...arr]; 
+
+    // Choose pivot (we'll use the last element)
+    const pivot = arrCopy[arrCopy.length - 1];
+    const left = [];
+    const right = [];
+
+    // Partition the array into two subarrays: one with elements less than the pivot, and one with elements greater than the pivot
+    for (let i = 0; i < arrCopy.length - 1; i++) {
+        if (arrCopy[i] < pivot) {
+            left.push(arrCopy[i]);
+        } else {
+            right.push(arrCopy[i]);
+        }
+    }
+
+    // Recursively apply quickSort on the left and right subarrays, and concatenate them with the pivot in between
+    return [...quickSort(left), pivot, ...quickSort(right)];
 }
+
 
 ///// Merge Functions /////
 
@@ -128,9 +158,9 @@ function concatMerge(array1, array2) {
 function interweavingMerge(array1, array2) {
     var outputArray = []
     var combinedLength = (array1.length + array2.length)
-    for(var i = 0; i < combinedLength; i += 2) {
-        outputArray[i] = array1[i/2]
-        outputArray[i+1] = array2[i/2]
+    for (var i = 0; i < combinedLength; i += 2) {
+        outputArray[i] = array1[i / 2]
+        outputArray[i + 1] = array2[i / 2]
     }
     return outputArray
 }//end of interweavingMerge
