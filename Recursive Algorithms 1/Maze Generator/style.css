@@ -33,6 +33,7 @@ p {
     background-color: #1e1e1e;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
+    text-align: center;
 }
 
 button {
@@ -106,5 +107,5 @@ textarea {
 }
 
 #maze {
-    margin: 10rem;
+    margin: 1rem;
 }
