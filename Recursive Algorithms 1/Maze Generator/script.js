@@ -1,12 +1,11 @@
 let canvas, ctx
 
-let squareSize = 10
-let mazeCols = 100
-let mazeRows = 60
-let animationDelay = 1
+let squareSize = 20
+let mazeCols = 30
+let mazeRows = 30
+let animationDelay = 200
 
 let mazeArr = []
-let currentCell
 
 function loaded() {
 	canvas = document.getElementById('maze')
@@ -30,21 +29,22 @@ function loaded() {
 			}
 		}
 
-		makeRecursiveMaze(mazeArr, 0)
+		makeRecursiveMaze(mazeArr, 0, 0)
 	})
 } // end of loaded
 
-function makeRecursiveMaze(arr, i) {
-	//Base case
-	if (i >= arr.length * arr[0].length) {
+function makeRecursiveMaze(arr, currentCellX, currentCellY) {
+	if (
+		currentCellX === undefined || 
+		currentCellY === undefined || 
+		!mazeArr[currentCellY] || 
+		!mazeArr[currentCellY][currentCellX]
+	) {
+		console.error("Invalid cell coordinates:", currentCellX, currentCellY)
 		return
 	}
 
-	const x = i % mazeCols
-	const y = Math.floor(i / mazeCols)
-
-	currentCell = arr[y][x]
-
+	let currentCell = mazeArr[currentCellY][currentCellX]
 	currentCell.visited = true
 
 	const nextCell = currentCell.getRandomValidNeighbor()
@@ -55,11 +55,11 @@ function makeRecursiveMaze(arr, i) {
 	}
 
 	drawMaze()
-
 	setTimeout(() => {
-		makeRecursiveMaze(arr, i + 1)
+		makeRecursiveMaze(arr, currentCell.x, currentCell.y)
 	}, animationDelay)
 }
+
 
 function drawMaze() {
 	for (let y = 0; y < mazeRows; y++) {
@@ -131,7 +131,7 @@ class MazeCell {
 
 	getRandomValidNeighbor() {
 		let neighbors = []
-
+		
 		let up = mazeArr[this.y - 1] && mazeArr[this.y - 1][this.x] // up
 		let down = mazeArr[this.y + 1] && mazeArr[this.y + 1][this.x] // down
 		let left = mazeArr[this.y][this.x - 1] // left
@@ -157,13 +157,6 @@ class MazeCell {
 		}
 		return null // No valid neighbor found
 	}
-}
-
-function randomRangeInt(min, max) {
-	if (min == max) {
-		return min
-	}
-	return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 function removeWalls(current, next) {
@@ -194,4 +187,11 @@ function drawLine(ctx, x1, y1, x2, y2, color = '#FF0000') {
 	ctx.lineTo(x2, y2)
 	ctx.lineWidth = Math.round(squareSize / 10)
 	ctx.stroke()
+}
+
+function randomRangeInt(min, max) {
+	if (min == max) {
+		return min
+	}
+	return Math.floor(Math.random() * (max - min + 1) + min)
 }
