@@ -19,18 +19,17 @@ let animationDelay = 0
 let showSteps = false
 
 // Colors
-let unvisitedColor = '#00FF00'
 let visitedColor = '#0000DD'
 let finishedColor = '#555555'
 let currentCellColor = '#FFD700'
 
-let unvisitedOutlineColor = '#00DD00'
 let visitedOutlineColor = '#0000FF'
 let finishedOutlineColor = '#000000'
 let currentCellOutlineColor = '#FF0000'
 
 // Maze Gen
 let mazeArr = []
+let affectedCells = [] // Add the current cell to the affected array
 let mazeGenerationActive = false // Tracks if a maze is being generated
 let mazeTimeout // Store the timeout so we can cancel it
 let currentCell = null
@@ -42,6 +41,7 @@ function getElement(id) {
 function loaded() {
 	canvas = document.getElementById('maze')
 	ctx = canvas.getContext('2d')
+	ctx.imageSmoothingEnabled = false
 
 	columnInput = getElement('columnInput')
 	rowInput = getElement('rowInput')
@@ -49,7 +49,6 @@ function loaded() {
 	mazeGenButton = getElement('mazeGenButton')
 	animationDelayInput = getElement('animationDelayInput')
 	showStepsToggle = getElement('showStepsToggle')
-
 
 	mazeGenButton.addEventListener('click', function () {
 		if (mazeGenerationActive) {
@@ -64,25 +63,27 @@ function loaded() {
 		animationDelay = animationDelayInput.value
 		showSteps = showStepsToggle.checked
 
-		if(mazeRows <= 0){
-			alert("Maze must have more than 0 rows!")
+		if (mazeRows <= 0) {
+			alert('Maze must have more than 0 rows!')
 			return
 		}
-		if(mazeCols <= 0){
-			alert("Maze must have more than 0 columns!")
+		if (mazeCols <= 0) {
+			alert('Maze must have more than 0 columns!')
 			return
 		}
-		if(cellSize <= 0){
-			alert("Cell size must be greater than 0!")
+		if (cellSize <= 0) {
+			alert('Cell size must be greater than 0!')
 			return
 		}
 
 		canvas.width = mazeCols * cellSize
 		canvas.height = mazeRows * cellSize
-		
+
+		ctx.fillStyle = '#000000'
+		ctx.fillRect(0, 0, canvas.width, canvas.height)
+
 		mazeArr = []
 
-	
 		for (let y = 0; y < mazeRows; y++) {
 			mazeArr[y] = []
 			for (let x = 0; x < mazeCols; x++) {
@@ -90,12 +91,15 @@ function loaded() {
 				mazeArr[y].push(newCell)
 			}
 		}
-
-
-
+		affectedCells = []
 		mazeGenerationActive = true // Set flag to prevent multiple generations
-		makeRecursiveMaze(mazeArr, randomRangeInt(0,mazeCols-1), randomRangeInt(0,mazeRows-1), [])
-		drawMaze()
+		makeRecursiveMaze(
+			mazeArr,
+			randomRangeInt(0, mazeCols - 1),
+			randomRangeInt(0, mazeRows - 1),
+			[],
+			0
+		)
 	})
 } // end of loaded
 /**
@@ -106,19 +110,40 @@ function loaded() {
  * @param {Array} stack Starts as empty. Keeps track of path taken
  * @returns
  */
-function makeRecursiveMaze(arr, currentCellX, currentCellY, stack) {
+const MAX_RECURSION_DEPTH = 10000
+async function makeRecursiveMaze(
+	arr,
+	currentCellX,
+	currentCellY,
+	stack,
+	recursionDepth
+) {
+	if (recursionDepth > MAX_RECURSION_DEPTH) {
+		alert('Error: Too much recursion. Enable "Show Generation Steps" to prevent', 10, 50)
+		return
+	}
+
 	if (
 		mazeGenerationActive == false ||
 		!mazeArr[currentCellY] ||
 		!mazeArr[currentCellY][currentCellX]
 	) {
-		alert('things went horribly wrong if you are seeing this message. refresh please')
+		alert(
+			'things went horribly wrong if you are seeing this message. refresh please'
+		)
 		return
 	}
 
 	currentCell = mazeArr[currentCellY][currentCellX]
 	currentCell.visited = true
 	currentCell.backtracked = false
+
+	// Track the affected cells
+
+	if (showSteps == true) {
+		affectedCells = []
+	}
+	affectedCells.push(currentCell)
 
 	const nextCell = currentCell.getRandomValidNeighbor()
 
@@ -127,110 +152,115 @@ function makeRecursiveMaze(arr, currentCellX, currentCellY, stack) {
 		removeWalls(currentCell, nextCell)
 		stack.push(currentCell) // Push current cell to stack
 		currentCell = nextCell
+		affectedCells.push(currentCell) // Add next cell to affected array
 	} else if (stack.length > 0) {
 		// Backtrack if no open neighbors
 		currentCell.backtracked = true
+		affectedCells.push(currentCell) // Add backtracked cell to affected array
 		currentCell = stack.pop()
 	} else {
-		// Stop when stack is empty/maze is done generatinf
+		// Stop when stack is empty/maze is done generating
 		currentCell.backtracked = true
+		affectedCells.push(currentCell) // Add final cell to affected array
+		// Draw all affected cells
+		drawMaze(affectedCells)
+
+		currentCell = null // Reset currentCell to prevent it from being yellow
 		return
 	}
-	if (showSteps){
-		drawMaze()
+
+	// Only redraw affected cells
+	if (showSteps) {
+		drawMaze(affectedCells)
+
 		mazeTimeout = setTimeout(() => {
-			makeRecursiveMaze(arr, currentCell.x, currentCell.y, stack)
+			makeRecursiveMaze(
+				arr,
+				currentCell.x,
+				currentCell.y,
+				stack,
+				recursionDepth + 1
+			)
 		}, animationDelay)
 	} else {
-		makeRecursiveMaze(arr, currentCell.x, currentCell.y, stack)
+		makeRecursiveMaze(
+			arr,
+			currentCell.x,
+			currentCell.y,
+			stack,
+			recursionDepth + 1
+		)
 	}
-	
 }
 
-function drawMaze() {
-	// Clear Canvas
-	ctx.fillStyle = '#FFFFFF'
-	ctx.fillRect(0, 0, canvas.width, canvas.height)
+function drawMaze(affectedCells) {
+	// Loop through all affected cells and draw them
+	for (let i = 0; i < affectedCells.length; i++) {
+		const cell = affectedCells[i]
 
-	// Draw cell backgrounds
-	for (let y = 0; y < mazeRows; y++) {
-		for (let x = 0; x < mazeCols; x++) {
-			const cell = mazeArr[y][x]
-			if (cell === currentCell) {
-				ctx.fillStyle = currentCellColor
-			} else if (cell.backtracked === true) {
-				ctx.fillStyle = finishedColor
-			} else if (cell.visited === true) {
-				ctx.fillStyle = visitedColor
-			} else {
-				ctx.fillStyle = unvisitedColor
-			}
-			ctx.fillRect(
-				cell.drawX,
-				cell.drawY,
-				cell.drawX + cellSize,
-				cell.drawY + cellSize
-			)
+		if (cell === currentCell) {
+			ctx.fillStyle = currentCellColor
+			ctx.strokeStyle = currentCellOutlineColor
+		} else if (cell.backtracked === true) {
+			ctx.fillStyle = finishedColor
+			ctx.strokeStyle = finishedOutlineColor
+		} else if (cell.visited === true) {
+			ctx.fillStyle = visitedColor
+			ctx.strokeStyle = visitedOutlineColor
 		}
+
+		// Draw updated cell background
+		drawCellBackground(cell)
+		// Draw updated cell edge lines
+		drawCellWalls(cell)
 	}
+}
 
-	// Draw cell edge lines
-	for (let y = 0; y < mazeRows; y++) {
-		for (let x = 0; x < mazeCols; x++) {
-			const cell = mazeArr[y][x]
-			if (cell === currentCell) {
-				ctx.strokeStyle = currentCellOutlineColor
-			} else if (cell.backtracked === true) {
-				ctx.strokeStyle = finishedOutlineColor
-			} else if (cell.visited === true) {
-				ctx.strokeStyle = visitedOutlineColor
-			} else {
-				ctx.strokeStyle = unvisitedOutlineColor
-			}
+function drawCellBackground(cell) {
+	ctx.fillRect(cell.drawX, cell.drawY, cellSize, cellSize)
+}
 
-			const inset = 0.1
-
-			// up
-			if (cell.walls[0]) {
-				drawLine(
-					ctx,
-					cell.drawX + cellSize * inset,
-					cell.drawY + cellSize * inset,
-					cell.drawX + cellSize * (1 - inset),
-					cell.drawY + cellSize * inset
-				)
-			}
-			// right
-			if (cell.walls[1]) {
-				drawLine(
-					ctx,
-					cell.drawX + cellSize * (1 - inset),
-					cell.drawY + cellSize * inset,
-					cell.drawX + cellSize * (1 - inset),
-					cell.drawY + cellSize * (1 - inset)
-				)
-			}
-			// down
-			if (cell.walls[2]) {
-				drawLine(
-					ctx,
-					cell.drawX + cellSize * inset,
-					cell.drawY + cellSize * (1 - inset),
-					cell.drawX + cellSize * (1 - inset),
-					cell.drawY + cellSize * (1 - inset)
-				)
-			}
-			// left
-			if (cell.walls[3]) {
-				drawLine(
-					ctx,
-					cell.drawX + cellSize * inset,
-					cell.drawY + cellSize * inset,
-					cell.drawX + cellSize * inset,
-					cell.drawY + cellSize * (1 - inset)
-				)
-			}
-		}
+function drawCellWalls(cell) {
+	const inset = 0.0
+	// up
+	if (cell.walls[0]) {
+		drawLine(
+			ctx,
+			cell.drawX + cellSize * inset,
+			cell.drawY + cellSize * inset,
+			cell.drawX + cellSize * (1 - inset),
+			cell.drawY + cellSize * inset
+		)
+	}
+	// right
+	if (cell.walls[1]) {
+		drawLine(
+			ctx,
+			cell.drawX + cellSize * (1 - inset),
+			cell.drawY + cellSize * inset,
+			cell.drawX + cellSize * (1 - inset),
+			cell.drawY + cellSize * (1 - inset)
+		)
+	}
+	// down
+	if (cell.walls[2]) {
+		drawLine(
+			ctx,
+			cell.drawX + cellSize * inset,
+			cell.drawY + cellSize * (1 - inset),
+			cell.drawX + cellSize * (1 - inset),
+			cell.drawY + cellSize * (1 - inset)
+		)
+	}
+	// left
+	if (cell.walls[3]) {
+		drawLine(
+			ctx,
+			cell.drawX + cellSize * inset,
+			cell.drawY + cellSize * inset,
+			cell.drawX + cellSize * inset,
+			cell.drawY + cellSize * (1 - inset)
+		)
 	}
 }
 
