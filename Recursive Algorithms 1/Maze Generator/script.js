@@ -8,18 +8,11 @@ let canvas,
 	animationDelayInput,
 	showStepsToggle
 
-<<<<<<< Updated upstream
-let squareSize = 20
-let mazeCols = 30
-let mazeRows = 30
-let animationDelay = 200
-=======
 //// Settings
 // Maze Dimensions
 let cellSize = 10
 let mazeCols = 50
 let mazeRows = 40
->>>>>>> Stashed changes
 
 // Animation
 let animationDelay = 0
@@ -38,8 +31,6 @@ let currentCellOutlineColor = '#FF0000'
 
 // Maze Gen
 let mazeArr = []
-<<<<<<< Updated upstream
-=======
 let mazeGenerationActive = false // Tracks if a maze is being generated
 let mazeTimeout // Store the timeout so we can cancel it
 let currentCell = null
@@ -47,7 +38,6 @@ let currentCell = null
 function getElement(id) {
 	return document.getElementById(id)
 }
->>>>>>> Stashed changes
 
 function loaded() {
 	canvas = document.getElementById('maze')
@@ -101,24 +91,6 @@ function loaded() {
 			}
 		}
 
-<<<<<<< Updated upstream
-		makeRecursiveMaze(mazeArr, 0, 0)
-	})
-} // end of loaded
-
-function makeRecursiveMaze(arr, currentCellX, currentCellY) {
-	if (
-		currentCellX === undefined || 
-		currentCellY === undefined || 
-		!mazeArr[currentCellY] || 
-		!mazeArr[currentCellY][currentCellX]
-	) {
-		console.error("Invalid cell coordinates:", currentCellX, currentCellY)
-		return
-	}
-
-	let currentCell = mazeArr[currentCellY][currentCellX]
-=======
 
 
 		mazeGenerationActive = true // Set flag to prevent multiple generations
@@ -145,7 +117,6 @@ function makeRecursiveMaze(arr, currentCellX, currentCellY, stack) {
 	}
 
 	currentCell = mazeArr[currentCellY][currentCellX]
->>>>>>> Stashed changes
 	currentCell.visited = true
 	currentCell.backtracked = false
 
@@ -165,13 +136,6 @@ function makeRecursiveMaze(arr, currentCellX, currentCellY, stack) {
 		currentCell.backtracked = true
 		return
 	}
-<<<<<<< Updated upstream
-
-	drawMaze()
-	setTimeout(() => {
-		makeRecursiveMaze(arr, currentCell.x, currentCell.y)
-	}, animationDelay)
-=======
 	if (showSteps){
 		drawMaze()
 		mazeTimeout = setTimeout(() => {
@@ -181,9 +145,7 @@ function makeRecursiveMaze(arr, currentCellX, currentCellY, stack) {
 		makeRecursiveMaze(arr, currentCell.x, currentCell.y, stack)
 	}
 	
->>>>>>> Stashed changes
 }
-
 
 function drawMaze() {
 	// Clear Canvas
@@ -285,7 +247,7 @@ class MazeCell {
 
 	getRandomValidNeighbor() {
 		let neighbors = []
-		
+
 		let up = mazeArr[this.y - 1] && mazeArr[this.y - 1][this.x] // up
 		let down = mazeArr[this.y + 1] && mazeArr[this.y + 1][this.x] // down
 		let left = mazeArr[this.y][this.x - 1] // left
@@ -347,8 +309,4 @@ function randomRangeInt(min, max) {
 		return min
 	}
 	return Math.floor(Math.random() * (max - min + 1) + min)
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes
