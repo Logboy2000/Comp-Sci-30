@@ -110,18 +110,12 @@ function loaded() {
  * @param {Array} stack Starts as empty. Keeps track of path taken
  * @returns
  */
-const MAX_RECURSION_DEPTH = 10000
 async function makeRecursiveMaze(
 	arr,
 	currentCellX,
 	currentCellY,
-	stack,
-	recursionDepth
+	stack
 ) {
-	if (recursionDepth > MAX_RECURSION_DEPTH) {
-		alert('Error: Too much recursion. Enable "Show Generation Steps" to prevent', 10, 50)
-		return
-	}
 
 	if (
 		mazeGenerationActive == false ||
@@ -178,8 +172,7 @@ async function makeRecursiveMaze(
 				arr,
 				currentCell.x,
 				currentCell.y,
-				stack,
-				recursionDepth + 1
+				stack
 			)
 		}, animationDelay)
 	} else {
@@ -187,8 +180,7 @@ async function makeRecursiveMaze(
 			arr,
 			currentCell.x,
 			currentCell.y,
-			stack,
-			recursionDepth + 1
+			stack
 		)
 	}
 }
