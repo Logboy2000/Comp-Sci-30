@@ -27,7 +27,7 @@ p {
 }
 
 .container {
-	max-width: 100%;
+	max-width: 1200px;
 	width: 80%;
 	margin: 20px auto;
 	padding: 20px;
@@ -116,7 +116,8 @@ textarea {
 }
 
 #maze {
-    width: calc(100% - 2rem);
+	max-width: 500px;
+	max-height: 500px;
 	margin: 1rem;
     image-rendering: crisp-edges;
 }

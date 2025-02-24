@@ -27,7 +27,7 @@ let visitedOutlineColor = '#0000FF'
 let finishedOutlineColor = '#000000'
 let currentCellOutlineColor = '#FF0000'
 
-// Maze Gen
+/// Maze Gen
 let mazeArr = []
 let affectedCells = [] // Add the current cell to the affected array
 let mazeGenerationActive = false // Tracks if a maze is being generated
