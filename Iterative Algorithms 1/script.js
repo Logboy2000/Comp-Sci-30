@@ -1,7 +1,7 @@
 // Look mom i commented my code for once
 
-var arrA = new Array()
-var arrB = new Array()
+let arrA = new Array()
+let arrB = new Array()
 
 
 ///// Searching Functions /////
@@ -28,12 +28,12 @@ function linearSearch(array, targetValue) {
  * @returns {Number} The index of the target value in the array or -1 if it is not found.
  */
 function binarySearch(array, targetValue) {
-    var sorted = bubbleSort(array);
+    let sorted = bubbleSort(array);
     console.log("Sorted Array: ", sorted);
-    var min = 0;
-    var max = sorted.length - 1;
+    let min = 0;
+    let max = sorted.length - 1;
     while (min <= max) {
-        var middle = Math.floor((min + max) / 2);
+        let middle = Math.floor((min + max) / 2);
 
         if (sorted[middle] === targetValue) {
             return middle;
@@ -59,11 +59,11 @@ function binarySearch(array, targetValue) {
  */
 function bubbleSort(array) {
     sortedArray = array.slice()
-    var temp
-    var hasSwapped = true
+    let temp
+    let hasSwapped = true
     while (hasSwapped) {
         hasSwapped = false
-        for (var i = 0; i < sortedArray.length; i++) {
+        for (let i = 0; i < sortedArray.length; i++) {
             if (sortedArray[i] > sortedArray[i + 1]) {
                 temp = sortedArray[i]
                 sortedArray[i] = sortedArray[i + 1]
@@ -81,10 +81,10 @@ function bubbleSort(array) {
  * @returns {Number[]} The sorted array
  */
 function insertionSort(array) {
-    var sorted = array.slice()
-    for (var i = 1; i < sorted.length; i++) {
-        var temp = sorted[i]
-        var j = i - 1
+    let sorted = array.slice()
+    for (let i = 1; i < sorted.length; i++) {
+        let temp = sorted[i]
+        let j = i - 1
         while (sorted[j] > temp && j >= 0) {
             sorted[j + 1] = sorted[j]
             j -= 1
@@ -100,55 +100,59 @@ function insertionSort(array) {
  * @returns {Number[]} The sorted array
  */
 function selectionSort(array) {
-    var sorted = array.slice()
-    var min = 0
-    for (var i = 0; i < sorted.length; i++) {
-        for (var j = i; j < sorted.length; j++) { // Find smallest value
+    let sorted = array.slice()
+    let min = 0
+    for (let i = 0; i < sorted.length; i++) {
+        for (let j = i; j < sorted.length; j++) { // Find smallest value
             if (sorted[j] < sorted[min]) {
                 min = j
             }
         }
         // Swap the minimum element with the current element
-        var temp = sorted[i]
+        let temp = sorted[i]
         sorted[i] = sorted[min]
         sorted[min] = temp
     }
     return sorted
 }//end of selectionSort
-
-function quickSort(arr) {
-    // NOT MINE
-    if (arr.length <= 1) {
-        return arr;
+function quickSort(arr, left, right, i = 0) {
+    if (i > 1000){
+        console.error('frick')
+        return
     }
 
-    // Make a copy of the array to avoid modifying the original one
-    const arrCopy = [...arr]; 
+    
+    let pivotI = left
+    let pivot = arr[pivotI]
 
-    // Choose pivot (we'll use the last element)
-    const pivot = arrCopy[arrCopy.length - 1];
-    const left = [];
-    const right = [];
+    if (left >= right) {
+        return arr
+    }
 
-    // Partition the array into two subarrays: one with elements less than the pivot, and one with elements greater than the pivot
-    for (let i = 0; i < arrCopy.length - 1; i++) {
-        if (arrCopy[i] < pivot) {
-            left.push(arrCopy[i]);
-        } else {
-            right.push(arrCopy[i]);
+    while (left != right) {
+        while (arr[right] > pivot) {
+            right--
         }
-    }
+        arr[left] = arr[right]
+        left++
 
-    // Recursively apply quickSort on the left and right subarrays, and concatenate them with the pivot in between
-    return [...quickSort(left), pivot, ...quickSort(right)];
-}
+        while (arr[left] < pivot) {
+            left++
+        }
+        arr[right] = arr[left]
+        right--
+    }
+    arr[pivotI] = pivot
+
+    return quickSort(arr, left, right, i + 1)
+}//end of quickSort
 
 
 ///// Merge Functions /////
 
 function concatMerge(array1, array2) {
-    var outputArray = array1.slice()
-    var i
+    let outputArray = array1.slice()
+    let i
     for (i = 0; i < array2.length; i++) {
         outputArray[i + array1.length] = array2[i]
     }
@@ -156,9 +160,9 @@ function concatMerge(array1, array2) {
 }//end of concatMerge
 
 function interweavingMerge(array1, array2) {
-    var outputArray = []
-    var combinedLength = (array1.length + array2.length)
-    for (var i = 0; i < combinedLength; i += 2) {
+    let outputArray = []
+    let combinedLength = (array1.length + array2.length)
+    for (let i = 0; i < combinedLength; i += 2) {
         outputArray[i] = array1[i / 2]
         outputArray[i + 1] = array2[i / 2]
     }
@@ -196,7 +200,7 @@ function getElement(id) {
  * @returns {number[]} An array of random numbers.
  */
 function createRandomArray(length, minNumber, maxNumber) {
-    var array = []
+    let array = []
     for (i = 0; i < length; i++) {
         array[i] = randomRangeInt(minNumber, maxNumber)
     }
@@ -210,8 +214,8 @@ function createRandomArray(length, minNumber, maxNumber) {
  * @param {string} elementID The ID of the HTML element where the array will be displayed.
  */
 function displayArray(array, elementID) {
-    var output = ''
-    var element = getElement(elementID)
+    let output = ''
+    let element = getElement(elementID)
     for (i = 0; i < array.length; i++) {
         output += array[i] + ", "
     }// end of for
