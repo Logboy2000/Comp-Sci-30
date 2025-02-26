@@ -178,7 +178,7 @@
          */
         function quickSortButton() {
             var startTime = performance.now()
-            var sorted = quickSort(arrA.slice(), 0, arrA.length - 1)
+            var sorted = quickSort(arrA.slice())
             var endTime = performance.now()
             getElement('quickTime').innerText = (endTime - startTime).toFixed(1)
             displayArray(sorted, "quick")
