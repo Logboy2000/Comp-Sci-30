@@ -110,13 +110,7 @@ function loaded() {
  * @param {Array} stack Starts as empty. Keeps track of path taken
  * @returns
  */
-async function makeRecursiveMaze(
-	arr,
-	currentCellX,
-	currentCellY,
-	stack
-) {
-
+async function makeRecursiveMaze(arr, currentCellX, currentCellY, stack) {
 	if (
 		mazeGenerationActive == false ||
 		!mazeArr[currentCellY] ||
@@ -168,20 +162,10 @@ async function makeRecursiveMaze(
 		drawMaze(affectedCells)
 
 		mazeTimeout = setTimeout(() => {
-			makeRecursiveMaze(
-				arr,
-				currentCell.x,
-				currentCell.y,
-				stack
-			)
+			makeRecursiveMaze(arr, currentCell.x, currentCell.y, stack)
 		}, animationDelay)
 	} else {
-		makeRecursiveMaze(
-			arr,
-			currentCell.x,
-			currentCell.y,
-			stack
-		)
+		makeRecursiveMaze(arr, currentCell.x, currentCell.y, stack)
 	}
 }
 

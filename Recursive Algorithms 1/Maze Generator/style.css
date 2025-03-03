@@ -116,8 +116,6 @@ textarea {
 }
 
 #maze {
-	max-width: 500px;
-	max-height: 500px;
 	margin: 1rem;
     image-rendering: crisp-edges;
 }
