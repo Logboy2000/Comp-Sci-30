@@ -97,25 +97,29 @@ function insertionSort(array) {
  * @param {Number[]} array The unsorted array
  * @returns {Number[]} The sorted array
  */
-function selectionSort(array) {
-	let sorted = array.slice()
-	let min = 0
-	for (let i = 0; i < sorted.length; i++) {
-		for (let j = i; j < sorted.length; j++) {
-			// Find smallest value
-			if (sorted[j] < sorted[min]) {
-				min = j
-			}
-		}
-		// Swap the minimum element with the current element
-		let temp = sorted[i]
-		sorted[i] = sorted[min]
-		sorted[min] = temp
-	}
-	return sorted
-} //end of selectionSort
-
-function quickSort(arr, left = 0, right = arr.length - 1) {
+ function selectionSort(array) {
+    let sorted = array.slice(); // Create a copy of the array
+    for (let i = 0; i < sorted.length; i++) {
+        let min = i; // Reset min index for this iteration
+        for (let j = i + 1; j < sorted.length; j++) {
+            if (sorted[j] < sorted[min]) {
+                min = j; // Update min index if a smaller element is found
+            }
+        }
+        // Swap the found minimum element with the first element of the unsorted part
+        if (min !== i) { // Swap only if a smaller element was found
+            [sorted[i], sorted[min]] = [sorted[min], sorted[i]];
+        }
+    }
+    return sorted;
+}
+/**
+ * @param {Number[]} arr Arr
+ * @param {Number} left Min value or range
+ * @param {Number} right Max value or range
+ * @returns A sorted array using quick sort
+ */
+function quickSort(arr, left, right) {
 	if (left >= right) return
  
 	let pivot = arr[left]
@@ -145,7 +149,12 @@ function quickSort(arr, left = 0, right = arr.length - 1) {
 }
 
 ///// Merge Functions /////
-
+/**
+ * 
+ * @param {Array} array1 First array
+ * @param {Array} array2 Second array
+ * @returns array2 concatenated to array 1
+ */
 function concatMerge(array1, array2) {
 	let outputArray = array1.slice()
 	let i
@@ -154,7 +163,12 @@ function concatMerge(array1, array2) {
 	}
 	return outputArray
 } //end of concatMerge
-
+/**
+ * 
+ * @param {Array} array1 First array
+ * @param {Array} array2 Second array
+ * @returns Alternating an array the alternates between values from array1 and array2
+ */
 function interweavingMerge(array1, array2) {
 	let outputArray = []
 	let combinedLength = array1.length + array2.length
