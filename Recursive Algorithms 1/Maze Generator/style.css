@@ -54,7 +54,7 @@ button:hover {
 }
 
 table {
-	width: 50%;
+	width: 100%;
 	border-collapse: collapse;
 	margin: 20px 0;
 	border-color: #333;
@@ -117,5 +117,6 @@ textarea {
 
 #maze {
 	margin: 1rem;
+	max-width: calc(100% - 2rem);
     image-rendering: crisp-edges;
 }
