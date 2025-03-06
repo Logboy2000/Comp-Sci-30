@@ -119,4 +119,5 @@ textarea {
 	margin: 1rem;
 	max-width: calc(100% - 2rem);
     image-rendering: crisp-edges;
+	border: #5c5c5c 2px solid;
 }

@@ -1,0 +1,24 @@
+                        <html lang="en"> <head><meta charset="UTF-8" />
+		            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		        <title>donut.html</title></head><body></body><script>const canvas = 
+            document.createElement("canvas"); document.body.appendChild(canvas); const 
+        ctx = canvas.getContext("2d"); canvas.width = 500; canvas.height = 500; let A = 0, 
+    B = 0, R1 = 1, R2 = 2, K1 = 150, K2 = 5; function renderFrame() { ctx.fillStyle = "black"; 
+ctx.fillRect(0, 0, 500, 500); let               zBuffer = Array(500 * 500).fill(0), buffer = Array(
+500 * 500).fill(" "); for (                         let theta = 0; theta < 6.28; theta += 0.07) { for (
+let phi = 0; phi < 6.28;                                phi += 0.02) { let cosA = Math.cos(A), sinA = Math.
+sin(A), cosB = Math.cos(                                B), sinB = Math.sin(B), cosT = Math.cos(theta), sinT
+ = Math.sin(theta), cosP                                = Math.cos(phi), sinP = Math.sin(phi), circleX = R2 
+ + R1 * cosT, circleY =                                     R1 * sinT,x = circleX * (cosB * cosP + sinA * sinB *
+    sinP) - circleY * cosA *                              sinB, y = circleX * (sinB * cosP - sinA * cosB * sinP)
+     + circleY * cosA * cosB,                               z =  K2 + cosA * circleX * sinP + circleY * sinA,
+      ooz = 1 / z, xp = Math.                               floor(250 + K1 * ooz * x), yp =   
+      Math.floor(250 - K1 * ooz                          * y),  L = cosP * cosT * sinB - cosA * cosT * sinP - sinA *  sinT + cosB * (cosA * sinT -cosT * sinA * sinP); if                         (L > 0) { let index = xp + yp * 500; if (ooz > zBuffer
+            [index]) { zBuffer[index]                = ooz;   buffer[index] = ".-~:;=!*#$@"[Math.
+              floor(L * 8)]; } } } } ctx.       fillStyle = "white";   ctx.font = 
+               "8px monospace"; for (let i = 0; i < 500; i++) { for (let j 
+                  = 0; j < 500; j++) { if (buffer[i + j * 500] !== " ")
+                    ctx.fillText(buffer[i + j * 500], j, i); } } A += 
+                        0.04; B += 0.02; requestAnimationFrame(
+                            renderFrame); } renderFrame();
+                                    </script></html>
