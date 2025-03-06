@@ -12,13 +12,22 @@
 			<hr />
 			<canvas id="maze"></canvas>
 			<hr />
-			<button id="mazeGenButton">Generate Maze!</button>
+			<button id="mazeGenButtonI">Iterative Maze!</button>
+			<button id="mazeGenButtonR">Recursion Maze</button>
 		</div>
 
 		<div class="container" style="text-align: center">
 			<h1>Settings</h1>
 			<hr />
 			<table>
+				<tr>
+					<td><label for="showStepsToggle">Show Generation Steps:</label></td>
+					<td><input type="checkbox" id="showStepsToggle" checked /></td>
+				</tr>
+				<tr>
+					<td><label for="animationDelayInput">Step Delay (ms):</label></td>
+					<td><input type="number" id="animationDelayInput" value="20" /></td>
+				</tr>
 				<tr>
 					<td>
 						<label for="cellSizeInput">Cell Resolution (15 recommended):</label>
@@ -32,14 +41,6 @@
 				<tr>
 					<td><label for="rowInput">Rows:</label></td>
 					<td><input type="number" id="rowInput" value="15" /></td>
-				</tr>
-				<tr>
-					<td><label for="showStepsToggle">Show Generation Steps:</label></td>
-					<td><input type="checkbox" id="showStepsToggle" checked /></td>
-				</tr>
-				<tr>
-					<td><label for="animationDelayInput">Step Delay (ms):</label></td>
-					<td><input type="number" id="animationDelayInput" value="20" /></td>
 				</tr>
 
 				<tr>
