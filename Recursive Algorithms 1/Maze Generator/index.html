@@ -11,16 +11,63 @@
 			<h1>Maze Generator</h1>
 			<hr />
 			<canvas id="maze"></canvas>
-			<hr>
-			<p id="stats"></p>
-			<hr>
+			<br />
 			<button id="mazeGenButtonI">Iterative Maze!</button>
 			<button id="mazeGenButtonR">Recursion Maze</button>
+			<hr />
+			<div id="stats">
+				<h2>Maze Generation Statistics</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Metric</th>
+							<th>Iterative</th>
+							<th>Recursive</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Execution Time</td>
+							<td id="iter_time">--</td>
+							<td id="rec_time">--</td>
+						</tr>
+						<tr>
+							<td>Step Count</td>
+							<td id="iter_steps">--</td>
+							<td id="rec_steps">--</td>
+						</tr>
+						<tr>
+							<td>Backtracking Count</td>
+							<td id="iter_backtracks">--</td>
+							<td id="rec_backtracks">--</td>
+						</tr>
+						<tr>
+							<td>Max Stack Depth</td>
+							<td id="iter_stack">--</td>
+							<td id="rec_stack">--</td>
+						</tr>
+						<tr>
+							<td>Cells Visited</td>
+							<td id="iter_visited">--</td>
+							<td id="rec_visited">--</td>
+						</tr>
+						<tr>
+							<td>Walls Removed</td>
+							<td id="iter_walls">--</td>
+							<td id="rec_walls">--</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
 		</div>
 
 		<div class="container" style="text-align: center">
 			<h1>Settings</h1>
 			<hr />
+
+			<!-- General Settings -->
+			<h2>General</h2>
 			<table>
 				<tr>
 					<td><label for="showStepsToggle">Show Generation Steps:</label></td>
@@ -36,6 +83,11 @@
 					</td>
 					<td><input type="number" id="cellSizeInput" value="15" /></td>
 				</tr>
+			</table>
+
+			<!-- Grid Settings -->
+			<h2>Grid</h2>
+			<table>
 				<tr>
 					<td><label for="columnInput">Columns:</label></td>
 					<td><input type="number" id="columnInput" value="20" /></td>
@@ -44,7 +96,11 @@
 					<td><label for="rowInput">Rows:</label></td>
 					<td><input type="number" id="rowInput" value="15" /></td>
 				</tr>
+			</table>
 
+			<!-- Weight Settings -->
+			<h2>Weights</h2>
+			<table>
 				<tr>
 					<td><label for="weightUpInput">Up Weight:</label></td>
 					<td><input type="number" id="weightUpInput" value="1" /></td>
