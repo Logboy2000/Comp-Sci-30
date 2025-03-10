@@ -3,9 +3,9 @@ let canvas,
 	ctx,
 	columnInput,
 	rowInput,
-	cellSizeInput,
-	mazeGenButtonI,
-	mazeGenButtonR,
+	resolutionScaleInput,
+	mazeGenButtonIter,
+	mazeGenButtonRecur,
 	animationDelayInput,
 	showStepsToggle,
 	weightUpInput,
@@ -24,13 +24,13 @@ let animationDelay = 0
 let showSteps = false
 
 // Colors
-let visitedColor = "#5555DD"
-let finishedColor = "#555555"
-let currentCellColor = "#FFD700"
+let visitedColor = '#5555DD'
+let finishedColor = '#555555'
+let currentCellColor = '#FFD700'
 
-let visitedOutlineColor = "#0000FF"
-let finishedOutlineColor = "#000000"
-let currentCellOutlineColor = "#FF0000"
+let visitedOutlineColor = '#0000FF'
+let finishedOutlineColor = '#000000'
+let currentCellOutlineColor = '#FF0000'
 
 // Assign weights to each direction
 let directionWeights = {
@@ -46,42 +46,55 @@ let affectedCells = []
 let mazeGenerationActive = false
 let stopRequested = false
 
+/**
+ * A shorthand for document.getElementById
+ * @param {String} id The id of the HTML element to get
+ * @returns {HTMLElement}
+ */
 function getElement(id) {
 	return document.getElementById(id)
 }
 
+/**
+ * Runs when the HTML body is loaded
+ */
 function loaded() {
-	canvas = getElement("maze")
-	ctx = canvas.getContext("2d")
+	canvas = getElement('maze')
+	ctx = canvas.getContext('2d')
 	ctx.imageSmoothingEnabled = false
 
-	columnInput = getElement("columnInput")
-	rowInput = getElement("rowInput")
-	cellSizeInput = getElement("cellSizeInput")
-	mazeGenButtonI = getElement("mazeGenButtonI")
-	mazeGenButtonR = getElement("mazeGenButtonR")
-	animationDelayInput = getElement("animationDelayInput")
-	showStepsToggle = getElement("showStepsToggle")
-	weightUpInput = getElement("weightUpInput")
-	weightDownInput = getElement("weightDownInput")
-	weightLeftInput = getElement("weightLeftInput")
-	weightRightInput = getElement("weightRightInput")
+	columnInput = getElement('columnInput')
+	rowInput = getElement('rowInput')
+	resolutionScaleInput = getElement('cellSizeInput')
+	mazeGenButtonIter = getElement('mazeGenButtonI')
+	mazeGenButtonRecur = getElement('mazeGenButtonR')
+	animationDelayInput = getElement('animationDelayInput')
+	showStepsToggle = getElement('showStepsToggle')
+	weightUpInput = getElement('weightUpInput')
+	weightDownInput = getElement('weightDownInput')
+	weightLeftInput = getElement('weightLeftInput')
+	weightRightInput = getElement('weightRightInput')
 
-	mazeGenButtonI.addEventListener("click", () => genButtonPressed(false))
-	mazeGenButtonR.addEventListener("click", () => genButtonPressed(true))
+	mazeGenButtonIter.addEventListener('click', () => startMazeGeneration(false))
+	mazeGenButtonRecur.addEventListener('click', () => startMazeGeneration(true))
 }
 
-function genButtonPressed(doRecursively) {
+/**
+ *
+ * @param {Boolean} doRecursively If false then maze gen is done iterativley
+ * @returns void
+ */
+function startMazeGeneration(doRecursively) {
 	// Stop any currently running maze
 	if (mazeGenerationActive) {
 		stopRequested = true
-		mazeGenButtonI.innerText = "Iterative Maze!"
-		mazeGenButtonR.style.display = ""
+		mazeGenButtonIter.innerText = 'Iterative Maze!'
+		mazeGenButtonRecur.style.display = ''
 		return
 	} else {
 		stopRequested = false
-		mazeGenButtonI.innerText = "Cancel"
-		mazeGenButtonR.style.display = "none"
+		mazeGenButtonIter.innerText = 'Cancel'
+		mazeGenButtonRecur.style.display = 'none'
 	}
 
 	// Wait a bit so the previous loop exits (50ms)
@@ -91,12 +104,12 @@ function genButtonPressed(doRecursively) {
 
 		mazeRows = parseInt(rowInput.value)
 		mazeCols = parseInt(columnInput.value)
-		cellSize = parseInt(cellSizeInput.value)
+		cellSize = parseFloat(resolutionScaleInput.value) * 15
 		animationDelay = parseInt(animationDelayInput.value)
 		showSteps = showStepsToggle.checked
 
 		if (mazeRows <= 0 || mazeCols <= 0 || cellSize <= 0) {
-			alert("Maze dimensions and cell size must be greater than 0!")
+			alert('Maze dimensions and cell size must be greater than 0!')
 			return
 		}
 
@@ -109,7 +122,7 @@ function genButtonPressed(doRecursively) {
 
 		canvas.width = mazeCols * cellSize
 		canvas.height = mazeRows * cellSize
-		canvas.style.display = "inline"
+		canvas.style.display = 'inline'
 
 		// Reset maze array
 		mazeArr = []
@@ -126,13 +139,13 @@ function genButtonPressed(doRecursively) {
 		if (doRecursively) {
 			makeRecursiveMaze(mazeArr, 0, 0).then(() => {
 				let endTime = performance.now()
-				updateStats("rec", "time", Math.round(endTime - startTime) + "ms")
+				updateStats('rec', 'time', Math.round(endTime - startTime) + 'ms')
 				mazeGenEnd()
 			})
 		} else {
 			makeIterativeMaze(mazeArr, 0, 0).then(() => {
 				let endTime = performance.now()
-				updateStats("iter", "time", Math.round(endTime - startTime) + "ms")
+				updateStats('iter', 'time', Math.round(endTime - startTime) + 'ms')
 				mazeGenEnd()
 			})
 		}
@@ -141,8 +154,8 @@ function genButtonPressed(doRecursively) {
 
 function mazeGenEnd() {
 	mazeGenerationActive = false
-	mazeGenButtonI.innerText = "Iterative Maze!"
-	mazeGenButtonR.style.display = ""
+	mazeGenButtonIter.innerText = 'Iterative Maze!'
+	mazeGenButtonRecur.style.display = ''
 }
 function updateStats(method, metric, value) {
 	document.getElementById(`${method}_${metric}`).textContent = value
@@ -192,18 +205,18 @@ async function makeIterativeMaze(arr, startX, startY) {
 
 		if (showSteps) {
 			drawMazeCells(affectedCells, currentCell)
-			updateStats("iter", "steps", steps)
-			updateStats("iter", "backtracks", backtracks)
-			updateStats("iter", "stack", maxStackDepth)
-			updateStats("iter", "visited", visitedCells)
+			updateStats('iter', 'steps', steps)
+			updateStats('iter', 'backtracks', backtracks)
+			updateStats('iter', 'stack', maxStackDepth)
+			updateStats('iter', 'visited', visitedCells)
 			await new Promise((resolve) => setTimeout(resolve, animationDelay))
 		}
 	}
 
-	updateStats("iter", "steps", steps)
-	updateStats("iter", "backtracks", backtracks)
-	updateStats("iter", "stack", maxStackDepth)
-	updateStats("iter", "visited", visitedCells)
+	updateStats('iter', 'steps', steps)
+	updateStats('iter', 'backtracks', backtracks)
+	updateStats('iter', 'stack', maxStackDepth)
+	updateStats('iter', 'visited', visitedCells)
 
 	if (!stopRequested && (showSteps || (startX === 0 && startY === 0))) {
 		drawMazeCells(affectedCells, null)
@@ -249,10 +262,10 @@ async function makeRecursiveMaze(
 			stats.wallsRemoved++
 
 			if (showSteps) {
-				updateStats("rec", "steps", stats.steps)
-				updateStats("rec", "backtracks", stats.backtracks)
-				updateStats("rec", "stack", stats.maxDepth)
-				updateStats("rec", "visited", stats.visitedCells)
+				updateStats('rec', 'steps', stats.steps)
+				updateStats('rec', 'backtracks', stats.backtracks)
+				updateStats('rec', 'stack', stats.maxDepth)
+				updateStats('rec', 'visited', stats.visitedCells)
 				drawMazeCells(affectedCells, currentCell)
 				await new Promise((resolve) => setTimeout(resolve, animationDelay))
 			}
@@ -275,10 +288,10 @@ async function makeRecursiveMaze(
 	}
 
 	if (depth === 0) {
-		updateStats("rec", "steps", stats.steps)
-		updateStats("rec", "backtracks", stats.backtracks)
-		updateStats("rec", "stack", stats.maxDepth)
-		updateStats("rec", "visited", stats.visitedCells)
+		updateStats('rec', 'steps', stats.steps)
+		updateStats('rec', 'backtracks', stats.backtracks)
+		updateStats('rec', 'stack', stats.maxDepth)
+		updateStats('rec', 'visited', stats.visitedCells)
 	}
 }
 
@@ -464,4 +477,17 @@ function randomRangeInt(min, max) {
 		return min
 	}
 	return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+function downloadCanvas() {
+	// Convert the canvas to data
+	var image = canvas.toDataURL()
+	// Create a link
+	var aDownloadLink = document.createElement('a')
+	// Add the name of the file to the link
+	aDownloadLink.download = 'maze.png'
+	// Attach the data to the link
+	aDownloadLink.href = image
+	// Get the code to click the download link
+	aDownloadLink.click()
 }

@@ -14,6 +14,7 @@
 			<br />
 			<button id="mazeGenButtonI">Iterative Maze!</button>
 			<button id="mazeGenButtonR">Recursion Maze</button>
+			<button onclick="downloadCanvas()">Save Maze</button>
 			<hr />
 			<div id="stats">
 				<h2>Maze Generation Statistics</h2>
@@ -42,7 +43,7 @@
 							<td id="rec_backtracks">--</td>
 						</tr>
 						<tr>
-							<td>Max Stack Depth</td>
+							<td>Highest Stack Size</td>
 							<td id="iter_stack">--</td>
 							<td id="rec_stack">--</td>
 						</tr>
@@ -74,9 +75,9 @@
 				</tr>
 				<tr>
 					<td>
-						<label for="cellSizeInput">Cell Resolution (15 recommended):</label>
+						<label for="cellSizeInput">Resolution Scale:</label>
 					</td>
-					<td><input type="number" id="cellSizeInput" value="15" /></td>
+					<td><input type="number" id="cellSizeInput" value="1" /></td>
 				</tr>
 			</table>
 
