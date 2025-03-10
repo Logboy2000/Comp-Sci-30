@@ -196,7 +196,6 @@ async function makeIterativeMaze(arr, startX, startY) {
 			updateStats("iter", "backtracks", backtracks)
 			updateStats("iter", "stack", maxStackDepth)
 			updateStats("iter", "visited", visitedCells)
-			updateStats("iter", "walls", wallsRemoved)
 			await new Promise((resolve) => setTimeout(resolve, animationDelay))
 		}
 	}
@@ -205,7 +204,6 @@ async function makeIterativeMaze(arr, startX, startY) {
 	updateStats("iter", "backtracks", backtracks)
 	updateStats("iter", "stack", maxStackDepth)
 	updateStats("iter", "visited", visitedCells)
-	updateStats("iter", "walls", wallsRemoved)
 
 	if (!stopRequested && (showSteps || (startX === 0 && startY === 0))) {
 		drawMazeCells(affectedCells, null)
@@ -255,7 +253,6 @@ async function makeRecursiveMaze(
 				updateStats("rec", "backtracks", stats.backtracks)
 				updateStats("rec", "stack", stats.maxDepth)
 				updateStats("rec", "visited", stats.visitedCells)
-				updateStats("rec", "walls", stats.wallsRemoved)
 				drawMazeCells(affectedCells, currentCell)
 				await new Promise((resolve) => setTimeout(resolve, animationDelay))
 			}
@@ -282,7 +279,6 @@ async function makeRecursiveMaze(
 		updateStats("rec", "backtracks", stats.backtracks)
 		updateStats("rec", "stack", stats.maxDepth)
 		updateStats("rec", "visited", stats.visitedCells)
-		updateStats("rec", "walls", stats.wallsRemoved)
 	}
 }
 
