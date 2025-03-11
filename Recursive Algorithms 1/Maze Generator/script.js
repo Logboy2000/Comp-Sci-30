@@ -40,9 +40,9 @@ let directionWeights = {
 	right: 1,
 }
 
-/// Maze Gen
+/// Maze Gen stuff
 let mazeArr = []
-let affectedCells = []
+let cellsToDraw = []
 let mazeGenerationActive = false
 let stopRequested = false
 
@@ -97,34 +97,35 @@ function startMazeGeneration(doRecursively) {
 		mazeGenButtonRecur.style.display = 'none'
 	}
 
-	// Wait a bit so the previous loop exits (50ms)
+	// Wait a bit so the previous maze loop finishes (50ms)
 	setTimeout(() => {
 		// Prevent starting a new maze if one is already running
 		if (mazeGenerationActive) return
 
+		// Get values from settings boxes
 		mazeRows = parseInt(rowInput.value)
 		mazeCols = parseInt(columnInput.value)
 		cellSize = parseFloat(resolutionScaleInput.value) * 15
 		animationDelay = parseInt(animationDelayInput.value)
 		showSteps = showStepsToggle.checked
-
-		if (mazeRows <= 0 || mazeCols <= 0 || cellSize <= 0) {
-			alert('Maze dimensions and cell size must be greater than 0!')
-			return
-		}
-
 		directionWeights = {
 			up: parseInt(weightUpInput.value),
 			down: parseInt(weightDownInput.value),
 			left: parseInt(weightLeftInput.value),
 			right: parseInt(weightRightInput.value),
 		}
+		// Make sure settings values are valid
+		if (mazeRows <= 0 || mazeCols <= 0 || cellSize <= 0 || animationDelay < 0) {
+			alert('Maze dimensions and cell size must be greater than 0!')
+			return
+		}
 
+		// Show and resize canvas to fit maze
 		canvas.width = mazeCols * cellSize
 		canvas.height = mazeRows * cellSize
 		canvas.style.display = 'inline'
 
-		// Reset maze array
+		// Reset maze array and related values
 		mazeArr = []
 		for (let y = 0; y < mazeRows; y++) {
 			mazeArr[y] = []
@@ -132,57 +133,97 @@ function startMazeGeneration(doRecursively) {
 				mazeArr[y].push(new MazeCell(x, y))
 			}
 		}
-
-		affectedCells = []
+		cellsToDraw = []
 		mazeGenerationActive = true
+
+		// Used to track how long maze gen took
 		let startTime = performance.now()
+		// Generate the maze recursivley or iterativley depending on input
+		// Then update the stats
 		if (doRecursively) {
 			makeRecursiveMaze(mazeArr, 0, 0).then(() => {
-				let endTime = performance.now()
-				updateStats('rec', 'time', Math.round(endTime - startTime) + 'ms')
+				updateStats(
+					'rec',
+					'time',
+					Math.round(performance.now() - startTime) + 'ms'
+				)
 				mazeGenEnd()
 			})
 		} else {
 			makeIterativeMaze(mazeArr, 0, 0).then(() => {
-				let endTime = performance.now()
-				updateStats('iter', 'time', Math.round(endTime - startTime) + 'ms')
+				updateStats(
+					'iter',
+					'time',
+					Math.round(performance.now() - startTime) + 'ms'
+				)
 				mazeGenEnd()
 			})
 		}
 	}, 50) // Small delay to let the previous function exit
 }
 
+/**
+ * Resets values for after a maze finishes
+ */
 function mazeGenEnd() {
 	mazeGenerationActive = false
 	mazeGenButtonIter.innerText = 'Iterative Maze!'
 	mazeGenButtonRecur.style.display = ''
 }
-function updateStats(method, metric, value) {
-	document.getElementById(`${method}_${metric}`).textContent = value
-}
 
+/**
+ * Updates stats about the maze generation in the 
+ * @param {*} category 
+ * @param {*} metric 
+ * @param {*} value 
+ */
+function updateStats(category, metric, value) {
+	document.getElementById(`${category}_${metric}`).textContent = value
+}
+/**
+ * Makes a maze and draws it with an iterative solution
+ * @param {*} arr The input array (full of new MazeCell objects)
+ * @param {*} startX Starting x for maze gen
+ * @param {*} startY Starting y for maze gen
+ */
 async function makeIterativeMaze(arr, startX, startY) {
+	// Emulates the stack used in recursion
 	let stack = []
+
+	// Sets the starting cell to visited
 	let currentCell = arr[startY][startX]
 	currentCell.visited = true
 
+	// Define stats that are displayed
 	let steps = 0
 	let backtracks = 0
 	let maxStackDepth = 0
 	let visitedCells = 1
 	let wallsRemoved = 0
 
-	while (true) {
+	// While loop runs until broken inside the function
+	while (true == true) {
+		// Prevents running if a stop is requested by the user
 		if (stopRequested) {
-			drawMazeCells(affectedCells, null)
+			drawMazeCells(cellsToDraw, null)
 			return
 		}
 
-		if (showSteps) affectedCells = []
-		affectedCells.push(currentCell)
+		// Resets effected cells when showing steps so it only draws the maze cells that change
+		if (showSteps) {
+			cellsToDraw = []
+		}
+
+		// Makes the current cell one that is drawn
+		cellsToDraw.push(currentCell)
+
+		// Add to stats
 		steps++
 
+		// Gets a next cell to use
 		let nextCell = currentCell.getRandomValidNeighbor()
+
+		// if there is a next cell, then remove the walls between it and the current one
 		if (nextCell) {
 			removeWalls(currentCell, nextCell)
 			stack.push(currentCell)
@@ -191,20 +232,25 @@ async function makeIterativeMaze(arr, startX, startY) {
 			currentCell.visited = true
 			visitedCells++
 			wallsRemoved++
-			affectedCells.push(currentCell)
-		} else if (stack.length > 0) {
+			cellsToDraw.push(currentCell)
+		} 
+		// If there is no next cell, but backtracking is possible, do it
+		else if (stack.length > 0) {
 			currentCell.backtracked = true
-			affectedCells.push(currentCell)
+			cellsToDraw.push(currentCell)
 			currentCell = stack.pop()
 			backtracks++
-		} else {
+		} else
+		// If there is no next cell or backtracking to do, then exit the loop
+		{
 			currentCell.backtracked = true
-			affectedCells.push(currentCell)
+			cellsToDraw.push(currentCell)
 			break
 		}
 
+		// Update stats every step if it is shown
 		if (showSteps) {
-			drawMazeCells(affectedCells, currentCell)
+			drawMazeCells(cellsToDraw, currentCell)
 			updateStats('iter', 'steps', steps)
 			updateStats('iter', 'backtracks', backtracks)
 			updateStats('iter', 'stack', maxStackDepth)
@@ -213,14 +259,14 @@ async function makeIterativeMaze(arr, startX, startY) {
 		}
 	}
 
+	// Show stats when maze generation finishes
 	updateStats('iter', 'steps', steps)
 	updateStats('iter', 'backtracks', backtracks)
 	updateStats('iter', 'stack', maxStackDepth)
 	updateStats('iter', 'visited', visitedCells)
 
-	if (!stopRequested && (showSteps || (startX === 0 && startY === 0))) {
-		drawMazeCells(affectedCells, null)
-	}
+	// Draw maze cells one last time with no cell as the current one
+	drawMazeCells(cellsToDraw, null)
 }
 
 async function makeRecursiveMaze(
@@ -237,18 +283,18 @@ async function makeRecursiveMaze(
 	}
 ) {
 	if (stopRequested) {
-		drawMazeCells(affectedCells, null)
+		drawMazeCells(cellsToDraw, null)
 		return
 	}
 
 	let currentCell = arr[y][x]
 	currentCell.visited = true
-	affectedCells.push(currentCell)
+	cellsToDraw.push(currentCell)
 	stats.steps++
 	stats.maxDepth = Math.max(stats.maxDepth, depth)
 
 	if (showSteps) {
-		drawMazeCells(affectedCells, currentCell)
+		drawMazeCells(cellsToDraw, currentCell)
 	}
 
 	let neighbors = currentCell.getValidNeighbors()
@@ -257,7 +303,7 @@ async function makeRecursiveMaze(
 
 		if (!nextCell.visited) {
 			removeWalls(currentCell, nextCell)
-			affectedCells.push(nextCell)
+			cellsToDraw.push(nextCell)
 			stats.visitedCells++
 			stats.wallsRemoved++
 
@@ -266,7 +312,7 @@ async function makeRecursiveMaze(
 				updateStats('rec', 'backtracks', stats.backtracks)
 				updateStats('rec', 'stack', stats.maxDepth)
 				updateStats('rec', 'visited', stats.visitedCells)
-				drawMazeCells(affectedCells, currentCell)
+				drawMazeCells(cellsToDraw, currentCell)
 				await new Promise((resolve) => setTimeout(resolve, animationDelay))
 			}
 
@@ -277,14 +323,14 @@ async function makeRecursiveMaze(
 	}
 
 	currentCell.backtracked = true
-	affectedCells.push(currentCell)
+	cellsToDraw.push(currentCell)
 	stats.backtracks++
 
 	if (showSteps || stopRequested) {
-		drawMazeCells(affectedCells, currentCell)
+		drawMazeCells(cellsToDraw, currentCell)
 		await new Promise((resolve) => setTimeout(resolve, animationDelay))
 	} else if (!showSteps && x === 0 && y === 0) {
-		drawMazeCells(affectedCells, null)
+		drawMazeCells(cellsToDraw, null)
 	}
 
 	if (depth === 0) {
