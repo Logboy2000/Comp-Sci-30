@@ -1,4 +1,4 @@
-/// global stuff thats set after load
+/// global stuff thats set in loaded
 let canvas,
 	ctx,
 	columnInput,
@@ -59,10 +59,9 @@ function getElement(id) {
  * Runs when the HTML body is loaded
  */
 function loaded() {
+	// Get a looooooooooooooooooooooot of elements
 	canvas = getElement('maze')
 	ctx = canvas.getContext('2d')
-	ctx.imageSmoothingEnabled = false
-
 	columnInput = getElement('columnInput')
 	rowInput = getElement('rowInput')
 	resolutionScaleInput = getElement('cellSizeInput')
@@ -80,7 +79,7 @@ function loaded() {
 }
 
 /**
- *
+ * Starts the initial maze generation
  * @param {Boolean} doRecursively If false then maze gen is done iterativley
  * @returns void
  */
@@ -263,12 +262,10 @@ async function makeRecursiveMaze(arr, x, y) {
 			removeWalls(currentCell, nextCell)
 			cellsToDraw.push(nextCell)
 
-			
 			if (showSteps) {
 				drawMazeCells(cellsToDraw, currentCell)
 				await new Promise((resolve) => setTimeout(resolve, animationDelay))
 			}
-
 
 			await makeRecursiveMaze(arr, nextCell.x, nextCell.y)
 
@@ -288,28 +285,38 @@ async function makeRecursiveMaze(arr, x, y) {
 	}
 }
 
+/**
+ * Draws the given maze cells in different colors depending on their state
+ * @param {MazeCell[]} affectedCells An array of the affected cells
+ * @param {MazeCell} currentCell The currently active cell (drawn in a different color)
+ */
 function drawMazeCells(affectedCells, currentCell) {
+	// loop through all cells and draw
 	for (let cell of affectedCells) {
 		if (cell === currentCell) {
+			// Draw Current cell
 			ctx.fillStyle = currentCellColor
 			ctx.strokeStyle = currentCellOutlineColor
 		} else if (cell.backtracked) {
+			// Draw Cell Thats been backtracked to
 			ctx.fillStyle = finishedColor
 			ctx.strokeStyle = finishedOutlineColor
 		} else if (cell.visited) {
+			// Draw cell that has not been backtracked to
 			ctx.fillStyle = visitedColor
 			ctx.strokeStyle = visitedOutlineColor
 		}
-
-		drawCellBackground(cell)
+		// Draw Background
+		ctx.fillRect(cell.drawX, cell.drawY, cellSize, cellSize)
+		// Draw Walls on top
 		drawCellWalls(cell)
 	}
 }
 
-function drawCellBackground(cell) {
-	ctx.fillRect(cell.drawX, cell.drawY, cellSize, cellSize)
-}
-
+/**
+ *
+ * @param {MazeCell} cell Draws the walls of a maze cell based on it's properties
+ */
 function drawCellWalls(cell) {
 	const inset = 0.0
 	// up
@@ -354,109 +361,121 @@ function drawCellWalls(cell) {
 	}
 }
 
+/**
+ * A class for a maze cell that keeps
+ */
 class MazeCell {
+	/**
+	 * Sets up the maze cell
+	 * @param {*} x The cells x position on the grid
+	 * @param {*} y The cells y position on the grid
+	 */
 	constructor(x = 0, y = 0) {
-		this.visited = false
-		this.backtracked = false
-		this.walls = [true, true, true, true] // [Up, Right, Down, Left]
+		// Sets the position of the cell
 		this.x = x
 		this.y = y
+
+		// Tracks the cell's state
+		this.visited = false
+		this.backtracked = false
+
+		// Tracks which walls are active [Up, Right, Down, Left]
+		this.walls = [true, true, true, true]
+
+		// Get the draw position
 		this.drawX = this.x * cellSize
 		this.drawY = this.y * cellSize
 	}
 
+	/**
+	 * 
+	 * @param {Boolean} weighted Whether or not the returned array should be weighted
+	 * @returns An array of the valid neighbors
+	 */
+	getValidNeighborsList(weighted = false) {
+		let validNeighbors = []
+
+		// Get all neighbor cells
+		const neighbors = {
+			up: mazeArr[this.y - 1] && mazeArr[this.y - 1][this.x],
+			down: mazeArr[this.y + 1] && mazeArr[this.y + 1][this.x],
+			left: mazeArr[this.y] && mazeArr[this.y][this.x - 1],
+			right: mazeArr[this.y] && mazeArr[this.y][this.x + 1],
+		}
+
+		for (let dir in neighbors) {
+			let neighbor = neighbors[dir]
+			if (neighbor && !neighbor.visited) {
+				// Adds extra cells if they are weighted in certain directions
+				if (weighted) {
+					for (let i = 0; i < directionWeights[dir]; i++) {
+						validNeighbors.push(neighbor)
+					}
+				} else {
+					validNeighbors.push(neighbor)
+				}
+			}
+		}
+
+		return validNeighbors
+	}
+
+	/**
+	 * Returns a random valid neighbor maze cell
+	 * @returns {MazeCell} Random valid neighbor cell
+	 */
 	getRandomValidNeighbor() {
-		let neighbors = []
-
-		let up = mazeArr[this.y - 1] && mazeArr[this.y - 1][this.x] // up
-		let down = mazeArr[this.y + 1] && mazeArr[this.y + 1][this.x] // down
-		let left = mazeArr[this.y][this.x - 1] // left
-		let right = mazeArr[this.y][this.x + 1] // right
-
-		// Check if each neighbor is valid and push with its weight
-		if (up && !up.visited) {
-			for (let i = 0; i < directionWeights.up; i++) {
-				neighbors.push(up)
-			}
-		}
-		if (down && !down.visited) {
-			for (let i = 0; i < directionWeights.down; i++) {
-				neighbors.push(down)
-			}
-		}
-		if (left && !left.visited) {
-			for (let i = 0; i < directionWeights.left; i++) {
-				neighbors.push(left)
-			}
-		}
-		if (right && !right.visited) {
-			for (let i = 0; i < directionWeights.right; i++) {
-				neighbors.push(right)
-			}
-		}
-
-		// Return a weighted random neighbor
+		const neighbors = this.getValidNeighborsList(true)
 		if (neighbors.length > 0) {
 			return neighbors[randomRangeInt(0, neighbors.length - 1)]
 		}
-		return null // No valid neighbor found
+		return null
+		
 	}
+
+	/**
+	 * Returns an array of all valid neighbor cells
+	 * @returns {MazeCell[]} Array of all valid neighbor cells
+	 */
 	getValidNeighbors() {
-		let neighbors = []
-
-		let up = mazeArr[this.y - 1] && mazeArr[this.y - 1][this.x] // Up
-		let down = mazeArr[this.y + 1] && mazeArr[this.y + 1][this.x] // Down
-		let left = mazeArr[this.y][this.x - 1] // Left
-		let right = mazeArr[this.y][this.x + 1] // Right
-
-		// Check if each neighbor is valid and push with its weight
-		if (up && !up.visited) {
-			for (let i = 0; i < directionWeights.up; i++) {
-				neighbors.push(up)
-			}
-		}
-		if (down && !down.visited) {
-			for (let i = 0; i < directionWeights.down; i++) {
-				neighbors.push(down)
-			}
-		}
-		if (left && !left.visited) {
-			for (let i = 0; i < directionWeights.left; i++) {
-				neighbors.push(left)
-			}
-		}
-		if (right && !right.visited) {
-			for (let i = 0; i < directionWeights.right; i++) {
-				neighbors.push(right)
-			}
-		}
-
-		// Shuffle the array to ensure randomness in traversal order
-		return neighbors.sort(() => Math.random() - 0.5)
+		return this.getValidNeighborsList().sort(() => Math.random() - 0.5)
 	}
 }
 
-function removeWalls(current, next) {
-	let x = current.x - next.x
-	let y = current.y - next.y
+/**
+ * Takes in two cells and destroys the walls between them 
+ * @param {*} cell1 The first cell
+ * @param {*} cell2 The second cell
+ */
+function removeWalls(cell1, cell2) {
+	let x = cell1.x - cell2.x
+	let y = cell1.y - cell2.y
 
 	if (x === 1) {
-		current.walls[3] = false
-		next.walls[1] = false
+		cell1.walls[3] = false
+		cell2.walls[1] = false
 	} else if (x === -1) {
-		current.walls[1] = false
-		next.walls[3] = false
+		cell1.walls[1] = false
+		cell2.walls[3] = false
 	}
 
 	if (y === 1) {
-		current.walls[0] = false
-		next.walls[2] = false
+		cell1.walls[0] = false
+		cell2.walls[2] = false
 	} else if (y === -1) {
-		current.walls[2] = false
-		next.walls[0] = false
+		cell1.walls[2] = false
+		cell2.walls[0] = false
 	}
 }
 
+/**
+ * Helper function to draw a line on a canvas
+ * @param {CanvasRenderingContext2D} ctx The 2d canvas context
+ * @param {Number} x1 
+ * @param {Number} y1 
+ * @param {Number} x2 
+ * @param {Number} y2 
+ */
 function drawLine(ctx, x1, y1, x2, y2) {
 	ctx.beginPath()
 	ctx.moveTo(x1, y1)
@@ -465,6 +484,12 @@ function drawLine(ctx, x1, y1, x2, y2) {
 	ctx.stroke()
 }
 
+/**
+ * Helper function to return a random integer between the two values
+ * @param {*} min Minimum value (inclusive)
+ * @param {*} max Maximum value (inclusive)
+ * @returns {Number} The random number
+ */
 function randomRangeInt(min, max) {
 	if (min == max) {
 		return min
@@ -472,7 +497,11 @@ function randomRangeInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-function downloadCanvas() {
+/**
+ * Downloads the current maze canvas as a file
+ * (triggered by a button)
+ */
+function downloadMazeCanvas() {
 	// Convert the canvas to data
 	var image = canvas.toDataURL()
 	// Create a link
