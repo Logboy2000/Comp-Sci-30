@@ -12,7 +12,10 @@ let RedBox = {
 
 	update: function () {
 		if (Input.isMousePressed(0)){
-			RedBox.changeSize(10,10)
+			RedBox.scale(1.05)
+		}
+		if (Input.isMousePressed(2)){
+			RedBox.scale(0.95)
 		}
 
 
@@ -21,16 +24,16 @@ let RedBox = {
 		this.xd = 0
 		this.yd = 0
 
-		if (Input.isKeyPressed('ArrowUp')) {
+		if (Input.isKeyPressed('ArrowUp') || Input.isKeyPressed('w')) {
 			this.yd--
 		}
-		if (Input.isKeyPressed('ArrowDown')) {
+		if (Input.isKeyPressed('ArrowDown') || Input.isKeyPressed('s')) {
 			this.yd++
 		}
-		if (Input.isKeyPressed('ArrowLeft')) {
+		if (Input.isKeyPressed('ArrowLeft') || Input.isKeyPressed('a')) {
 			this.xd--
 		}
-		if (Input.isKeyPressed('ArrowRight')) {
+		if (Input.isKeyPressed('ArrowRight') || Input.isKeyPressed('d')) {
 			this.xd++
 		}
 
@@ -47,8 +50,8 @@ let RedBox = {
 		this.y += dy
 	},
 
-	changeSize: function (dw, dh) {
-		this.w += dw
-		this.h += dh
+	scale: function (scaleFactor) {
+		this.w *= scaleFactor
+		this.h *= scaleFactor
 	},
 }

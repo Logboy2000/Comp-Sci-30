@@ -1,3 +1,4 @@
+// Input Object
 document.addEventListener('keydown', (e) => {
 	Input.pressedKeys[e.key] = true
 })
@@ -6,6 +7,7 @@ document.addEventListener('keyup', (e) => {
 })
 document.addEventListener('mousedown', (e) => {
 	Input.pressedMouse[e.button] = true
+	console.log(e.button)
 })
 document.addEventListener('mouseup', (e) => {
 	Input.pressedMouse[e.button] = false
@@ -20,22 +22,16 @@ let Input = {
 		y: 0,
 	},
 	pressedKeys: {},
-
 	pressedMouse: {},
+
 	isKeyPressed: function (key) {
 		if (this.pressedKeys[key] == true) {
 			console.log(key)
 		}
 		return this.pressedKeys[key]
 	},
-	isKeyJustPressed: function (key) {
-		return this.justPressedKeys[key]
-	},
 	isMousePressed: function (mouseButton) {
 		return this.pressedMouse[mouseButton]
-	},
-	isMouseJustPressed: function (mouseButton) {
-		return this.justPressedMouse[mouseButton]
 	},
 	getMousePosition: function () {
 		return {

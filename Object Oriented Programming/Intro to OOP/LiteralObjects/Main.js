@@ -1,11 +1,11 @@
 let canvas, ctx
-
 function loaded() {
 	canvas = document.getElementById('canvas')
 	ctx = canvas.getContext('2d')
 	canvas.width = 1280
 	canvas.height = 720
-
+	
+	document.addEventListener('contextmenu', event => event.preventDefault())
 	update()
 }
 
