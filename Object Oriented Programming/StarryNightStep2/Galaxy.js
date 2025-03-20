@@ -1,15 +1,15 @@
 class Galaxy {
-	constructor(w, h, starCount, starColor = '#FFFFFF') {
-		this.camX = 0
-		this.camY = 0
-		this.camSpeed = 10
-		this.camZoom = 1
+	constructor(x, y, w, h, initialStarCount, starColor = '#FFFFFF') {
+		this.x = x
+		this.y = y
 		this.w = w
 		this.h = h
+		this.r = 0
 		this.starColor = starColor
 		this.stars = []
 
-		for (var i = 0; i < starCount; i++) {
+		
+		for (var i = 0; i < initialStarCount; i++) {
 			this.addStar(
 				Math.random() * this.w,
 				Math.random() * this.h,
@@ -18,14 +18,21 @@ class Galaxy {
 			)
 		}
 	}
-	
-	addStar(x, y, size, color) {
+
+	addStar = function (x, y, size, color) {
 		this.stars.push(new Star(x, y, size, color))
 	}
 
-	draw(ctx) {
+	draw = function (ctx) {
+		if (Input.isKeyPressed('r')){
+			this.r += 0.1
+		}
+		ctx.save()
+		ctx.translate(this.x, this.y)
+		ctx.rotate(this.r)
 		for (var i = 0; i < this.stars.length; i++) {
 			this.stars[i].draw(ctx)
 		}
+		ctx.restore()
 	}
 }

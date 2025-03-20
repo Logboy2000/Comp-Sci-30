@@ -1,5 +1,7 @@
 // Variables
-let canvas, ctx, galaxy, directionInputDisplay, camera, debugMenu
+let canvas, ctx, universe, directionInputDisplay, camera, debugMenu, fpsGraph
+let lastFrameTime = performance.now() // Track last frame time
+let fps = 0 // FPS variable
 
 function loaded() {
 	// Elements
@@ -8,19 +10,25 @@ function loaded() {
 	resizeCanvas()
 
 	// Objects
-	galaxy = new Galaxy(canvas.width * 3, canvas.height * 3, 10000)
-	camera = new Camera(0, 0, 1, 0, galaxy.w, 0, galaxy.h)
+	universe = new Universe(canvas.width * 2, canvas.height * 2, 10)
+	camera = new Camera(0, 0, 1, 0, universe.w, 0, universe.h)
+	fpsGraph = new Graph({
+		yellowThreshold: 40,
+		greenThreshold: 60,
+		labelCount: 5,
+		stepSize: 20,
+		minYScale: 200,
+		decimalPlaces: 2,
+		higherIsBetter: true,
+	})
 	debugMenu = new DebugMenu()
-	debugMenu.addLabel('Star Count', galaxy.stars.length)
+	debugMenu.addLabel('Galaxy Count', universe.galaxys.length)
 	debugMenu.addLabel('Camera X', '0')
 	debugMenu.addLabel('Camera Y', '0')
 	debugMenu.addLabel('Camera Zoom', '1')
+	debugMenu.addLabel('FPS', '0') // Add FPS label
 
-	directionInputDisplay = new DirectionInputDisplay(
-		canvas.width - 200,
-		canvas.height + 200,
-		2
-	)
+	directionInputDisplay = new DirectionInputDisplay(5, 5, 2)
 
 	// Event Listeners
 	window.addEventListener('resize', resizeCanvas)
@@ -37,32 +45,44 @@ function loaded() {
 	update()
 }
 
-function resizeCanvas() {
-	canvas.width = window.innerWidth
-	canvas.height = window.innerHeight
-}
-
 function update() {
+	let currentTime = performance.now()
+	let deltaTime = (currentTime - lastFrameTime) / 1000 // Convert to seconds
+	lastFrameTime = currentTime
+	fps = (1 / deltaTime).toFixed(1) // Calculate FPS
+
 	// Clear Screen
 	ctx.fillStyle = '#000000'
 	ctx.fillRect(0, 0, canvas.width, canvas.height)
 
 	// Update
+	if (Input.isMousePressed(0) == true) {
+	}
 	camera.update()
 	debugMenu.updateLabel('Camera X', camera.x.toFixed(4))
 	debugMenu.updateLabel('Camera Y', camera.y.toFixed(4))
 	debugMenu.updateLabel('Camera Zoom', camera.zoom.toFixed(4))
+	debugMenu.updateLabel('FPS', fps)
 
 	// Drawing
 	ctx.save()
 	ctx.translate(-camera.x * camera.zoom, -camera.y * camera.zoom)
 	ctx.scale(camera.zoom, camera.zoom)
+	ctx.rotate(camera.r)
+
 	draw(ctx)
+
 	ctx.restore()
+
 	drawUI(ctx)
 
 	// Loop
 	requestAnimationFrame(update)
+}
+
+function resizeCanvas() {
+	canvas.width = window.innerWidth
+	canvas.height = window.innerHeight
 }
 
 function draw(ctx) {
@@ -71,7 +91,7 @@ function draw(ctx) {
 	ctx.fillRect(0, 0, canvas.width, canvas.height)
 
 	// Draw
-	galaxy.draw(ctx)
+	universe.draw(ctx)
 
 	if (Input.isKeyPressed('`')) {
 		ctx.strokeStyle = '#FF0000'
@@ -92,6 +112,8 @@ function drawUI(ctx) {
 	if (Input.isKeyPressed('`')) {
 		debugMenu.draw(ctx)
 	}
+	fpsGraph.drawGraph(ctx, fps, 100, 100, 100, 100, 'FPS', 'Time', 'FPS')
+
 }
 
 function randomRange(low, high) {

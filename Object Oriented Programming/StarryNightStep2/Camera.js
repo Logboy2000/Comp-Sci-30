@@ -3,23 +3,24 @@ class Camera {
 		x = 0,
 		y = 0,
 		zoom = 1,
-		leftX = -Infinity,
-		rightX = Infinity,
-		topY = -Infinity,
-		bottomY = Infinity
+		leftLimit = -Infinity,
+		rightLimit = Infinity,
+		topLimit = -Infinity,
+		bottomLimit = Infinity
 	) {
 		this.x = x
 		this.y = y
+		this.r = 0
 		this.zoom = zoom
 		this.moveSpeed = 10
 		this.zoomSpeed = 1.01
         this.scrollZoomSpeed = 1.25
 		this.minZoom = 0.1
 		this.maxZoom = 10
-		this.leftX = leftX
-		this.rightX = rightX
-		this.topY = topY
-		this.bottomY = bottomY
+		this.leftX = leftLimit
+		this.rightX = rightLimit
+		this.topY = topLimit
+		this.bottomY = bottomLimit
         this.targetX = x
         this.targetY = y
         this.targetZoom = zoom
@@ -44,6 +45,14 @@ class Camera {
 		if (Input.isKeyPressed('ArrowDown') || Input.isKeyPressed('s')) {
 			this.targetY += this.moveSpeed / this.zoom
 		}
+		if (Input.isKeyPressed('q')){
+			this.r -= 0.02
+		}
+		if (Input.isKeyPressed('e')){
+			this.r += 0.02
+		}
+		
+
 		if (Input.isKeyPressed('+') || Input.isKeyPressed('=')) {
 			this.zoomTo(this.targetZoom * this.zoomSpeed)
 		}
