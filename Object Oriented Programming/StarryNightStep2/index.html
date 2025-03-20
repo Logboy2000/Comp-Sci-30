@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-	<style>
-		* {
-			padding: 0;
-			margin: 0;
-			overflow: hidden;
-		}
-		body {
-			background-color: #444444;
-			text-align: center;
-		}
-	</style>
-</head>
-<body onload="loaded()">
-	<canvas id="canvas"></canvas>
-	<script src="Input.js"></script>
-	<script src="Galaxy.js"></script>
-	<script src="Star.js"></script>
-	<script src="Main.js"></script>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Starry Night</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+				overflow: hidden;
+			}
+			body {
+				background-color: #444444;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body onload="loaded()">
+		<canvas id="canvas"></canvas>
+		<script src="Input.js"></script>
+		<script src="DirectionInputDisplay.js"></script>
+		<script src="Camera.js"></script>
+		<script src="Galaxy.js"></script>
+		<script src="Star.js"></script>
+		<script src="DebugMenu.js"></script>
+		<script src="Main.js"></script>
+	</body>
 </html>

@@ -6,23 +6,24 @@ let Input = {
 	pressedKeys: {},
 	pressedMouse: {},
 
-	startListening: function () {
+	addEventListeners: function () {
 		// Input Object
 		document.addEventListener('keydown', (e) => {
-			Input.pressedKeys[e.key] = true
+			this.pressedKeys[e.key] = true
+			// console.log(e.key)
 		})
 		document.addEventListener('keyup', (e) => {
-			Input.pressedKeys[e.key] = false
+			this.pressedKeys[e.key] = false
 		})
 		document.addEventListener('mousedown', (e) => {
-			Input.pressedMouse[e.button] = true
+			this.pressedMouse[e.button] = true
 		})
 		document.addEventListener('mouseup', (e) => {
-			Input.pressedMouse[e.button] = false
+			this.pressedMouse[e.button] = false
 		})
 		document.addEventListener('mousemove', (e) => {
-			Input.mouse.x = e.clientX
-			Input.mouse.y = e.clientY
+			this.mouse.x = e.clientX
+			this.mouse.y = e.clientY
 		})
 	},
 
