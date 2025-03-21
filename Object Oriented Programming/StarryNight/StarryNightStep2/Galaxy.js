@@ -27,6 +27,10 @@ class Galaxy {
 		if (Input.isKeyPressed('r')){
 			this.r += 0.1
 		}
+		if (Input.isKeyPressed('`')){
+			ctx.strokeStyle = '#0000FF'
+			ctx.strokeRect(this.x, this.y, this.w, this.h)
+		}
 		ctx.save()
 		ctx.translate(this.x, this.y)
 		ctx.rotate(this.r)

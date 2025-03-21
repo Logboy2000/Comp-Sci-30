@@ -21,6 +21,7 @@ class DebugMenu {
         let yOffset = 20
         ctx.font = '14px Arial'
         ctx.fillStyle = '#FFFFFF'
+        ctx.textAlign = 'left'
         
         for (let [key, text] of this.labels) {
             ctx.fillText(`${key}: ${text}`, 10, yOffset)

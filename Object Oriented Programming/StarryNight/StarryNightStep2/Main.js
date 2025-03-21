@@ -10,14 +10,14 @@ function loaded() {
 	resizeCanvas()
 
 	// Objects
-	universe = new Universe(canvas.width * 2, canvas.height * 2, 10)
+	universe = new Universe(canvas.width * 2, canvas.height * 2, 100, 75, 125)
 	camera = new Camera(0, 0, 1, 0, universe.w, 0, universe.h)
 	fpsGraph = new Graph({
 		yellowThreshold: 40,
 		greenThreshold: 60,
 		labelCount: 5,
 		stepSize: 20,
-		minYScale: 200,
+		minYScale: 60,
 		decimalPlaces: 2,
 		higherIsBetter: true,
 	})
@@ -102,6 +102,7 @@ function draw(ctx) {
 			camera.rightX - camera.leftX,
 			camera.bottomY - camera.topY
 		)
+
 	}
 }
 
@@ -111,8 +112,8 @@ function drawUI(ctx) {
 
 	if (Input.isKeyPressed('`')) {
 		debugMenu.draw(ctx)
+		fpsGraph.drawGraph(ctx, fps, 5, 140, 100, 100, 'FPS', 'Time', 'FPS')
 	}
-	fpsGraph.drawGraph(ctx, fps, 100, 100, 100, 100, 'FPS', 'Time', 'FPS')
 
 }
 
