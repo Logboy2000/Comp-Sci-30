@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script type="text/javascript" src="js/card.js"></script>
+		<script type="text/javascript" src="js/deck.js"></script>
+		<script>
+			var d
+
+			function loaded() {
+				// need a Deck of 52 shuffled cards
+				// test the card object
+				var tc = new Card('Ace', 'Diamonds', 1)
+				document.getElementById('ct').innerHTML =
+					'If this does not say object your card does not create an object:  ' +
+					typeof tc
+				// suit test
+				document.getElementById('getSuit').innerHTML += '<br />' + tc.getSuit()
+				//getRank test
+				document.getElementById('getRank').innerHTML += '<br />' + tc.getRank()
+				//getValue test
+				document.getElementById('getVal').innerHTML += '<br />' + tc.getValue()
+
+				var mCards = new Array()
+				var suit // temp holder for suit as deck is created
+				var rank //temp holder for rank as deck is created
+				var value // temporary holder for value as deck is created
+				var sx
+				var sy
+				var ssx
+				var ssy
+				var img
+				img = new Image()
+				img.src = 'cards/cardsSpriteSheet.png'
+				img.onload = function () {
+					SelectedCards = new Array()
+					for (i = 1; i <= 4; i++) {
+						//four suits
+						switch (i) {
+							case 1:
+								suit = 'hearts'
+								ymultiplier = 2
+								break
+
+							case 2:
+								suit = 'diamonds'
+								ymultiplier = 1
+								break
+							case 3:
+								suit = 'clubs'
+								ymultiplier = 0
+								break
+							case 4:
+								suit = 'spades'
+								ymultiplier = 3
+								break
+						}
+						for (j = 1; j <= 13; j++) {
+							// a-10, j,q,k
+							switch (j) {
+								case 1:
+									rank = 'a'
+									value = 1
+									sx = 73 * (j - 1)
+									sy = 97 * ymultiplier
+									ssx = sx
+									ssy = sy + 388
+									break
+								case 11:
+									rank = 'j'
+									value = 0
+									sx = 73 * (j - 1)
+									sy = 97 * ymultiplier
+									ssx = sx
+									ssy = sy + 388
+									break
+								case 12:
+									rank = 'q'
+									value = 0
+									sx = 73 * (j - 1)
+									sy = 97 * ymultiplier
+									ssx = sx
+									ssy = sy + 388
+									break
+								case 13:
+									rank = 'k'
+									value = 0
+									sx = 73 * (j - 1)
+									sy = 97 * ymultiplier
+									ssx = sx
+									ssy = sy + 388
+									break
+								default:
+									rank = j // need to switch to string value
+									value = j
+									sx = 73 * (j - 1)
+									sy = 97 * ymultiplier
+									ssx = sx
+									ssy = sy + 388
+							}
+							//src="cards/" + src
+							//selectedSrc="cards/"+selectedSrc
+							var nCard = new Card(rank, suit, value) //,sx,sy,ssx,ssy,img)
+							mCards.push(nCard)
+						}
+					} // end of suits loop
+
+					d = new Deck(mCards)
+					// did the deck work
+					document.getElementById('dt').innerHTML =
+						'Your deck generated a ' + typeof d
+					// test getCard
+					tc = d.getCard(0)
+					document.getElementById('getCard').innerHTML =
+						'getCard(0) returned a (should be object):  ' + typeof d.getCard(0)
+
+					// now display card info
+					document.getElementById('getCard').innerHTML +=
+						'<br />Info for first card in deck: <br /> Rank: ' +
+						tc.getRank() +
+						'<br />Suit: ' +
+						tc.getSuit() +
+						'<br /> Value ' +
+						tc.getValue()
+
+					//d.shuffle() // shuffle the deck
+					// show all the cards in your deck
+					document.getElementById('deckSize').innerHTML =
+						'Number of cards in deck:  ' + d.getSize()
+
+					displayDeck()
+				}
+			} // end of loaded
+
+			function displayDeck() {
+				// new line for deck output
+				document.getElementById('out').innerHTML = 'Your Deck:<br />'
+				for (i = 0; i < d.getSize(); i++) {
+					currenCard = d.getCard(i)
+					document.getElementById('out').innerHTML +=
+						currenCard.getRank() +
+						' of ' +
+						currenCard.getSuit() +
+						' with a value of ' +
+						currenCard.getValue() +
+						'<br />'
+				}
+			} // end of displayDeck
+
+			function addCard() {
+				/*this function runs when add Card button is clicked.  It adds a Joker to the middle of the deck (position 5) it can be ran multiple times.  it will update the deck and size of deck on the screen
+				 */
+				document.getElementById('out').innerHTML = 'Your Deck:'
+				var tc = new Card('Joker', 'Wild', 100)
+				d.addCard(tc, 5)
+				displayDeck()
+				document.getElementById('deckSize').innerHTML =
+					'Number of cards in deck:  ' + d.getSize()
+			} // end of addCard
+
+			function deal() {
+				/*this function runs when add Deal button is clicked.  It removes the top card from the deck.  It then updates teh size of your deck, the dealt card div tag and the your deck
+				 */
+				document.getElementById('out').innerHTML = 'Your Deck:'
+				var tc = d.deal()
+
+				// change the size of the deck:
+				document.getElementById('deckSize').innerHTML =
+					'Number of cards in deck:  ' + d.getSize()
+
+				document.getElementById('dealt').innerHTML +=
+					'<br />' +
+					tc.getRank() +
+					' of ' +
+					tc.getSuit() +
+					' with a value of ' +
+					tc.getValue()
+
+				displayDeck()
+			} // end of deal
+
+			function shuffle() {
+				/*this function runs when add Deal button is clicked.  It removes the top card from the deck.  It then updates teh size of your deck, the dealt card div tag and the your deck
+				 */
+				document.getElementById('out').innerHTML = 'Your Deck:'
+				d.shuffle()
+
+				displayDeck()
+			} // end of deal
+
+			function DealAll() {
+				/*
+		This function deals all remaining cards in the deck using the isEmpty() method of the deck.  size of deck, dealt cards adn your deck should be updated
+		
+	*/
+				while (!d.isEmpty()) {
+					deal()
+				}
+			} // end of DealAll
+			function removeCard() {
+				/*
+		This function removes a card from position 5 of the deck.  It tells you what it is and then it is gone. 
+	*/
+				d.removeCard(5)
+				document.getElementById('deckSize').innerHTML =
+					'Number of cards in deck:  ' + d.getSize()
+				displayDeck()
+			} // end of remove
+		</script>
+		<title>Deck Tester</title>
+	</head>
+
+	<body onLoad="loaded()">
+		<h1>Deck Tester</h1>
+		<p>You should see your deck of cards in the div tag below:</p>
+		<p>
+			This file requires a folder called js to be in the same folder as this
+			file.The js folder MUST contain your card.js file and deck.js file. The
+			name of your Card object MUST be Card, the name of deck object MUST be
+			Deck
+		</p>
+		<div id="ct">Changed when card is created</div>
+		<div id="getSuit">Suit of Ace of Diamonds:</div>
+		<div id="getRank">Rank of Ace of Diamonds:</div>
+		<div id="getVal">Value of of Ace of Diamonds:</div>
+		<div id="dt">Changed when a deck is created</div>
+		<div id="getCard">Does your deck getCard method work</div>
+		<div id="deckSize">Size of your deck</div>
+		<p>
+			<input
+				type="button"
+				name="adCard"
+				id="adCard"
+				onClick="addCard()"
+				value="Add a Card - position 5"
+			/>
+			<input
+				type="button"
+				name="adCard2"
+				id="adCard2"
+				onClick="deal()"
+				value="Deal a Card"
+			/>
+			<input
+				type="button"
+				name="adCard3"
+				id="adCard3"
+				onClick="shuffle()"
+				value="shuffle"
+			/>
+			<input
+				type="button"
+				name="adCard4"
+				id="adCard4"
+				onClick="DealAll()"
+				value="Deal all (uses isEmpty)"
+			/>
+			<input
+				type="button"
+				name="adCard5"
+				id="adCard5"
+				onClick="removeCard()"
+				value="RemoveCard"
+			/>
+		</p>
+		<div id="dealt">Dealt Card (last one is on bottom):</div>
+		<p>&nbsp;</p>
+		<div id="out">Your deck:</div>
+		<canvas id="myCanvas" width="800" height="500"></canvas>
+	</body>
+</html>

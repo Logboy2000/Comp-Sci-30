@@ -1,0 +1,28 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Elevens</title>
+</head>
+<body>
+	<canvas id="gameCanvas"></canvas>
+	<script src="js/card.js"></script>
+	<script src="js/deck.js"></script>
+
+	<script>
+		var canvas = document.getElementById('gameCanvas')
+		var ctx = canvas.getContext('2d')
+		canvas.width = 800
+		canvas.height = 600
+
+		var card = new Card('A', 'hearts', 1, 100, 100, 100, 100, 'cards/cardsSpriteSheet.png')
+		var cardsSpriteSheet = new Image()
+		cardsSpriteSheet.src = 'cards/cardsSpriteSheet.png'
+		cardsSpriteSheet.onload = function() {
+			card.draw(ctx, 100, 100)
+		}
+
+	</script>
+</body>
+</html>
