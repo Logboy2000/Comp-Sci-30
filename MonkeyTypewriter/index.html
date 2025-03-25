@@ -29,7 +29,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             margin-bottom: 20px;
-            width: 60px;
+            width: 100%;
         }
 
         #monkeyOutputs {
@@ -78,6 +78,10 @@
 </head>
 <body>
     <h1>Monkey Typewriter Experiment</h1>
+    <label for="targetWord">Target String: </label>
+    <input type="text" id="targetWord" value="Word" name="targetWord">
+    <br>
+
     <label for="monkeyCount">Monkey Count: </label>
     <input type="text" id="monkeyCount" value="1" name="monkeyCount">
     <br>

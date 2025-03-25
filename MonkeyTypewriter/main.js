@@ -11,16 +11,18 @@ for (let i = 97; i <= 122; i++) { // Lowercase a-z
 function startSimulation() {
     monkeys = parseInt(getElement('monkeyCount').value);
     monkeyCharsPerSecond = parseInt(getElement('charsPerSec').value);
-    
+    targetWord = getElement('targetWord').value
+
     clearInterval(updateInterval);
     generateTextareas(monkeys);
+
     updateInterval = setInterval(update, 1000 / (monkeyCharsPerSecond * targetWord.length));
 }
 
 function generateTextareas(count) {
     let container = getElement('monkeyOutputs');
     container.innerHTML = ''; // Clear existing textareas
-    for (let i = 0; i < count; i++) {
+    for (let i = 1; i <= count; i++) {
         let h2 = document.createElement('h2')
         h2.innerText = `Monkey ${i}`
         container.appendChild(h2);
@@ -34,14 +36,15 @@ function generateTextareas(count) {
 }
 
 function update() {
-    for (let i = 0; i < monkeys; i++) {
+    for (let i = 1; i <= monkeys; i++) {
         let generatedWord = generateRandomWord(targetWord.length);
         let textarea = getElement(`monkey_${i}`);
         textarea.value += generatedWord + ' ';
         textarea.scrollTop = textarea.scrollHeight; // Auto-scroll to bottom
         if (generatedWord === targetWord) {
             clearInterval(updateInterval);
-            alert(`Monkey ${i + 1} typed "${targetWord}"!`);
+
+            alert(`Monkey ${i} typed "${targetWord}"!`);
             return;
         }
     }
