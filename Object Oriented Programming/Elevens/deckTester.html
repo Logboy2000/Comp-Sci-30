@@ -5,7 +5,7 @@
 		<script type="text/javascript" src="js/card.js"></script>
 		<script type="text/javascript" src="js/deck.js"></script>
 		<script>
-			var d
+			var deck
 
 			function loaded() {
 				// need a Deck of 52 shuffled cards
@@ -31,7 +31,7 @@
 				var ssy
 				var img
 				img = new Image()
-				img.src = 'cards/cardsSpriteSheet.png'
+				img.src = 'img/cardsSpriteSheet.png'
 				img.onload = function () {
 					SelectedCards = new Array()
 					for (i = 1; i <= 4; i++) {
@@ -105,14 +105,14 @@
 						}
 					} // end of suits loop
 
-					d = new Deck(mCards)
+					deck = new Deck(mCards)
 					// did the deck work
 					document.getElementById('dt').innerHTML =
-						'Your deck generated a ' + typeof d
+						'Your deck generated a ' + typeof deck
 					// test getCard
-					tc = d.getCard(0)
+					tc = deck.getCard(0)
 					document.getElementById('getCard').innerHTML =
-						'getCard(0) returned a (should be object):  ' + typeof d.getCard(0)
+						'getCard(0) returned a (should be object):  ' + typeof deck.getCard(0)
 
 					// now display card info
 					document.getElementById('getCard').innerHTML +=
@@ -126,7 +126,7 @@
 					//d.shuffle() // shuffle the deck
 					// show all the cards in your deck
 					document.getElementById('deckSize').innerHTML =
-						'Number of cards in deck:  ' + d.getSize()
+						'Number of cards in deck:  ' + deck.getSize()
 
 					displayDeck()
 				}
@@ -135,8 +135,8 @@
 			function displayDeck() {
 				// new line for deck output
 				document.getElementById('out').innerHTML = 'Your Deck:<br />'
-				for (i = 0; i < d.getSize(); i++) {
-					currenCard = d.getCard(i)
+				for (i = 0; i < deck.getSize(); i++) {
+					currenCard = deck.getCard(i)
 					document.getElementById('out').innerHTML +=
 						currenCard.getRank() +
 						' of ' +
@@ -152,21 +152,21 @@
 				 */
 				document.getElementById('out').innerHTML = 'Your Deck:'
 				var tc = new Card('Joker', 'Wild', 100)
-				d.addCard(tc, 5)
+				deck.addCard(tc, 5)
 				displayDeck()
 				document.getElementById('deckSize').innerHTML =
-					'Number of cards in deck:  ' + d.getSize()
+					'Number of cards in deck:  ' + deck.getSize()
 			} // end of addCard
 
 			function deal() {
 				/*this function runs when add Deal button is clicked.  It removes the top card from the deck.  It then updates teh size of your deck, the dealt card div tag and the your deck
 				 */
 				document.getElementById('out').innerHTML = 'Your Deck:'
-				var tc = d.deal()
+				var tc = deck.deal()
 
 				// change the size of the deck:
 				document.getElementById('deckSize').innerHTML =
-					'Number of cards in deck:  ' + d.getSize()
+					'Number of cards in deck:  ' + deck.getSize()
 
 				document.getElementById('dealt').innerHTML +=
 					'<br />' +
@@ -183,7 +183,7 @@
 				/*this function runs when add Deal button is clicked.  It removes the top card from the deck.  It then updates teh size of your deck, the dealt card div tag and the your deck
 				 */
 				document.getElementById('out').innerHTML = 'Your Deck:'
-				d.shuffle()
+				deck.shuffle()
 
 				displayDeck()
 			} // end of deal
@@ -193,7 +193,7 @@
 		This function deals all remaining cards in the deck using the isEmpty() method of the deck.  size of deck, dealt cards adn your deck should be updated
 		
 	*/
-				while (!d.isEmpty()) {
+				while (!deck.isEmpty()) {
 					deal()
 				}
 			} // end of DealAll
@@ -201,9 +201,9 @@
 				/*
 		This function removes a card from position 5 of the deck.  It tells you what it is and then it is gone. 
 	*/
-				d.removeCard(5)
+				deck.removeCard(5)
 				document.getElementById('deckSize').innerHTML =
-					'Number of cards in deck:  ' + d.getSize()
+					'Number of cards in deck:  ' + deck.getSize()
 				displayDeck()
 			} // end of remove
 		</script>

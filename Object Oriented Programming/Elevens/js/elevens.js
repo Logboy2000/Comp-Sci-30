@@ -1,5 +1,3 @@
-var i = 0
-
 class ElevensGame {
 	constructor(canvas, deck) {
 		this.canvas = canvas
@@ -7,21 +5,33 @@ class ElevensGame {
 		this.score = 0
 		this.deck = deck
 
-		this.cardsInPlay = []
+		this.deckInPlay = new Deck()
 		this.selectedCards = []
+		this.buttons = []
 
 		this.imgWidth = 73
 		this.imgHeight = 97
 
-		this.restartButton = new CanvasButton(0, 0, 130, 50, 'Restart Game', () => {
-			this.newGame()
-		})
+		this.buttons.push(
+			new CanvasButton(0, 0, 130, 50, 'Restart Game', () => {
+				this.newGame()
+			}),
+			new CanvasButton(0, 0, 130, 50, 'Confirm Move', () => {
+				this.makeMove()
+			})
+		)
 
 		this.canvas.addEventListener(
 			'mousedown',
 			this.mouseClicked.bind(this),
 			false
 		)
+
+		canvas.addEventListener('keydown', (event) => {
+			if (event.key === 'r') {
+				this.newGame()
+			}
+		})
 
 		// Resize canvas to fit the window when resized
 		window.addEventListener('resize', () => {
@@ -38,8 +48,8 @@ class ElevensGame {
 		let x = event.x - this.canvas.offsetLeft + window.pageXOffset
 		let y = event.y - this.canvas.offsetTop + window.pageYOffset
 
-		for (let i = 0; i < this.cardsInPlay.length; i++) {
-			let card = this.cardsInPlay[i]
+		for (let i = 0; i < this.deckInPlay.getSize(); i++) {
+			let card = this.deckInPlay.getCard(i)
 			if (card.checkCollision(x, y)) {
 				let selected = false
 				for (let j = 0; j < this.selectedCards.length; j++) {
@@ -61,7 +71,10 @@ class ElevensGame {
 			}
 		}
 
-		this.restartButton.handleClick(x, y)
+
+		for(let button of this.buttons) {
+			button.handleClick(x, y)
+		}
 	}
 
 	// Privileged method to start the game
@@ -73,40 +86,42 @@ class ElevensGame {
 	}
 
 	draw() {
+		// Clear the canvas and set the background color
 		this.ctx.fillStyle = '#229922'
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
+		// Draw the score at the top-left corner
 		this.ctx.fillStyle = '#000000'
 		this.ctx.font = '30px Arial'
 		this.ctx.textAlign = 'left'
-		this.ctx.fillText('Score: ' + this.score, 10, 30)
+		this.ctx.fillText('Score: ' + this.score, 20, 40)
 
 		// Calculate the total width of all cards and spacing
 		let totalWidth =
-			this.cardsInPlay.length * this.imgWidth +
-			(this.cardsInPlay.length - 1) * 10
+			this.deckInPlay.getSize() * this.imgWidth +
+			(this.deckInPlay.getSize() - 1) * 15 // Adjusted spacing for better alignment
 		let startX = (this.canvas.width - totalWidth) / 2 // Center the cards horizontally
-		let startY = (this.canvas.height - this.imgHeight) / 2 // Center the cards vertically
+		let startY = this.canvas.height * 0.3 // Position cards slightly above center
 
-		for (let i = 0; i < this.cardsInPlay.length; i++) {
-			let card = this.cardsInPlay[i]
+		// Draw each card in play
+		for (let i = 0; i < this.deckInPlay.getSize(); i++) {
+			let card = this.deckInPlay.getCard(i)
 			card.setPosition(
-				Math.round(startX + i * (this.imgWidth + 10)),
+				Math.round(startX + i * (this.imgWidth + 15)),
 				Math.round(startY)
 			)
-
-			// Draw the card image
-			if (this.selectedCards.includes(i)) {
-				card.draw(this.ctx, true)
-			} else {
-				card.draw(this.ctx, false)
-			}
+			card.draw(this.ctx, this.selectedCards.includes(i))
 		}
-		this.restartButton.setPosition(
-			(this.canvas.width / 2) - (this.restartButton.width/2),
-			startY + 120
-		)
-		this.restartButton.draw(this.ctx)
+
+		// Calculate button area and position buttons below the cards
+		startY = this.canvas.height * 0.7 // Position buttons below cards
+
+		for (let i = 0; i < this.buttons.length; i++) {
+			let buttonX = (this.canvas.width - this.buttons[i].width) / 2
+			let buttonY = startY + i * (60 + 15) // Adjusted button spacing
+			this.buttons[i].setPosition(buttonX, buttonY)
+			this.buttons[i].draw(this.ctx)
+		}
 	}
 
 	checkWin() {
@@ -117,6 +132,11 @@ class ElevensGame {
 
 	makeMove() {
 		// Remove all selected cards, replace them with new cards from the deck if cards still exist
+		for (let i = 0; i < this.selectedCards.length; i++) {
+			this.deckInPlay.removeCard(this.selectedCards[i])
+		}
+
+		this.selectedCards = []
 		// Draw an image for the new cards or a green rectangle if no new cards exist
 		// Ensure the selectedCards array has no values at the end of this method
 	}
@@ -169,8 +189,8 @@ class ElevensGame {
 
 	newGame() {
 		// Move the current cards back into the deck
-		while (this.cardsInPlay.length > 0) {
-			this.deck.addCard(this.cardsInPlay.pop())
+		while (this.deckInPlay.getSize() > 0) {
+			this.deck.addCard(this.deckInPlay.deal())
 		}
 
 		// Unselect all cards
@@ -184,7 +204,7 @@ class ElevensGame {
 
 		// Deal 9 new cards
 		for (let i = 0; i < 9; i++) {
-			this.cardsInPlay.push(this.deck.deal())
+			this.deckInPlay.addCard(this.deck.deal())
 		}
 	}
 

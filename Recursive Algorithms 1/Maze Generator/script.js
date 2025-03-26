@@ -267,6 +267,7 @@ async function makeRecursiveMaze(arr, x, y) {
 				await new Promise((resolve) => setTimeout(resolve, animationDelay))
 			}
 
+			// recursive call
 			await makeRecursiveMaze(arr, nextCell.x, nextCell.y)
 
 			// Stops the generation early when stop requested

@@ -23,10 +23,10 @@ class Card {
 		this.spritesheet = spritesheet
 
 
-		this.w = 73
-		this.h = 97
 		this.x = 0
 		this.y = 0
+		this.w = 73
+		this.h = 97
 		this.#rank = rank
 		this.#suit = suit
 		this.#value = value

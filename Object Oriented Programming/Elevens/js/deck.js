@@ -1,7 +1,7 @@
 class Deck {
 	#cards
 
-	constructor(cards) {
+	constructor(cards = []) {
 		this.#cards = cards
 	}
 
@@ -27,19 +27,19 @@ class Deck {
 	}
 
 	getCard = function (index) {
+
 		return this.#cards[index]
+		
 	}
 
 	getSize = function () {
 		return this.#cards.length
 	}
 
-	addCard = function (card) {
-		this.#cards.push(card)
+	addCard = function (card, index) {
+		this.#cards.splice(index, 0, card)
 	}
-
-
-
+	
 	removeCard(index) {
 		if (index < 0 || index >= this.#cards.length) {
 			console.warn('Invalid card index: returning null')
