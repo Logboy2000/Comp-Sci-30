@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,19 +12,52 @@
 			margin: 0;
 			overflow: hidden;
 		}
+
 		canvas {
 			display: block;
 			width: 100vw;
 			height: 100vh;
 		}
+
+		.notification {
+			pointer-events: all;
+			cursor: pointer;
+			background-color: #000000;
+			font-size: 2px;
+			min-width: 200px;
+			max-width: 30%;
+			color: #ffffff;
+			margin-bottom: 10px;
+			border-radius: 5px;
+			padding: 10px;
+			font-size: 16px;
+			z-index: 1000;
+		}
+
+		#notificationContainer {
+			pointer-events: none;
+			margin: 10px;
+			position: fixed;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			width: auto;
+			display: flex;
+			flex-direction: column;
+			z-index: 1000;
+		}
 	</style>
 </head>
+
 <body>
 	<canvas id="gameCanvas"></canvas>
+	<div id="notificationContainer"></div>
 	<script src="js/button.js"></script>
 	<script src="js/card.js"></script>
 	<script src="js/deck.js"></script>
 	<script src="js/elevens.js"></script>
+	<script src="js/canvasNotification.js"></script>
 	<script src="js/main.js"></script>
 </body>
+
 </html>

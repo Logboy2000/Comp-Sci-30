@@ -1,12 +1,12 @@
 class Deck {
-	#cards
+	#cardStack
 
 	constructor(cards = []) {
-		this.#cards = cards
+		this.#cardStack = cards
 	}
 
 	isEmpty = function () {
-		return this.#cards.length == 0
+		return this.#cardStack.length == 0
 	}
 
 	deal = function () {
@@ -14,37 +14,42 @@ class Deck {
 			console.warn('Deck is empty: returning null')
 			return null
 		}
-		return this.#cards.pop()
+		return this.removeCard(0)
 	}
 
 	shuffle = function () {
 		const tempArray = []
-		while (this.#cards.length > 0) {
-			const randomIndex = Math.floor(Math.random() * this.#cards.length)
-			tempArray.push(this.#cards.splice(randomIndex, 1)[0])
+		while (this.#cardStack.length > 0) {
+			const randomIndex = Math.floor(Math.random() * this.#cardStack.length)
+			tempArray.push(this.#cardStack.splice(randomIndex, 1)[0])
 		}
-		this.#cards = tempArray
+		this.#cardStack = tempArray
 	}
 
 	getCard = function (index) {
 
-		return this.#cards[index]
+		return this.#cardStack[index]
 		
 	}
 
 	getSize = function () {
-		return this.#cards.length
+		return this.#cardStack.length
 	}
 
 	addCard = function (card, index) {
-		this.#cards.splice(index, 0, card)
+		this.#cardStack.splice(index, 0, card)
 	}
+
+	setCard = function (card, index) {
+		this.#cardStack[index] = card
+	}
+
 	
 	removeCard(index) {
-		if (index < 0 || index >= this.#cards.length) {
+		if (index < 0 || index >= this.#cardStack.length) {
 			console.warn('Invalid card index: returning null')
 			return null
 		}
-		return this.#cards.splice(index, 1)
+		return this.#cardStack.splice(index, 1)[0]
 	}
 }

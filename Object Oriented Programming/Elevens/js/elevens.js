@@ -6,6 +6,8 @@ class ElevensGame {
 		this.deck = deck
 
 		this.deckInPlay = new Deck()
+		this.discards = new Deck()
+
 		this.selectedCards = []
 		this.buttons = []
 
@@ -72,7 +74,7 @@ class ElevensGame {
 		}
 
 
-		for(let button of this.buttons) {
+		for (let button of this.buttons) {
 			button.handleClick(x, y)
 		}
 	}
@@ -111,6 +113,15 @@ class ElevensGame {
 				Math.round(startY)
 			)
 			card.draw(this.ctx, this.selectedCards.includes(i))
+			// Draw the card's index below itself
+			this.ctx.fillStyle = '#000000'
+			this.ctx.font = '20px Arial'
+			this.ctx.textAlign = 'center'
+			this.ctx.fillText(
+				i,
+				Math.round(startX + i * (this.imgWidth + 15) + this.imgWidth / 2),
+				Math.round(startY + this.imgHeight + 20)
+			)
 		}
 
 		// Calculate button area and position buttons below the cards
@@ -131,21 +142,42 @@ class ElevensGame {
 	}
 
 	makeMove() {
-		// Remove all selected cards, replace them with new cards from the deck if cards still exist
-		for (let i = 0; i < this.selectedCards.length; i++) {
-			this.deckInPlay.removeCard(this.selectedCards[i])
+		// Remove all selected cards from deckInPlay if the move is legal
+		if (this.isLegal()) {
+			// Sort selectedCards in descending order to avoid index shifting issues
+			this.selectedCards.sort((a, b) => b - a)
+
+			// Remove each selected card from deckInPlay
+			for (let index of this.selectedCards) {
+				this.discards.addCard(this.deckInPlay.removeCard(index))
+			}
 		}
 
+		// Deal new cards to replace the removed cards
+		for (let i = this.deckInPlay.getSize(); i < 9; i++) {
+			this.deckInPlay.addCard(this.deck.deal())
+		}
+
+		// Deselect cards
 		this.selectedCards = []
-		// Draw an image for the new cards or a green rectangle if no new cards exist
-		// Ensure the selectedCards array has no values at the end of this method
+
 	}
 
 	isLegal() {
 		// Determines if the selected cards form a valid group for removal
 		// In Elevens, the legal groups are:
-		// (1) a pair of non-face cards whose values add to 11
-		// (2) a group of three cards consisting of a jack, a queen, and a king in some order
+		for (let i = 0; i < this.selectedCards.length; i++) {
+			if (this.selectedCards.length === 2) {
+				// (1) a pair of non-face cards whose values add to 11
+				return this.containsPairSum11()
+			} else if (this.selectedCards.length === 3) {
+				// (2) a group of three cards consisting of a jack, a queen, and a king in some order
+				return this.containsJQK()
+			}
+		}
+
+		new Notification('Invalid Move', 'Please select 2 or 3 cards', 2000)
+		return false
 	}
 
 	containsPairSum11() {
@@ -153,6 +185,13 @@ class ElevensGame {
 		// INPUTS: none
 		// OUTPUTS: true if the sum is 11, otherwise false
 		// Only called if 2 elements are in selectedCards
+
+		// Get the two cards from the deck
+		let card1 = this.deckInPlay.getCard(this.selectedCards[0])
+		let card2 = this.deckInPlay.getCard(this.selectedCards[1])
+
+		// Check if the sum of the two cards is 11
+		return card1.getValue() + card2.getValue() === 11
 	}
 
 	containsJQK() {
@@ -160,6 +199,15 @@ class ElevensGame {
 		// INPUTS: none
 		// OUTPUTS: true if the cards are J, Q, K in any order, false otherwise
 		// Only called if selectedCards array has 3 elements
+
+		// Get the three cards from the deck
+		let card1 = this.deckInPlay.getCard(this.selectedCards[0])
+		let card2 = this.deckInPlay.getCard(this.selectedCards[1])
+		let card3 = this.deckInPlay.getCard(this.selectedCards[2])
+
+		// Check if the cards are J, Q, K in any order
+		let ranks = [card1.getRank(), card2.getRank(), card3.getRank()]
+		return ranks.includes('J') && ranks.includes('Q') && ranks.includes('K')
 	}
 
 	anotherPlayIsPossible() {
@@ -200,7 +248,7 @@ class ElevensGame {
 		this.score = 0
 
 		// Shuffle the deck
-		this.deck.shuffle()
+		//this.deck.shuffle()
 
 		// Deal 9 new cards
 		for (let i = 0; i < 9; i++) {
