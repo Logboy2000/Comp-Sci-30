@@ -13,8 +13,6 @@ function loaded() {
     const cardW = cardsSpritesheet.width / 13
     const cardH = cardsSpritesheet.height / 8
 
-    console.log(cardW, ',', cardH)
-
 
 	let gameDeckCards = []
 	const suits = ['hearts', 'diamonds', 'clubs', 'spades']
@@ -65,11 +63,11 @@ function loaded() {
 		new Deck(gameDeckCards)
 	)
 
-	game.setup()
-    update()
+	game.start()
+	update()
 }
 
 function update() {
-    game.draw()
-    requestAnimationFrame(update)
+	game.draw()
+	requestAnimationFrame(update)
 }

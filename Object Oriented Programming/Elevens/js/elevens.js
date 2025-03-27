@@ -2,7 +2,7 @@ class ElevensGame {
 	constructor(canvas, deck) {
 		this.canvas = canvas
 		this.ctx = this.canvas.getContext('2d')
-		this.score = 0
+		this.matches = 0
 		this.deck = deck
 
 		this.deckInPlay = new Deck()
@@ -29,9 +29,39 @@ class ElevensGame {
 			false
 		)
 
-		canvas.addEventListener('keydown', (event) => {
+		document.addEventListener('keydown', (event) => {
 			if (event.key === 'r') {
 				this.newGame()
+			}
+			if (event.key === ' ') {
+				this.makeMove()
+			}
+			if (event.key === '1') {
+				this.toggleSelectCard(0)
+			}
+			if (event.key === '2') {
+				this.toggleSelectCard(1)
+			}
+			if (event.key === '3') {
+				this.toggleSelectCard(2)
+			}
+			if (event.key === '4') {
+				this.toggleSelectCard(3)
+			}
+			if (event.key === '5') {
+				this.toggleSelectCard(4)
+			}
+			if (event.key === '6') {
+				this.toggleSelectCard(5)
+			}
+			if (event.key === '7') {
+				this.toggleSelectCard(6)
+			}
+			if (event.key === '8') {
+				this.toggleSelectCard(7)
+			}
+			if (event.key === '9') {
+				this.toggleSelectCard(8)
 			}
 		})
 
@@ -39,6 +69,17 @@ class ElevensGame {
 		window.addEventListener('resize', () => {
 			this.resizeCanvas()
 		})
+	}
+
+	toggleSelectCard(index) {
+		// Select a card at the given index
+		if (index >= 0 && index < this.deckInPlay.getSize()) {
+			if (this.selectedCards.includes(index)) {
+				this.selectedCards = this.selectedCards.filter((card) => card !== index)
+			} else {
+				this.selectedCards.push(index)
+			}
+		}
 	}
 
 	resizeCanvas() {
@@ -73,17 +114,17 @@ class ElevensGame {
 			}
 		}
 
-
 		for (let button of this.buttons) {
 			button.handleClick(x, y)
 		}
 	}
 
 	// Privileged method to start the game
-	setup() {
+	start() {
 		// Set the width and height of canvas
 		this.resizeCanvas()
 
+		// Start a new game
 		this.newGame()
 	}
 
@@ -96,7 +137,7 @@ class ElevensGame {
 		this.ctx.fillStyle = '#000000'
 		this.ctx.font = '30px Arial'
 		this.ctx.textAlign = 'left'
-		this.ctx.fillText('Score: ' + this.score, 20, 40)
+		this.ctx.fillText('Matches: ' + this.matches, 20, 40)
 
 		// Calculate the total width of all cards and spacing
 		let totalWidth =
@@ -118,7 +159,7 @@ class ElevensGame {
 			this.ctx.font = '20px Arial'
 			this.ctx.textAlign = 'center'
 			this.ctx.fillText(
-				i,
+				i + 1,
 				Math.round(startX + i * (this.imgWidth + 15) + this.imgWidth / 2),
 				Math.round(startY + this.imgHeight + 20)
 			)
@@ -139,6 +180,7 @@ class ElevensGame {
 		// Privileged method to determine if you have won
 		// INPUTS: none
 		// OUTPUTS: boolean value if you won ... true if you win
+		return this.deckInPlay.getSize() === 0 && this.deck.getSize() === 0
 	}
 
 	makeMove() {
@@ -151,16 +193,33 @@ class ElevensGame {
 			for (let index of this.selectedCards) {
 				this.discards.addCard(this.deckInPlay.removeCard(index))
 			}
+
+			this.matches++
 		}
 
 		// Deal new cards to replace the removed cards
 		for (let i = this.deckInPlay.getSize(); i < 9; i++) {
-			this.deckInPlay.addCard(this.deck.deal())
+			if (this.deck.getSize() === 0) {
+				console.log('No more cards in the deck!')
+				break
+			} else {
+				this.deckInPlay.addCard(this.deck.deal())
+			}
+		}
+
+		// Check if the game is over
+		if (this.checkWin()) {
+			console.log('You Win!')
+			alert('You Win!')
+		} else if (this.anotherPlayIsPossible()) {
+			console.log('You have another play!')
+		} else {
+			console.log('You Lose!')
+			alert('You Lose!')
 		}
 
 		// Deselect cards
 		this.selectedCards = []
-
 	}
 
 	isLegal() {
@@ -176,7 +235,6 @@ class ElevensGame {
 			}
 		}
 
-		new Notification('Invalid Move', 'Please select 2 or 3 cards', 2000)
 		return false
 	}
 
@@ -215,22 +273,44 @@ class ElevensGame {
 		// In Elevens, there is a legal play if the board contains:
 		// (1) a pair of non-face cards whose values add to 11
 		// (2) a group of three cards consisting of a jack, a queen, and a king in some order
-		return this.pairSum11Exists(this.deck) || this.JQKExists(this.deck)
+		return (
+			this.pairSum11Exists(this.deckInPlay) || this.JQKExists(this.deckInPlay)
+		)
 	}
 
 	pairSum11Exists(dip) {
 		// Private method
 		// For each card in dip, see if another card exists that will make the sum 11
 		// If you find a pair adding to 11, return true, otherwise return false
+		for (let i = 0; i < dip.getSize(); i++) {
+			let card1 = dip.getCard(i)
+			for (let j = i + 1; j < dip.getSize(); j++) {
+				let card2 = dip.getCard(j)
+				if (card1.getValue() + card2.getValue() === 11) {
+					return true
+				}
+			}
+		}
+		return false
 	}
 
-	JQKExists(dip) {
+	JQKExists(deckInPlay) {
 		let foundJack = false
 		let foundQueen = false
 		let foundKing = false
 
 		// Search for all of dip
-		// Change the values of foundJack, foundQueen, and foundKing if the cards are found
+		for (let i = 0; i < deckInPlay.getSize(); i++) {
+			let card = deckInPlay.getCard(i)
+			// Change the values of foundJack, foundQueen, and foundKing if the cards are found
+			if (card.getRank() === 'J') {
+				foundJack = true
+			} else if (card.getRank() === 'Q') {
+				foundQueen = true
+			} else if (card.getRank() === 'K') {
+				foundKing = true
+			}
+		}
 
 		return foundJack && foundQueen && foundKing
 	}
@@ -245,10 +325,10 @@ class ElevensGame {
 		this.selectedCards = []
 
 		// Reset the score
-		this.score = 0
+		this.matches = 0
 
 		// Shuffle the deck
-		//this.deck.shuffle()
+		// this.deck.shuffle()
 
 		// Deal 9 new cards
 		for (let i = 0; i < 9; i++) {
@@ -262,6 +342,6 @@ class ElevensGame {
 		while (!this.deck.isEmpty()) {
 			this.deck.removeCard(0)
 		}
-		alert('Number of cards in deck is ' + this.deck.getSize())
+		console.log('Number of cards in deck is ' + this.deck.getSize())
 	}
 }
