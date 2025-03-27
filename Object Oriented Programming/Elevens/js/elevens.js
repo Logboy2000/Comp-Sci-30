@@ -320,6 +320,9 @@ class ElevensGame {
 		while (this.deckInPlay.getSize() > 0) {
 			this.deck.addCard(this.deckInPlay.deal())
 		}
+		while (this.discards.getSize() > 0) {
+			this.deck.addCard(this.discards.deal())
+		}
 
 		// Unselect all cards
 		this.selectedCards = []
