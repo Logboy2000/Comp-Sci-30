@@ -331,7 +331,7 @@ class ElevensGame {
 		this.matches = 0
 
 		// Shuffle the deck
-		// this.deck.shuffle()
+		this.deck.shuffle()
 
 		// Deal 9 new cards
 		for (let i = 0; i < 9; i++) {
