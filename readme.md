@@ -1,5 +1,5 @@
 # Comp-Sci-30
-Contains my Computer Science 20 project source code 
+Contains my Computer Science 30 project source code 
 
 ## HTML Projects List
 ### Iterative Algorithms 1
