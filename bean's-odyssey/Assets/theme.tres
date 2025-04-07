@@ -1,7 +1,0 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bxj0toenekelu"]
-
-[ext_resource type="FontFile" uid="uid://c460pr8in5t64" path="res://Assets/Font/snicker.ttf" id="1_0dftj"]
-
-[resource]
-default_font = ExtResource("1_0dftj")
-Label/constants/outline_size = 10
