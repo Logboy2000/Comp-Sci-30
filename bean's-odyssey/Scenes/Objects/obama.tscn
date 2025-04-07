@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjex11f4l1gjp"]
+
+[ext_resource type="Script" uid="uid://cdpldqwh7svfr" path="res://Scenes/Objects/obama.gd" id="1_7kxux"]
+[ext_resource type="Texture2D" uid="uid://c3brn7mibcu1e" path="res://Assets/Sprites/obama.jpg" id="1_ayk0f"]
+
+[node name="Obama" type="Sprite2D"]
+texture = ExtResource("1_ayk0f")
+script = ExtResource("1_7kxux")
