@@ -1,4 +1,12 @@
+/*
+* Represents the Elevens card game.
+*/
 class ElevensGame {
+	/**
+	 * Creates an instance of ElevensGame.
+	 * @param {HTMLCanvasElement} canvas - The canvas element for rendering the game.
+	 * @param {Deck} deck - The deck of cards used in the game.
+	 */
 	constructor(canvas, deck) {
 		this.canvas = canvas
 		this.ctx = this.canvas.getContext('2d')
@@ -71,6 +79,10 @@ class ElevensGame {
 		})
 	}
 
+	/**
+	 * Toggles the selection of a card at the given index.
+	 * @param {number} index - The index of the card to toggle.
+	 */
 	toggleSelectCard(index) {
 		// Select a card at the given index
 		if (index >= 0 && index < this.deckInPlay.getSize()) {
@@ -82,11 +94,18 @@ class ElevensGame {
 		}
 	}
 
+	/**
+	 * Resizes the canvas to fit the window dimensions.
+	 */
 	resizeCanvas() {
 		this.canvas.width = window.innerWidth
 		this.canvas.height = window.innerHeight
 	}
 
+	/**
+	 * Handles mouse click events on the canvas.
+	 * @param {MouseEvent} event - The mouse event object.
+	 */
 	mouseClicked(event) {
 		let x = event.x - this.canvas.offsetLeft + window.pageXOffset
 		let y = event.y - this.canvas.offsetTop + window.pageYOffset
@@ -119,7 +138,9 @@ class ElevensGame {
 		}
 	}
 
-	// Privileged method to start the game
+	/**
+	 * Starts the game by initializing the canvas and dealing cards.
+	 */
 	start() {
 		// Set the width and height of canvas
 		this.resizeCanvas()
@@ -128,6 +149,9 @@ class ElevensGame {
 		this.newGame()
 	}
 
+	/**
+	 * Draws the game elements on the canvas.
+	 */
 	draw() {
 		// Clear the canvas and set the background color
 		this.ctx.fillStyle = '#229922'
@@ -176,13 +200,16 @@ class ElevensGame {
 		}
 	}
 
+	/**
+	 * Checks if the player has won the game.
+	 * @returns {boolean} True if the player has won, otherwise false.
+	 */
 	checkWin() {
-		// Privileged method to determine if you have won
-		// INPUTS: none
-		// OUTPUTS: boolean value if you won ... true if you win
 		return this.deckInPlay.getSize() === 0 && this.deck.getSize() === 0
 	}
-
+	/**
+	 * Processes the player's move and updates the game state.
+	 */
 	makeMove() {
 		// Remove all selected cards from deckInPlay if the move is legal
 		if (this.isLegal()) {
@@ -221,7 +248,10 @@ class ElevensGame {
 		// Deselect cards
 		this.selectedCards = []
 	}
-
+	/**
+	 * Determines if the selected cards form a valid group for removal.
+	 * @returns {boolean} True if the move is legal, otherwise false.
+	 */
 	isLegal() {
 		// Determines if the selected cards form a valid group for removal
 		// In Elevens, the legal groups are:
@@ -237,7 +267,10 @@ class ElevensGame {
 
 		return false
 	}
-
+	/**
+	 * Checks if the selected cards contain a pair that sums to 11.
+	 * @returns {boolean} True if a pair summing to 11 exists, otherwise false.
+	 */
 	containsPairSum11() {
 		// Private function
 		// INPUTS: none
@@ -251,7 +284,10 @@ class ElevensGame {
 		// Check if the sum of the two cards is 11
 		return card1.getValue() + card2.getValue() === 11
 	}
-
+	/**
+	 * Checks if the selected cards contain a Jack, Queen, and King.
+	 * @returns {boolean} True if the cards include J, Q, and K, otherwise false.
+	 */
 	containsJQK() {
 		// Private function
 		// INPUTS: none
@@ -268,6 +304,10 @@ class ElevensGame {
 		return ranks.includes('J') && ranks.includes('Q') && ranks.includes('K')
 	}
 
+	/**
+	 * Determines if another legal play is possible on the board.
+	 * @returns {boolean} True if another play is possible, otherwise false.
+	 */
 	anotherPlayIsPossible() {
 		// Determine if there are any legal plays left on the board
 		// In Elevens, there is a legal play if the board contains:
@@ -278,6 +318,11 @@ class ElevensGame {
 		)
 	}
 
+	/**
+	 * Checks if a pair of cards in the deck sums to 11.
+	 * @param {Deck} dip - The deck in play.
+	 * @returns {boolean} True if a pair summing to 11 exists, otherwise false.
+	 */
 	pairSum11Exists(dip) {
 		// Private method
 		// For each card in dip, see if another card exists that will make the sum 11
@@ -294,6 +339,11 @@ class ElevensGame {
 		return false
 	}
 
+	/**
+	 * Checks if the deck contains a Jack, Queen, and King.
+	 * @param {Deck} deckInPlay - The deck in play.
+	 * @returns {boolean} True if J, Q, and K exist, otherwise false.
+	 */
 	JQKExists(deckInPlay) {
 		let foundJack = false
 		let foundQueen = false
@@ -314,7 +364,9 @@ class ElevensGame {
 
 		return foundJack && foundQueen && foundKing
 	}
-
+	/**
+	 * Starts a new game by resetting the deck and dealing new cards.
+	 */
 	newGame() {
 		// Move the current cards back into the deck
 		while (this.deckInPlay.getSize() > 0) {
@@ -337,14 +389,5 @@ class ElevensGame {
 		for (let i = 0; i < 9; i++) {
 			this.deckInPlay.addCard(this.deck.deal())
 		}
-	}
-
-	emptyDeck() {
-		// NOT FOR GAME PLAY ... FOR TESTING PURPOSES
-		// Removes all cards from the main deck
-		while (!this.deck.isEmpty()) {
-			this.deck.removeCard(0)
-		}
-		console.log('Number of cards in deck is ' + this.deck.getSize())
 	}
 }

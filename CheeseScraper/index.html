@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DuckDuckGo Bulk Image Downloader</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+    input { padding: 0.5rem; width: 300px; }
+    button { padding: 0.5rem 1rem; margin: 10px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+      border: 3px solid transparent;
+      border-radius: 8px;
+      transition: border-color 0.3s;
+    }
+    img.selected { border-color: #00aaff; }
+  </style>
+</head>
+<body>
+  <h1>DuckDuckGo Bulk Image Downloader</h1>
+  <input id="query" placeholder="Search images..." />
+  <button onclick="search()">Search</button>
+  <button onclick="downloadSelected()">Download Selected</button>
+
+  <div id="results" class="grid"></div>
+
+  <script>
+    let selectedImages = [];
+
+    async function search() {
+      const query = document.getElementById("query").value.trim();
+      const results = document.getElementById("results");
+      results.innerHTML = "";
+      selectedImages = [];
+
+      if (!query) return alert("Enter a search term!");
+
+      const proxy = "https://corsproxy.io/?";
+      const searchPage = await (await fetch(proxy + "https://duckduckgo.com/?q=" + encodeURIComponent(query) + "&iax=images&ia=images")).text();
+
+      const vqdMatch = searchPage.match(/vqd='(.+?)'/);
+      if (!vqdMatch) return alert("Could not get search token from DuckDuckGo.");
+
+      const vqd = vqdMatch[1];
+      const apiURL = proxy + `https://duckduckgo.com/i.js?l=us-en&o=json&q=${encodeURIComponent(query)}&vqd=${vqd}&f=,,,&p=1`;
+
+      try {
+        const res = await fetch(apiURL);
+        const data = await res.json();
+
+        for (const img of data.results) {
+          const image = document.createElement("img");
+          image.src = img.image;
+          image.title = "Click to select";
+          image.onclick = () => toggleSelection(image, img.image);
+          results.appendChild(image);
+        }
+      } catch (err) {
+        alert("Error fetching images. DuckDuckGo may be blocking too many requests.");
+        console.error(err);
+      }
+    }
+
+    function toggleSelection(imgElem, url) {
+      imgElem.classList.toggle("selected");
+      if (imgElem.classList.contains("selected")) {
+        selectedImages.push(url);
+      } else {
+        selectedImages = selectedImages.filter(u => u !== url);
+      }
+    }
+
+    async function downloadSelected() {
+      if (selectedImages.length === 0) {
+        alert("No images selected.");
+        return;
+      }
+
+      const zip = new JSZip();
+      const folder = zip.folder("images");
+
+      for (let i = 0; i < selectedImages.length; i++) {
+        try {
+          const res = await fetch(selectedImages[i]);
+          const blob = await res.blob();
+          const ext = selectedImages[i].split('.').pop().split(/\#|\?/)[0];
+          folder.file(`image${i + 1}.${ext}`, blob);
+        } catch (e) {
+          console.error(`Failed to download: ${selectedImages[i]}`, e);
+        }
+      }
+
+      const content = await zip.generateAsync({ type: "blob" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(content);
+      a.download = "images.zip";
+      a.click();
+    }
+  </script>
+</body>
+</html>
