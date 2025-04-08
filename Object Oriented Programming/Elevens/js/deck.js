@@ -11,10 +11,14 @@ class Deck {
 
 	deal = function () {
 		if (this.isEmpty()) {
-			console.warn('Deck is empty: returning null')
+			console.log('Deck is empty: returning null')
 			return null
 		}
-		return this.removeCard(0)
+		const card = this.removeCard(0);
+		if (!card) {
+			console.error('Error: Failed to deal a card');
+		}
+		return card;
 	}
 
 	shuffle = function () {
@@ -36,13 +40,24 @@ class Deck {
 		return this.#cardStack.length
 	}
 
-	addCard = function (card, index) {
+	addCard = function (card, index = 0) {
 		this.#cardStack.splice(index, 0, card)
 	}
 
 	setCard = function (card, index) {
 		this.#cardStack[index] = card
 	}
+
+	replaceCard = function (card, index) {
+		if (index < 0 || index >= this.#cardStack.length) {
+			console.warn('Invalid card index: returning null')
+			return null
+		}
+		const oldCard = this.#cardStack[index]
+		this.#cardStack[index] = card
+		return oldCard
+	}
+
 
 	
 	removeCard(index) {
