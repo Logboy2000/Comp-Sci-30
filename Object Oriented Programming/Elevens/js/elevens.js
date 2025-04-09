@@ -393,7 +393,7 @@ class ElevensGame {
 		this.matches = 0;
 
 		// Shuffle the deck
-		// this.deck.shuffle();
+		this.deck.shuffle();
 
 		// Deal new cards based on the dip size
 		for (let i = 0; i < this.dipSize; i++) {
