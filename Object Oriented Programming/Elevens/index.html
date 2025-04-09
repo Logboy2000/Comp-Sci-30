@@ -6,8 +6,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Elevens</title>
 		<style>
+			* {
+				font-family: 'Courier New', Courier, monospace;
+			}
+
 			body {
-				background-color: rgb(36, 36, 36);
+				background-color: #006400; /* Green felt color */
 				margin: 0;
 				overflow: hidden;
 			}
@@ -20,11 +24,11 @@
 
 			#buttonContainer {
 				position: absolute;
-				bottom: 10px;
+				bottom: 20px;
 				left: 50%;
-				transform: translate(-50%, -50%);
+				transform: translateX(-50%);
 				display: flex;
-				gap: 10px;
+				gap: 15px;
 				flex-direction: row;
 				align-items: center;
 			}
@@ -36,25 +40,88 @@
 			}
 
 			button {
-				padding: 10px 20px;
-				font-size: 16px;
+				padding: 12px 25px;
+				font-size: 18px;
 				cursor: pointer;
-				background-color: green;
+				background-color: #8B0000; /* Dark red for poker theme */
 				color: white;
-				border: none;
-				border-radius: 5px;
+				border: 2px solid #FFD700; /* Gold border */
+				border-radius: 10px;
 				user-select: none;
+				font-weight: bold;
+				box-shadow: 0 6px #222;
+				transition: all 0.2s;
 			}
 
 			button:focus {
 				outline: none;
 			}
 
+			button:active {
+				transform: translateY(4px);
+				box-shadow: 0 0px #222;
+			}
+
 			.keybindLabel {
-				margin-top: 5px;
+				margin-top: 10px;
 				font-size: 14px;
 				color: white;
 				text-align: center;
+			}
+
+			#settingsButton {
+				position: absolute;
+				top: 10px;
+				right: 10px;
+			}
+
+			#settingsPanel {
+				position: absolute;
+				top: 0;
+				right: -500px;
+				width: 300px;
+				height: 100%;
+				background-color: #444;
+				color: white;
+				padding: 20px;
+				box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+				transition: right 0.3s ease;
+			}
+
+			#settingsPanel.open {
+				right: 0;
+			}
+
+			#closeSettingsButton {
+				padding: 0;
+				cursor: pointer;
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				width: 50px;
+				height: 50px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
+				border-radius: 50%;
+			}
+
+			h2 {
+				color: #FFD700; /* Gold color for headings */
+				text-align: center;
+			}
+
+			label {
+				color: white;
+			}
+
+			input {
+				padding: 5px;
+				border: 1px solid #FFD700;
+				border-radius: 5px;
+				background-color: #222;
+				color: white;
 			}
 		</style>
 	</head>
@@ -71,7 +138,23 @@
 				<span class="keybindLabel">(Space)</span>
 			</div>
 		</div>
-		<script src="js/button.js"></script>
+		<button id="settingsButton">Settings</button>
+		<div id="settingsPanel">
+			<button id="closeSettingsButton">X</button>
+			<h2>Settings</h2>
+			<div>
+				<label for="deckSize">Deck In Play Size:</label>
+				<input
+					type="number"
+					id="deckSize"
+					name="deckSize"
+					min="1"
+					max="52"
+					value="9"
+				/>
+			</div>
+			<button id="applySettingsButton">APPLY & RESTART</button>
+		</div>
 		<script src="js/card.js"></script>
 		<script src="js/deck.js"></script>
 		<script src="js/elevens.js"></script>

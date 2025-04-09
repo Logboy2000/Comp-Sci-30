@@ -7,14 +7,16 @@ class ElevensGame {
 	 * @param {HTMLCanvasElement} canvas - The canvas element for rendering the game.
 	 * @param {Deck} deck - The deck of cards used in the game.
 	 */
-	constructor(canvas, deck) {
+	constructor(canvas, deck, dipSize = 9) {
 		this.canvas = canvas
 		this.ctx = this.canvas.getContext('2d')
 		this.matches = 0
 		this.deck = deck
 
+		this.dipSize = dipSize
 		this.deckInPlay = new Deck()
 		this.discards = new Deck()
+
 
 		this.selectedCards = []
 
@@ -27,7 +29,14 @@ class ElevensGame {
 			false
 		)
 
-		document.addEventListener('keydown', (event) => {
+		// Make the canvas focusable and add a click listener to focus it
+		this.canvas.setAttribute('tabindex', '0')
+		this.canvas.addEventListener('click', () => {
+			this.canvas.focus()
+		})
+
+		// Add keydown event listener to the canvas
+		this.canvas.addEventListener('keydown', (event) => {
 			if (event.key === 'r') {
 				this.newGame()
 			}
@@ -168,9 +177,8 @@ class ElevensGame {
 		this.ctx.fillText('Matches: ' + this.matches, 20, 40)
 
 		// Define fixed spacing for 9 slots
-		const totalSlots = 9
 		const spacing = 15
-		const totalWidth = totalSlots * this.imgWidth + (totalSlots - 1) * spacing
+		const totalWidth = this.dipSize * this.imgWidth + (this.dipSize - 1) * spacing
 		const startX = (this.canvas.width - totalWidth) / 2 // Center the slots horizontally
 		const startY = this.canvas.height * 0.3 // Slightly above center
 
@@ -372,25 +380,32 @@ class ElevensGame {
 	newGame() {
 		// Move the current cards back into the deck
 		while (this.deckInPlay.getSize() > 0) {
-			this.deck.addCard(this.deckInPlay.deal())
+			this.deck.addCard(this.deckInPlay.deal());
 		}
 		while (this.discards.getSize() > 0) {
-			this.deck.addCard(this.discards.deal())
+			this.deck.addCard(this.discards.deal());
 		}
 
 		// Unselect all cards
-		this.selectedCards = []
+		this.selectedCards = [];
 
 		// Reset the score
-		this.matches = 0
+		this.matches = 0;
 
 		// Shuffle the deck
-		this.deck.shuffle()
+		// this.deck.shuffle();
 
-		// Deal 9 new cards
-		for (let i = 0; i < 9; i++) {
-			this.deckInPlay.addCard(this.deck.deal())
+		// Deal new cards based on the dip size
+		for (let i = 0; i < this.dipSize; i++) {
+			this.dealCard()
 		}
+	}
+
+	dealCard() {
+		// Deal a card from the deck and add it to the deckInPlay
+
+		this.deckInPlay.addCard(this.deck.deal())
+		
 	}
 
 	emptyDeck() {
