@@ -14,11 +14,11 @@ class Deck {
 			console.log('Deck is empty: returning null')
 			return null
 		}
-		const card = this.removeCard(0);
+		const card = this.removeCard(0)
 		if (!card) {
-			console.error('Error: Failed to deal a card');
+			console.error('Error: Failed to deal a card')
 		}
-		return card;
+		return card
 	}
 
 	shuffle = function () {
@@ -31,9 +31,7 @@ class Deck {
 	}
 
 	getCard = function (index) {
-
 		return this.#cardStack[index]
-		
 	}
 
 	getSize = function () {
@@ -58,8 +56,6 @@ class Deck {
 		return oldCard
 	}
 
-
-	
 	removeCard(index) {
 		if (index < 0 || index >= this.#cardStack.length) {
 			console.warn('Invalid card index: returning null')

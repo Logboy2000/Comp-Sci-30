@@ -6,12 +6,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Elevens</title>
 		<style>
-			* {
+			* { /* sets the font everywhere */
 				font-family: 'Courier New', Courier, monospace;
 			}
 
 			body {
-				background-color: #006400; /* Green felt color */
+				background-color: #006400;
 				margin: 0;
 				overflow: hidden;
 			}
@@ -43,9 +43,9 @@
 				padding: 12px 25px;
 				font-size: 18px;
 				cursor: pointer;
-				background-color: #8B0000; /* Dark red for poker theme */
+				background-color: #006400;
 				color: white;
-				border: 2px solid #FFD700; /* Gold border */
+				border: 2px solid #006400;
 				border-radius: 10px;
 				user-select: none;
 				font-weight: bold;
@@ -58,7 +58,7 @@
 			}
 
 			button:active {
-				transform: translateY(4px);
+				transform: translateY(6px);
 				box-shadow: 0 0px #222;
 			}
 
@@ -81,11 +81,14 @@
 				right: -500px;
 				width: 300px;
 				height: 100%;
-				background-color: #444;
+				background: linear-gradient(45deg, #006400, #004225, #003015);
 				color: white;
 				padding: 20px;
-				box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+				box-shadow: -2px 0 15px rgba(0, 0, 0, 0.5);
 				transition: right 0.3s ease;
+				display: flex;
+				flex-direction: column;
+				border-left: 3px solid #006400;
 			}
 
 			#settingsPanel.open {
@@ -108,8 +111,9 @@
 			}
 
 			h2 {
-				color: #FFD700; /* Gold color for headings */
+				color: white;
 				text-align: center;
+				margin-top: 20px;
 			}
 
 			label {
@@ -118,10 +122,16 @@
 
 			input {
 				padding: 5px;
-				border: 1px solid #FFD700;
+				border: 1px solid #006400;
 				border-radius: 5px;
 				background-color: #222;
 				color: white;
+			}
+			
+			#applySettingsButton {
+				margin-top: auto;
+				align-self: center;
+				margin-bottom: 100px;
 			}
 		</style>
 	</head>
@@ -130,7 +140,7 @@
 		<canvas id="gameCanvas"></canvas>
 		<div id="buttonContainer">
 			<div class="buttonWrapper">
-				<button id="resetButton">Reset Game</button>
+				<button id="resetButton">New Game</button>
 				<span class="keybindLabel">(R)</span>
 			</div>
 			<div class="buttonWrapper">

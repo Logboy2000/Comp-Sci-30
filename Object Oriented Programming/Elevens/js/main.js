@@ -1,8 +1,21 @@
 let canvas, game, card
-var cardsSpritesheet = new Image()
+let cardsSpritesheet = new Image()
 cardsSpritesheet.src = 'img/cardsSpriteSheet.png'
+let bg = new Image()
+bg.src = 'img/bg.jpg'
 
-window.onload = loaded
+window.onload = htmlLoaded
+
+function htmlLoaded() {
+	console.log('waiting for spritesheet to load')
+	while (!cardsSpritesheet.complete) {}
+
+	console.log('waiting for bg image to load')
+	while (!bg.complete) {}
+
+	loaded()
+}
+
 function loaded() {
 	const settingsButton = document.getElementById('settingsButton')
 	const settingsPanel = document.getElementById('settingsPanel')
@@ -10,9 +23,6 @@ function loaded() {
 	const applySettingsButton = document.getElementById('applySettingsButton')
 
 	canvas = document.getElementById('gameCanvas')
-	while (!cardsSpritesheet.complete) {
-		//wait
-	}
 
 	const cardW = cardsSpritesheet.width / 13
 	const cardH = cardsSpritesheet.height / 8
@@ -61,16 +71,14 @@ function loaded() {
 		}
 	}
 
-	game = new ElevensGame(canvas, new Deck(gameDeckCards))
+	game = new ElevensGame(canvas, new Deck(gameDeckCards), 9, bg)
 
 	game.start()
-
-
 
 	settingsButton.addEventListener('click', () => {
 		settingsPanel.classList.toggle('open')
 	})
-	
+
 	closeSettingsButton.addEventListener('click', () => {
 		settingsPanel.classList.remove('open')
 	})
@@ -80,6 +88,8 @@ function loaded() {
 		settingsPanel.classList.remove('open')
 	})
 
+
+	console.log('game loaded!')
 	update()
 }
 
@@ -88,9 +98,7 @@ function update() {
 	requestAnimationFrame(update)
 }
 
-
 function applySettings() {
-	
 	const newSize = parseInt(document.getElementById('deckSize').value, 10)
 	if (!isNaN(newSize) && newSize >= 1 && newSize <= 52) {
 		// Update the game with the new deck size

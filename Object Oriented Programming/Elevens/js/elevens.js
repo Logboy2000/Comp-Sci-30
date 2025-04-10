@@ -6,17 +6,18 @@ class ElevensGame {
 	 * Creates an instance of ElevensGame.
 	 * @param {HTMLCanvasElement} canvas - The canvas element for rendering the game.
 	 * @param {Deck} deck - The deck of cards used in the game.
+	 * @param {number} dipSize - The number of cards in the dip.
+	 * @param {Image} bg - The background image for the game.
 	 */
-	constructor(canvas, deck, dipSize = 9) {
+	constructor(canvas, deck, dipSize = 9, bg = null) {
 		this.canvas = canvas
 		this.ctx = this.canvas.getContext('2d')
 		this.matches = 0
 		this.deck = deck
-
+		this.bg = bg
 		this.dipSize = dipSize
 		this.deckInPlay = new Deck()
 		this.discards = new Deck()
-
 
 		this.selectedCards = []
 
@@ -170,6 +171,11 @@ class ElevensGame {
 		this.ctx.fillStyle = '#229922'
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
+		// Draw background image if provided
+		if (this.bg != null) {
+			this.ctx.drawImage(this.bg, 0, 0, this.canvas.width, this.canvas.height)
+		}
+
 		// Draw the score at the top-left corner
 		this.ctx.fillStyle = '#000000'
 		this.ctx.font = '30px Arial'
@@ -178,7 +184,8 @@ class ElevensGame {
 
 		// Define fixed spacing for 9 slots
 		const spacing = 15
-		const totalWidth = this.dipSize * this.imgWidth + (this.dipSize - 1) * spacing
+		const totalWidth =
+			this.dipSize * this.imgWidth + (this.dipSize - 1) * spacing
 		const startX = (this.canvas.width - totalWidth) / 2 // Center the slots horizontally
 		const startY = this.canvas.height * 0.3 // Slightly above center
 
@@ -187,31 +194,46 @@ class ElevensGame {
 		for (let i = 0; i < this.deckInPlay.getSize(); i++) {
 			let card = this.deckInPlay.getCard(i)
 
-
-
 			const slotX = startX + visibleIndex * (this.imgWidth + spacing)
 
 			// Skip null cards but still increment visibleIndex
 			// This allows for proper spacing of the cards
 			if (card == null) {
 				visibleIndex++
-				continue 
+			} else {
+				card.setPosition(Math.round(slotX), Math.round(startY))
+				card.draw(this.ctx, this.selectedCards.includes(i))
+
+				// Draw the card's index below itself
+				this.ctx.fillStyle = '#000000'
+				this.ctx.font = '20px Arial'
+				this.ctx.textAlign = 'center'
+				this.ctx.fillText(
+					i + 1,
+					Math.round(slotX + this.imgWidth / 2),
+					Math.round(startY + this.imgHeight + 20)
+				)
+
+				visibleIndex++
 			}
+		}
 
-			card.setPosition(Math.round(slotX), Math.round(startY))
-			card.draw(this.ctx, this.selectedCards.includes(i))
+		// Draw game over message if game is over
+		if (this.gameOver) {
+			// Create semi-transparent overlay
+			this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
+			this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
-			// Draw the card's index below itself
-			this.ctx.fillStyle = '#000000'
-			this.ctx.font = '20px Arial'
+			// Draw message
+			this.ctx.fillStyle = '#FFFFFF'
+			this.ctx.font = 'bold 60px Arial'
 			this.ctx.textAlign = 'center'
+			this.ctx.textBaseline = 'middle'
 			this.ctx.fillText(
-				i + 1,
-				Math.round(slotX + this.imgWidth / 2),
-				Math.round(startY + this.imgHeight + 20)
+				this.gameOverMessage,
+				this.canvas.width / 2,
+				this.canvas.height / 2
 			)
-
-			visibleIndex++ // Increment visible index for the next card
 		}
 	}
 
@@ -241,12 +263,14 @@ class ElevensGame {
 		// Check if the game is over
 		if (this.checkWin()) {
 			console.log('You Win!')
-			alert('You Win!')
+			this.gameOver = true
+			this.gameOverMessage = 'You Win!'
 		} else if (this.anotherPlayIsPossible()) {
 			console.log('You have another play!')
 		} else {
 			console.log('You Lose!')
-			alert('You Lose!')
+			this.gameOver = true
+			this.gameOverMessage = 'You Lose!'
 		}
 
 		// Deselect cards
@@ -359,7 +383,7 @@ class ElevensGame {
 		let foundQueen = false
 		let foundKing = false
 
-		// Search for all of dip
+		// Search through all of dip
 		for (let i = 0; i < deckInPlay.getSize(); i++) {
 			let card = deckInPlay.getCard(i)
 			// Change the values of foundJack, foundQueen, and foundKing if the cards are found
@@ -380,20 +404,24 @@ class ElevensGame {
 	newGame() {
 		// Move the current cards back into the deck
 		while (this.deckInPlay.getSize() > 0) {
-			this.deck.addCard(this.deckInPlay.deal());
+			this.deck.addCard(this.deckInPlay.deal())
 		}
 		while (this.discards.getSize() > 0) {
-			this.deck.addCard(this.discards.deal());
+			this.deck.addCard(this.discards.deal())
 		}
 
 		// Unselect all cards
-		this.selectedCards = [];
+		this.selectedCards = []
 
 		// Reset the score
-		this.matches = 0;
+		this.matches = 0
+
+		// Reset game over state
+		this.gameOver = false
+		this.gameOverMessage = ''
 
 		// Shuffle the deck
-		this.deck.shuffle();
+		this.deck.shuffle()
 
 		// Deal new cards based on the dip size
 		for (let i = 0; i < this.dipSize; i++) {
@@ -405,7 +433,6 @@ class ElevensGame {
 		// Deal a card from the deck and add it to the deckInPlay
 
 		this.deckInPlay.addCard(this.deck.deal())
-		
 	}
 
 	emptyDeck() {
