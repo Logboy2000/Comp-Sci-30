@@ -7,22 +7,40 @@ bg.src = 'img/bg.jpg'
 window.onload = htmlLoaded
 
 function htmlLoaded() {
-	console.log('waiting for spritesheet to load')
-	while (!cardsSpritesheet.complete) {}
+	canvas = document.getElementById('gameCanvas')
+	const ctx = canvas.getContext('2d')
 
-	console.log('waiting for bg image to load')
-	while (!bg.complete) {}
+	// Draw loading text
+	ctx.fillStyle = '#000000'
+	ctx.font = '30px Arial'
+	ctx.textAlign = 'center'
+	ctx.textBaseline = 'middle'
+	ctx.fillText('Loading...', canvas.width / 2, canvas.height / 2)
 
-	loaded()
+	// Wait for resources to load properly
+	if (cardsSpritesheet.complete && bg.complete) {
+		resourcesLoaded()
+	} else {
+		let loadedCount = 0
+		const totalResources = 2
+
+		function checkAllLoaded() {
+			loadedCount++
+			if (loadedCount === totalResources) {
+				resourcesLoaded() 
+			}
+		}
+
+		cardsSpritesheet.onload = checkAllLoaded
+		bg.onload = checkAllLoaded
+	}
 }
 
-function loaded() {
+function resourcesLoaded() {
 	const settingsButton = document.getElementById('settingsButton')
 	const settingsPanel = document.getElementById('settingsPanel')
 	const closeSettingsButton = document.getElementById('closeSettingsButton')
 	const applySettingsButton = document.getElementById('applySettingsButton')
-
-	canvas = document.getElementById('gameCanvas')
 
 	const cardW = cardsSpritesheet.width / 13
 	const cardH = cardsSpritesheet.height / 8
@@ -50,11 +68,10 @@ function loaded() {
 			const rank = ranks[rankIndex]
 			const suit = suits[suitIndex]
 
-			// Assuming sheetX, sheetY, sheetSelectedX, sheetSelectedY are calculated based on rankIndex and suitIndex
-			const sheetX = rankIndex * cardW // Example: 72px per card width
-			const sheetY = suitIndex * cardH // Example: 96px per card height
-			const sheetSelectedX = sheetX // Example offset for selected state
-			const sheetSelectedY = sheetY + 388 // Example offset for selected state
+			const sheetX = rankIndex * cardW
+			const sheetY = suitIndex * cardH
+			const sheetSelectedX = sheetX
+			const sheetSelectedY = sheetY + 388
 
 			gameDeckCards.push(
 				new Card(
@@ -87,7 +104,6 @@ function loaded() {
 		applySettings()
 		settingsPanel.classList.remove('open')
 	})
-
 
 	console.log('game loaded!')
 	update()

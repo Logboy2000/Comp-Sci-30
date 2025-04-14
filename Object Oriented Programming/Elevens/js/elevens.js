@@ -37,39 +37,12 @@ class ElevensGame {
 		})
 
 		// Add keydown event listener to the canvas
-		this.canvas.addEventListener('keydown', (event) => {
+		document.addEventListener('keydown', (event) => {
 			if (event.key === 'r') {
 				this.newGame()
 			}
 			if (event.key === ' ') {
 				this.makeMove()
-			}
-			if (event.key === '1') {
-				this.toggleSelectCard(0)
-			}
-			if (event.key === '2') {
-				this.toggleSelectCard(1)
-			}
-			if (event.key === '3') {
-				this.toggleSelectCard(2)
-			}
-			if (event.key === '4') {
-				this.toggleSelectCard(3)
-			}
-			if (event.key === '5') {
-				this.toggleSelectCard(4)
-			}
-			if (event.key === '6') {
-				this.toggleSelectCard(5)
-			}
-			if (event.key === '7') {
-				this.toggleSelectCard(6)
-			}
-			if (event.key === '8') {
-				this.toggleSelectCard(7)
-			}
-			if (event.key === '9') {
-				this.toggleSelectCard(8)
 			}
 		})
 
@@ -106,10 +79,6 @@ class ElevensGame {
 	 * Handles mouse click events on the canvas.
 	 * @param {MouseEvent} event - The mouse event object.
 	 */
-	/**
-	 * Handles mouse click events on the canvas.
-	 * @param {MouseEvent} event - The mouse event object.
-	 */
 	mouseClicked(event) {
 		let x = event.x - this.canvas.offsetLeft + window.pageXOffset
 		let y = event.y - this.canvas.offsetTop + window.pageYOffset
@@ -129,15 +98,7 @@ class ElevensGame {
 						break
 					}
 				}
-
-				if (selected) {
-					// Remove the card from selectedCards
-					this.selectedCards = this.selectedCards.filter((card) => card !== i)
-				} else {
-					// Add the card to selectedCards
-					this.selectedCards.push(i)
-				}
-
+				this.toggleSelectCard(i)
 				break
 			}
 		}
@@ -219,7 +180,7 @@ class ElevensGame {
 		}
 
 		// Draw game over message if game is over
-		if (this.gameOver) {
+		if (this.gameOver == true) {
 			// Create semi-transparent overlay
 			this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
 			this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
@@ -262,15 +223,11 @@ class ElevensGame {
 
 		// Check if the game is over
 		if (this.checkWin()) {
-			console.log('You Win!')
-			this.gameOver = true
-			this.gameOverMessage = 'You Win!'
+			this.doGameOver('You Win!')
 		} else if (this.anotherPlayIsPossible()) {
 			console.log('You have another play!')
 		} else {
-			console.log('You Lose!')
-			this.gameOver = true
-			this.gameOverMessage = 'You Lose!'
+			this.doGameOver('You Lose!')
 		}
 
 		// Deselect cards
@@ -440,5 +397,10 @@ class ElevensGame {
 		while (!this.deck.isEmpty()) {
 			this.discards.addCard(this.deck.deal())
 		}
+	}
+
+	doGameOver(message) {
+		this.gameOver = true
+		this.gameOverMessage = message
 	}
 }
