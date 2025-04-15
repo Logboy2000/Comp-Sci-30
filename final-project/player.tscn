@@ -1,8 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://b4hrdpl5dijvs"]
+[gd_scene load_steps=4 format=3 uid="uid://b4hrdpl5dijvs"]
 
 [ext_resource type="Script" uid="uid://bgnlnc30p3wb3" path="res://player.gd" id="1_4flbx"]
+[ext_resource type="PackedScene" uid="uid://bu7g5b5abhjrh" path="res://sword.tscn" id="2_onrkg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qk4a2"]
+size = Vector2(11, 20)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_4flbx")
@@ -10,3 +12,5 @@ script = ExtResource("1_4flbx")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_qk4a2")
 debug_color = Color(0, 0.6, 0, 0.419608)
+
+[node name="Sword" parent="." instance=ExtResource("2_onrkg")]

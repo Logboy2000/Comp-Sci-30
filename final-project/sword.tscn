@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bu7g5b5abhjrh"]
+
+[ext_resource type="Script" uid="uid://msjnvq7h4pgr" path="res://sword.gd" id="1_2k4m3"]
+
+[node name="Sword" type="Node2D"]
+script = ExtResource("1_2k4m3")
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(14, 0)
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Hitbox"]
+scale = Vector2(2, 2)
+polygon = PackedVector2Array(-10, -5, 0, -4, 10, -2, 12, 0, 12, 1, 10, 3, 5, 4, -10, 5, -3, 0)
+
+[node name="Sprite" type="Polygon2D" parent="."]
+position = Vector2(14, 0)
+scale = Vector2(2, 2)
+polygon = PackedVector2Array(-10, -5, 0, -4, 10, -2, 12, 0, 12, 1, 10, 3, 5, 4, -10, 5, -3, 0)
