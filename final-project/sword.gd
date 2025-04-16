@@ -6,8 +6,8 @@ signal attack_finished
 @onready var hitbox: Area2D = $Hitbox
 
 @export var damage = 5.0
-@export var attack_cooldown = 0.1
-@export var attack_duration = 0.2
+@export var attack_cooldown = 0
+@export var attack_duration = 0.1
 @export var wall_knockback_force = 250.0
 @export var enemy_knockback = 500.0
 

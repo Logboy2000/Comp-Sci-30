@@ -2,16 +2,23 @@ extends CharacterBody2D
 
 #nodes
 @onready var sword = $Sword
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 # movement variables
-@export var speed = 100.0
-@export var jump_velocity = -400.0
-@export var gravity = 980.0
+@export_category("Horizontal Movement")
+@export var normal_top_speed = 100.0
+@export var run_top_speed = 150.0
+@export var accel = 100.0
 @export var friction = 2000.0
+
+@export_category("Vertical Movement")
+@export var jump_velocity = -200.0
+@export var pogo_velocity = -300.0
+@export var gravity = 980.0
 @export var coyote_time = 0.15
 @export var jump_buffer_time = 0.1  
-@export var pogo_velocity = -300.0
 @export var cap_fall_speed: bool = true
+@export var max_fall_speed = 300.0
 
 var gravity_multiplier = 1.0
 var is_jumping = false
@@ -27,8 +34,25 @@ func _ready():
 	update_sword_direction()
 
 func _physics_process(delta):
+	# Get input direction
+	var direction = Input.get_axis("left", "right")
+	
+	
+	if Input.is_action_pressed("run"):
+		pass
+	
+	if direction != 0 and abs(velocity.x) < normal_top_speed:
+		# Set speed directly
+		velocity.x += direction * accel
+	else:
+		# Apply friction to slow down
+		velocity.x = move_toward(velocity.x, 0, friction * delta)
+	
 	# Add gravity
 	if not is_on_floor():
+		if cap_fall_speed:
+			velocity.y = min(max_fall_speed, velocity.y)
+		
 		velocity.y += gravity * gravity_multiplier * delta
 		# Apply jump cut gravity when jump button is released
 		if is_jumping and not Input.is_action_pressed("jump"):
@@ -61,14 +85,13 @@ func _physics_process(delta):
 		coyote_timer = 0
 		jump_buffer_timer = 0
 	
-	# Get input direction
-	var direction = Input.get_axis("left", "right")
 	
 	# Update facing direction
 	if direction != 0:
 		facing_right = direction > 0
+		sprite.flip_h = !facing_right
 	
-	update_sword_direction()
+	
 	
 	# Only update attack direction if not currently attacking
 	if not is_attacking:
@@ -96,15 +119,8 @@ func _physics_process(delta):
 		is_attacking = true
 		sword.start_attack(attack_direction)
 	
-	# Apply movement
-	if direction and abs(velocity.x) < speed:
-		# Set speed directly
-		velocity.x += direction * speed
-	else:
-		# Apply friction to slow down
-		velocity.x = move_toward(velocity.x, 0, friction * delta)
-	
 	# Move the character
+	update_sword_direction()
 	move_and_slide()
 
 func update_sword_direction():
@@ -123,5 +139,7 @@ func _on_sword_attack_finished():
 	is_attacking = false
 
 func pogo():
+	if is_on_floor():
+		return
 	is_jumping = false
 	velocity.y = pogo_velocity
