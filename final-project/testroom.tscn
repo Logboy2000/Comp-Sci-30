@@ -1,9 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://dykrla05monq3"]
+[gd_scene load_steps=5 format=3 uid="uid://dykrla05monq3"]
 
 [ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://player.tscn" id="1_q11y4"]
+[ext_resource type="PackedScene" uid="uid://j7myepfg202f" path="res://lilguy.tscn" id="2_aes75"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q11y4"]
-size = Vector2(119, 58)
+size = Vector2(938, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aes75"]
+size = Vector2(51, 352)
 
 [node name="testroom" type="Node2D"]
 
@@ -11,12 +15,42 @@ size = Vector2(119, 58)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(2, 2)
-position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
+drag_left_margin = 0.05
+drag_top_margin = 0.05
+drag_right_margin = 0.05
+drag_bottom_margin = 0.05
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["terrain"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(14.5, 56)
+position = Vector2(-13, 46)
 shape = SubResource("RectangleShape2D_q11y4")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." groups=["terrain"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(113, -134)
+shape = SubResource("RectangleShape2D_aes75")
+
+[node name="lilguy" parent="." instance=ExtResource("2_aes75")]
+position = Vector2(-94, 3)
+
+[node name="lilguy2" parent="." instance=ExtResource("2_aes75")]
+position = Vector2(-77, -31)
+
+[node name="lilguy3" parent="." instance=ExtResource("2_aes75")]
+position = Vector2(-143, -56)
+
+[node name="lilguy4" parent="." instance=ExtResource("2_aes75")]
+position = Vector2(-114, -28)
+
+[node name="lilguy5" parent="." instance=ExtResource("2_aes75")]
+position = Vector2(-78, -75)
+
+[node name="lilguy6" parent="." instance=ExtResource("2_aes75")]
+position = Vector2(-176, -28)
+
+[node name="lilguy7" parent="." instance=ExtResource("2_aes75")]
+position = Vector2(-224, -18)

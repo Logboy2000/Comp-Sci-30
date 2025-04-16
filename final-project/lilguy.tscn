@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://j7myepfg202f"]
+
+[ext_resource type="Script" uid="uid://cin3uwpgfq1s1" path="res://enemy.gd" id="1_iwjhx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iwjhx"]
+size = Vector2(20, 9)
+
+[node name="lilguy" type="CharacterBody2D"]
+collision_layer = 2
+script = ExtResource("1_iwjhx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5.5)
+shape = SubResource("RectangleShape2D_iwjhx")
+debug_color = Color(1, 0, 0, 0.419608)
