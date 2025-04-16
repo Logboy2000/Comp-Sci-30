@@ -92,6 +92,3 @@ func _on_hitbox_body_entered(body):
 		# Apply knockback to enemy
 		body.take_damage(damage, current_attack_direction, enemy_knockback)
 		has_applied_knockback = true
-	elif body.is_in_group("terrain"):
-		apply_knockback(false)
-		has_applied_knockback = true

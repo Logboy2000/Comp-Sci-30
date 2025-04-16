@@ -8,9 +8,10 @@ extends CharacterBody2D
 @export var jump_velocity = -400.0
 @export var gravity = 980.0
 @export var friction = 2000.0
-@export var coyote_time = 0.15  # Time in seconds to allow jumping after leaving platform
-@export var jump_buffer_time = 0.1  # Time in seconds to buffer jump input
+@export var coyote_time = 0.15
+@export var jump_buffer_time = 0.1  
 @export var pogo_velocity = -300.0
+@export var cap_fall_speed: bool = true
 
 var gravity_multiplier = 1.0
 var is_jumping = false
@@ -18,7 +19,7 @@ var facing_right = true
 var coyote_timer = 0.0
 var jump_buffer_timer = 0.0
 var was_on_floor = false
-var attack_direction = Vector2.RIGHT  # Default attack direction
+var attack_direction = Vector2.RIGHT 
 var is_attacking = false
 
 func _ready():
