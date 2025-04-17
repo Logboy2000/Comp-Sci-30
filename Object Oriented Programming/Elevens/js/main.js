@@ -6,6 +6,9 @@ bg.src = 'img/bg.jpg'
 
 window.onload = htmlLoaded
 
+/**
+ * runs when the html is loaded
+ */
 function htmlLoaded() {
 	canvas = document.getElementById('gameCanvas')
 	const ctx = canvas.getContext('2d')
@@ -24,18 +27,22 @@ function htmlLoaded() {
 		let loadedCount = 0
 		const totalResources = 2
 
-		function checkAllLoaded() {
+		const onResourceLoad = () => {
 			loadedCount++
 			if (loadedCount === totalResources) {
-				resourcesLoaded() 
+				resourcesLoaded()
 			}
 		}
 
-		cardsSpritesheet.onload = checkAllLoaded
-		bg.onload = checkAllLoaded
+		cardsSpritesheet.onload = onResourceLoad
+		bg.onload = onResourceLoad
 	}
 }
 
+/**
+ * run when the images are loaded
+ * Initializes the game
+ */
 function resourcesLoaded() {
 	const settingsButton = document.getElementById('settingsButton')
 	const settingsPanel = document.getElementById('settingsPanel')
@@ -109,11 +116,17 @@ function resourcesLoaded() {
 	update()
 }
 
+/**
+ * Updates the game state and draws it on the canvas
+ */
 function update() {
 	game.draw()
 	requestAnimationFrame(update)
 }
 
+/**
+ * Applies the settings to the game
+ */
 function applySettings() {
 	const newSize = parseInt(document.getElementById('deckSize').value, 10)
 	if (!isNaN(newSize) && newSize >= 1 && newSize <= 52) {

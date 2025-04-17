@@ -1,6 +1,4 @@
-/*
- * Represents the Elevens card game.
- */
+// Elevens Card Game
 class ElevensGame {
 	/**
 	 * Creates an instance of ElevensGame.
@@ -203,6 +201,7 @@ class ElevensGame {
 	 * @returns {boolean} True if the player has won, otherwise false.
 	 */
 	checkWin() {
+		
 		return this.deckInPlay.getSize() === 0 && this.deck.getSize() === 0
 	}
 	/**
@@ -221,6 +220,13 @@ class ElevensGame {
 			this.matches++
 		}
 
+		this.doWinCheck()
+
+		// Deselect cards
+		this.selectedCards = []
+	}
+
+	doWinCheck() {
 		// Check if the game is over
 		if (this.checkWin()) {
 			this.doGameOver('You Win!')
@@ -229,10 +235,8 @@ class ElevensGame {
 		} else {
 			this.doGameOver('You Lose!')
 		}
-
-		// Deselect cards
-		this.selectedCards = []
 	}
+
 	/**
 	 * Determines if the selected cards form a valid group for removal.
 	 * @returns {boolean} True if the move is legal, otherwise false.
@@ -378,20 +382,29 @@ class ElevensGame {
 		this.gameOverMessage = ''
 
 		// Shuffle the deck
-		this.deck.shuffle()
+		// this.deck.shuffle()
 
 		// Deal new cards based on the dip size
 		for (let i = 0; i < this.dipSize; i++) {
 			this.dealCard()
 		}
+
+		// Check if the game is over on first deal :(
+		this.doWinCheck()
 	}
 
+	/**
+	 * Deals a card from the deck and adds it to the deckInPlay.
+	 */
 	dealCard() {
 		// Deal a card from the deck and add it to the deckInPlay
 
 		this.deckInPlay.addCard(this.deck.deal())
 	}
 
+	/**
+	 * Removes all cards from the deck and adds them to the discards.
+	 */
 	emptyDeck() {
 		// Remove all cards from the deck
 		while (!this.deck.isEmpty()) {
@@ -399,6 +412,10 @@ class ElevensGame {
 		}
 	}
 
+	/**
+	 * Sets the game over state and displays a message.
+	 * @param {string} message - The message to display.
+	 */
 	doGameOver(message) {
 		this.gameOver = true
 		this.gameOverMessage = message

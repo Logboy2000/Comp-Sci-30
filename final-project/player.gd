@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 #nodes
-@onready var sword = $Sword
+@onready var forward_attack = $ForwardAttack
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 # movement variables
@@ -30,8 +30,8 @@ var attack_direction = Vector2.RIGHT
 var is_attacking = false
 
 func _ready():
-	# Make sure sword is properly oriented
-	update_sword_direction()
+	# Make sure forward_attack is properly oriented
+	update_forward_attack_direction()
 
 func _physics_process(delta):
 	# Get input direction
@@ -112,30 +112,29 @@ func _physics_process(delta):
 		# If there's attack input, update direction
 		if attack_input != Vector2.ZERO:
 			attack_direction = attack_input
-			update_sword_direction()
+			update_forward_attack_direction()
 	
 	# Handle attack
 	if Input.is_action_just_pressed("attack"):
 		is_attacking = true
-		sword.start_attack(attack_direction)
+		forward_attack.start_attack(attack_direction)
 	
 	# Move the character
-	update_sword_direction()
+	if not is_attacking:
+		update_forward_attack_direction()
 	move_and_slide()
 
-func update_sword_direction():
-	# Update sword position and rotation based on attack direction
-	if attack_direction == Vector2.ZERO:
-		# If no attack direction, use movement direction
-		sword.scale.x = 1 if facing_right else -1
-		sword.rotation = 0
-	else:
-		# Set sword rotation based on attack direction
-		sword.rotation = attack_direction.angle()
-		# Flip sword if needed to maintain proper orientation
-		sword.scale.x = 1
+func update_forward_attack_direction():
+	# Update forward_attack position and rotation based on attack direction
+		if facing_right:
+			forward_attack.scale.x = 1
+		else:
+			forward_attack.scale.x = -1
 
-func _on_sword_attack_finished():
+
+	
+
+func _on_forward_attack_attack_finished():
 	is_attacking = false
 
 func pogo():

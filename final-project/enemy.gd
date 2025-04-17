@@ -5,6 +5,7 @@ class_name Enemy extends CharacterBody2D
 @export var knockback_resistance = 0.5  # 0 = no resistance, 1 = full resistance
 @export var invincibility_duration = 0.2  # Seconds of invincibility after being hit
 @export var gravity = 980
+@export var affected_by_gravity = false
 @export var knockback_duration = 0.05  # How long knockback lasts
 
 var current_health: int
@@ -13,12 +14,18 @@ var facing_right = true
 var is_knockback = false
 var pre_knockback_velocity = Vector2.ZERO
 
+
 func _ready():
 	current_health = max_health
+	if affected_by_gravity:
+		motion_mode = CharacterBody2D.MOTION_MODE_GROUNDED
+	else:
+		motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 
 func _physics_process(delta: float) -> void:
-	if motion_mode == MotionMode.MOTION_MODE_GROUNDED and not is_on_floor():
-		velocity.y += gravity * delta
+	if affected_by_gravity:
+		if not is_on_floor():
+			velocity.y += gravity * delta
 	
 	# If not in knockback, update velocity based on enemy behavior
 	if not is_knockback:

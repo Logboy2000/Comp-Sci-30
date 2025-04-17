@@ -1,20 +1,36 @@
-[gd_scene load_steps=4 format=3 uid="uid://b4hrdpl5dijvs"]
+[gd_scene load_steps=6 format=3 uid="uid://b4hrdpl5dijvs"]
 
 [ext_resource type="Script" uid="uid://bgnlnc30p3wb3" path="res://player.gd" id="1_4flbx"]
-[ext_resource type="PackedScene" uid="uid://bu7g5b5abhjrh" path="res://sword.tscn" id="2_onrkg"]
+[ext_resource type="PackedScene" uid="uid://bu7g5b5abhjrh" path="res://forward_attack.tscn" id="2_onrkg"]
+[ext_resource type="Texture2D" uid="uid://bitv3xiijjhac" path="res://sprites/rat.png" id="3_i3pqv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qk4a2"]
-size = Vector2(14.25, 7)
+size = Vector2(45, 15.5)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hqtel"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_i3pqv")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_4flbx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.125, 0)
+visible = false
 shape = SubResource("RectangleShape2D_qk4a2")
 debug_color = Color(0, 0.6, 0, 0.419608)
 
-[node name="Sword" parent="." instance=ExtResource("2_onrkg")]
+[node name="ForwardAttack" parent="." instance=ExtResource("2_onrkg")]
 
-[connection signal="attack_finished" from="Sword" to="." method="_on_sword_attack_finished"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_hqtel")
+
+[connection signal="attack_finished" from="ForwardAttack" to="." method="_on_forward_attack_attack_finished"]
+[connection signal="attack_finished" from="ForwardAttack" to="." method="_on_sword_attack_finished"]

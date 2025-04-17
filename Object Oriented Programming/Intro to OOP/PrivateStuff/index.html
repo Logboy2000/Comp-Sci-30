@@ -7,6 +7,22 @@
 
 	<body onLoad="go()">
 		<script src="Account.js"></script>
-		<script src="Main.js"></script>
+		<script>
+			function go() {
+				let acc1 = new Account(AccountType.CHEQUING, 1, 'Neil Lindstrom')
+				acc1.deposit(999999999999999)
+				acc1.balance = 10000
+
+				console.log(acc1.fullName + ' has $' + acc1.getBalance())
+				console.log(acc1.fullName + ' wants to withdraw $2000')
+				if (acc1.withdraw(2000)) {
+					console.log('he can')
+					console.log(acc1.fullName + ' now has $' + acc1.getBalance())
+					console.log(acc1.fullName + ' now has $' + acc1.balance)
+				} else {
+					console.log(`he can't`)
+				}
+			} // end of go
+		</script>
 	</body>
 </html>

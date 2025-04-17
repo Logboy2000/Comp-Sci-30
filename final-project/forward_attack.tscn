@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://bu7g5b5abhjrh"]
+
+[ext_resource type="Script" uid="uid://msjnvq7h4pgr" path="res://forward_attack.gd" id="1_nx5kt"]
+
+[node name="ForwardAttack" type="Node2D"]
+script = ExtResource("1_nx5kt")
+
+[node name="Hitbox" type="Area2D" parent="."]
+visible = false
+position = Vector2(38.175, 0)
+collision_layer = 0
+collision_mask = 3
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Hitbox"]
+scale = Vector2(2, 2)
+polygon = PackedVector2Array(-10, -5, -3.5875, -7, 1.4125, -5, 3.4125, -2, 5.9125, 3.5, -0.0874996, 4, -4.5875, 5, -10, 5, -7, 0)
+
+[node name="Sprite" type="Polygon2D" parent="."]
+visible = false
+position = Vector2(38.175, 0)
+scale = Vector2(2, 2)
+color = Color(1, 1, 1, 0.415686)
+polygon = PackedVector2Array(-10, -5, -3.5875, -7, 1.4125, -5, 3.4125, -2, 5.9125, 3.5, -0.0874996, 4, -4.5875, 5, -10, 5, -7, 0)
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
