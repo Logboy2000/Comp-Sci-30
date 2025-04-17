@@ -2,14 +2,15 @@ extends Node2D
 
 signal attack_finished
 
-@onready var sprite: Polygon2D = $Sprite
 @onready var hitbox: Area2D = $Hitbox
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 @export var damage = 5.0
 @export var attack_cooldown = 0
 @export var attack_duration = 0.1
 @export var wall_knockback_force = 250.0
 @export var enemy_knockback = 500.0
+@onready var recovery_timer: Timer = $RecoveryTimer
 
 enum AttackState {
 	IDLE,
@@ -18,7 +19,6 @@ enum AttackState {
 }
 
 var current_state = AttackState.IDLE
-var attack_timer = 0.0
 var can_attack = true
 var hit_enemies = []
 var current_attack_direction = Vector2.RIGHT
@@ -30,17 +30,6 @@ func _ready():
 	hitbox.monitorable = false
 	player = get_parent()
 
-func _process(delta):
-	match current_state:
-		AttackState.ACTIVE:
-			attack_timer -= delta
-			if attack_timer <= 0:
-				start_recovery_state()
-		AttackState.RECOVERY:
-			attack_timer -= delta
-			if attack_timer <= 0:
-				reset_attack()
-
 func start_attack(direction: Vector2 = Vector2.RIGHT):
 	if not can_attack:
 		return
@@ -50,23 +39,14 @@ func start_attack(direction: Vector2 = Vector2.RIGHT):
 	hit_enemies.clear()
 	has_applied_knockback = false
 	current_state = AttackState.ACTIVE
-	attack_timer = attack_duration
+	
 	sprite.visible = true
+	sprite.play("attack")
 	hitbox.monitoring = true
 	hitbox.monitorable = true
 
-func start_recovery_state():
-	current_state = AttackState.RECOVERY
-	attack_timer = attack_cooldown
-	sprite.visible = false
-	hitbox.monitoring = false
-	hitbox.monitorable = false
 
-func reset_attack():
-	current_state = AttackState.IDLE
-	can_attack = true
-	has_applied_knockback = false
-	attack_finished.emit()
+
 
 func apply_knockback(is_pogoable = false):
 	if has_applied_knockback: return
@@ -92,3 +72,17 @@ func _on_hitbox_body_entered(body):
 		# Apply knockback to enemy
 		body.take_damage(damage, current_attack_direction, enemy_knockback)
 		has_applied_knockback = true
+
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	current_state = AttackState.RECOVERY
+	sprite.visible = false
+	hitbox.monitoring = false
+	hitbox.monitorable = false
+	recovery_timer.start()
+
+func _on_recovery_timer_timeout() -> void:
+	current_state = AttackState.IDLE
+	can_attack = true
+	has_applied_knockback = false
+	attack_finished.emit()

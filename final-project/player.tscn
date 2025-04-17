@@ -28,6 +28,7 @@ shape = SubResource("RectangleShape2D_qk4a2")
 debug_color = Color(0, 0.6, 0, 0.419608)
 
 [node name="ForwardAttack" parent="." instance=ExtResource("2_onrkg")]
+position = Vector2(0, -2)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hqtel")
