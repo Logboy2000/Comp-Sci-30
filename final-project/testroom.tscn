@@ -19,7 +19,6 @@ position = Vector2(0, -1)
 motion_scale = Vector2(0.3, 0.3)
 
 [node name="Bigrat" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
-modulate = Color(1, 1, 1, 0.352941)
 position = Vector2(14, 90)
 texture = ExtResource("1_dwq1p")
 
