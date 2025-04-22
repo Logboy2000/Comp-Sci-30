@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dyis8kds5mb8x"
-path="res://.godot/imported/bigrat.jpg-f3955583d346e2d0c61afd822d9dabf6.ctex"
+path="res://.godot/imported/bigrat.jpg-637265cf3047a24fc02a5fea2da97c60.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://bigrat.jpg"
-dest_files=["res://.godot/imported/bigrat.jpg-f3955583d346e2d0c61afd822d9dabf6.ctex"]
+source_file="res://sprites/bigrat.jpg"
+dest_files=["res://.godot/imported/bigrat.jpg-637265cf3047a24fc02a5fea2da97c60.ctex"]
 
 [params]
 

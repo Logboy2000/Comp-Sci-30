@@ -26,6 +26,8 @@ var player: CharacterBody2D
 var has_applied_knockback = false
 
 func _ready():
+	hitbox.visible = false
+	sprite.visible = false
 	hitbox.monitoring = false
 	hitbox.monitorable = false
 	player = get_parent()
@@ -45,9 +47,6 @@ func start_attack(direction: Vector2 = Vector2.RIGHT):
 	hitbox.monitoring = true
 	hitbox.monitorable = true
 
-
-
-
 func apply_knockback(is_pogoable = false):
 	if has_applied_knockback: return
 	# Apply knockback in the opposite direction of the attack
@@ -64,7 +63,6 @@ func apply_knockback(is_pogoable = false):
 		# Ceiling hit - only affect y velocity
 		player.velocity.y = knockback_direction.y * wall_knockback_force
 
-
 func _on_hitbox_body_entered(body):
 	if body is Enemy:
 		hit_enemies.append(body)
@@ -72,7 +70,6 @@ func _on_hitbox_body_entered(body):
 		# Apply knockback to enemy
 		body.take_damage(damage, current_attack_direction, enemy_knockback)
 		has_applied_knockback = true
-
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	current_state = AttackState.RECOVERY
@@ -85,4 +82,4 @@ func _on_recovery_timer_timeout() -> void:
 	current_state = AttackState.IDLE
 	can_attack = true
 	has_applied_knockback = false
-	attack_finished.emit()
+	attack_finished.emit() 

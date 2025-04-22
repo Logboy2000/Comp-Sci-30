@@ -1,22 +1,22 @@
 [gd_scene load_steps=8 format=3 uid="uid://bu7g5b5abhjrh"]
 
-[ext_resource type="Script" uid="uid://msjnvq7h4pgr" path="res://forward_attack.gd" id="1_nx5kt"]
-[ext_resource type="Texture2D" uid="uid://bb6nm7yo2jyki" path="res://sprites/rat_scratch_forward.png" id="2_pav6m"]
+[ext_resource type="Script" uid="uid://b8c4nq70htbfp" path="res://player/attack.gd" id="1_62ovl"]
+[ext_resource type="Texture2D" uid="uid://bb6nm7yo2jyki" path="res://sprites/rat_scratch_forward.png" id="2_fpvmp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pav6m"]
-atlas = ExtResource("2_pav6m")
+atlas = ExtResource("2_fpvmp")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ribe1"]
-atlas = ExtResource("2_pav6m")
+atlas = ExtResource("2_fpvmp")
 region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_segg6"]
-atlas = ExtResource("2_pav6m")
+atlas = ExtResource("2_fpvmp")
 region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8sgmu"]
-atlas = ExtResource("2_pav6m")
+atlas = ExtResource("2_fpvmp")
 region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_17371"]
@@ -33,26 +33,21 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8sgmu")
-}, {
-"duration": 1.0,
-"texture": null
 }],
 "loop": false,
 "name": &"attack",
 "speed": 20.0
 }]
 
-[node name="ForwardAttack" type="Node2D"]
-script = ExtResource("1_nx5kt")
+[node name="Attack" type="Node2D"]
+script = ExtResource("1_62ovl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-visible = false
-position = Vector2(36, -6)
+position = Vector2(43, -16)
 sprite_frames = SubResource("SpriteFrames_17371")
 animation = &"attack"
 
 [node name="Hitbox" type="Area2D" parent="."]
-visible = false
 position = Vector2(38.175, 0)
 collision_layer = 0
 collision_mask = 3
@@ -60,8 +55,9 @@ monitoring = false
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="Hitbox"]
+position = Vector2(8.825, -10)
 scale = Vector2(2, 2)
-polygon = PackedVector2Array(-10, -5, -3.5875, -7, 1.4125, -5, 3.4125, -2, 5.9125, 5, -10, 5, -7, 0)
+polygon = PackedVector2Array(-10, -5, -3.5875, -7, 1.4125, -5, 3.4125, -2, 5.9125, 5, -14.5, 5, -12, -1.5)
 
 [node name="RecoveryTimer" type="Timer" parent="."]
 wait_time = 0.1

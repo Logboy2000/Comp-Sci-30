@@ -1,0 +1,190 @@
+[gd_scene load_steps=16 format=3 uid="uid://b4hrdpl5dijvs"]
+
+[ext_resource type="Script" uid="uid://bgnlnc30p3wb3" path="res://player/player.gd" id="1_4flbx"]
+[ext_resource type="Texture2D" uid="uid://bitv3xiijjhac" path="res://sprites/rat.png" id="3_i3pqv"]
+[ext_resource type="Script" uid="uid://b8c4nq70htbfp" path="res://player/attack.gd" id="3_yw30f"]
+[ext_resource type="Texture2D" uid="uid://bb6nm7yo2jyki" path="res://sprites/rat_scratch_forward.png" id="4_qjkh3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qk4a2"]
+size = Vector2(20, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i3pqv"]
+atlas = ExtResource("3_i3pqv")
+region = Rect2(0, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqtel"]
+atlas = ExtResource("3_i3pqv")
+region = Rect2(24, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sweqy"]
+atlas = ExtResource("3_i3pqv")
+region = Rect2(48, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hs0m"]
+atlas = ExtResource("3_i3pqv")
+region = Rect2(72, 0, 24, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hqtel"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i3pqv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hqtel")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sweqy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2hs0m")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i3pqv")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yw30f"]
+atlas = ExtResource("4_qjkh3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjkh3"]
+atlas = ExtResource("4_qjkh3")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g6k8r"]
+atlas = ExtResource("4_qjkh3")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_boad6"]
+atlas = ExtResource("4_qjkh3")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_17371"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yw30f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qjkh3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g6k8r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_boad6")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 20.0
+}]
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+script = ExtResource("1_4flbx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_qk4a2")
+debug_color = Color(0, 0.6, 0, 0.419608)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_hqtel")
+
+[node name="DownwardAttack" type="Node2D" parent="."]
+position = Vector2(0, 17)
+script = ExtResource("3_yw30f")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="DownwardAttack"]
+rotation = 1.5708
+sprite_frames = SubResource("SpriteFrames_17371")
+animation = &"attack"
+
+[node name="Hitbox" type="Area2D" parent="DownwardAttack"]
+collision_layer = 0
+collision_mask = 3
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="DownwardAttack/Hitbox"]
+position = Vector2(7, -22)
+scale = Vector2(2, 2)
+polygon = PackedVector2Array(-10, 13, -4, 15.5, 1.5, 13, 3.5, 10, 5.9125, 5, -14.5, 5, -12, 10)
+
+[node name="RecoveryTimer" type="Timer" parent="DownwardAttack"]
+wait_time = 0.1
+one_shot = true
+
+[node name="ForwardAttack" type="Node2D" parent="."]
+script = ExtResource("3_yw30f")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ForwardAttack"]
+position = Vector2(22.905, 1)
+sprite_frames = SubResource("SpriteFrames_17371")
+animation = &"attack"
+
+[node name="Hitbox" type="Area2D" parent="ForwardAttack"]
+position = Vector2(22.905, 0)
+collision_layer = 0
+collision_mask = 3
+monitoring = false
+monitorable = false
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="ForwardAttack/Hitbox"]
+position = Vector2(10, 7)
+scale = Vector2(2, 2)
+polygon = PackedVector2Array(-10.5, -8.5, -6, -11, 0.5, -7, 0.5, 0.5, -2, 3.5, -10.5, 3.5, -10.5, -2)
+
+[node name="RecoveryTimer" type="Timer" parent="ForwardAttack"]
+wait_time = 0.1
+one_shot = true
+
+[node name="UpwardAttack" type="Node2D" parent="."]
+position = Vector2(-1, -3)
+script = ExtResource("3_yw30f")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UpwardAttack"]
+position = Vector2(0, -16)
+rotation = -1.5708
+sprite_frames = SubResource("SpriteFrames_17371")
+animation = &"attack"
+
+[node name="Hitbox" type="Area2D" parent="UpwardAttack"]
+collision_layer = 0
+collision_mask = 3
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="UpwardAttack/Hitbox"]
+position = Vector2(8.825, -10)
+scale = Vector2(2, 2)
+polygon = PackedVector2Array(-10, -5, -3.5875, -7, 1.4125, -5, 3.4125, -2, 5.9125, 5, -14.5, 5, -12, -1.5)
+
+[node name="RecoveryTimer" type="Timer" parent="UpwardAttack"]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="attack_finished" from="DownwardAttack" to="." method="_on_attack_finished"]
+[connection signal="animation_finished" from="DownwardAttack/AnimatedSprite2D" to="DownwardAttack" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="DownwardAttack/Hitbox" to="DownwardAttack" method="_on_hitbox_body_entered"]
+[connection signal="timeout" from="DownwardAttack/RecoveryTimer" to="DownwardAttack" method="_on_recovery_timer_timeout"]
+[connection signal="attack_finished" from="ForwardAttack" to="." method="_on_attack_finished"]
+[connection signal="animation_finished" from="ForwardAttack/AnimatedSprite2D" to="ForwardAttack" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="ForwardAttack/Hitbox" to="ForwardAttack" method="_on_hitbox_body_entered"]
+[connection signal="timeout" from="ForwardAttack/RecoveryTimer" to="ForwardAttack" method="_on_recovery_timer_timeout"]
+[connection signal="attack_finished" from="UpwardAttack" to="." method="_on_attack_finished"]
+[connection signal="animation_finished" from="UpwardAttack/AnimatedSprite2D" to="UpwardAttack" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="UpwardAttack/Hitbox" to="UpwardAttack" method="_on_hitbox_body_entered"]
+[connection signal="timeout" from="UpwardAttack/RecoveryTimer" to="UpwardAttack" method="_on_recovery_timer_timeout"]

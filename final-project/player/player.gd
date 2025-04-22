@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 #nodes
 @onready var forward_attack = $ForwardAttack
-#@onready var downward_attack = $DownwardAttack
+@onready var downward_attack = $DownwardAttack
 @onready var upward_attack: Node2D = $UpwardAttack
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -16,7 +16,7 @@ extends CharacterBody2D
 
 @export_category("Vertical Movement")
 @export var jump_velocity = -200.0
-@export var pogo_velocity = -300.0
+@export var pogo_velocity = -250.0
 @export var gravity = 980.0
 @export var coyote_time = 0.15
 @export var jump_buffer_time = 0.1  
@@ -116,11 +116,14 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("attack"):
 			is_attacking = true
 			if attack_direction == Vector2.UP:
-				upward_attack.start_attack()
+				upward_attack.start_attack(attack_direction)
 			elif attack_direction == Vector2.DOWN:
-				downward_attack.start_attack()
+				downward_attack.start_attack(attack_direction)
 			else:
 				forward_attack.start_attack(attack_direction)
+	
+	
+	move_and_slide()
 
 
 func update_forward_attack_direction():
@@ -130,18 +133,14 @@ func update_forward_attack_direction():
 		else:
 			forward_attack.scale.x = -1
 
+func _on_attack_finished():
+	is_attacking = false
 
 	
 
-func _on_forward_attack_attack_finished():
-	is_attacking = false
 
 func pogo():
 	if is_on_floor():
 		return
 	is_jumping = false
 	velocity.y = pogo_velocity
-
-
-func _on_upward_attack_attack_finished() -> void:
-	is_attacking = false

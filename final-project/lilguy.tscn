@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://j7myepfg202f"]
 
 [ext_resource type="Script" uid="uid://brqfmuhp48ojm" path="res://lilguy.gd" id="1_iwjhx"]
-[ext_resource type="Texture2D" uid="uid://dyis8kds5mb8x" path="res://bigrat.jpg" id="2_ln6qp"]
+[ext_resource type="Texture2D" uid="uid://dyis8kds5mb8x" path="res://sprites/bigrat.jpg" id="2_ln6qp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iwjhx"]
 size = Vector2(20, 9)
@@ -20,6 +20,7 @@ animations = [{
 [node name="lilguy" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_iwjhx")
+affected_by_gravity = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -27,6 +28,7 @@ shape = SubResource("RectangleShape2D_iwjhx")
 debug_color = Color(1, 0, 0, 0.419608)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
 scale = Vector2(-0.0201879, 0.0134604)
 sprite_frames = SubResource("SpriteFrames_ln6qp")
 
