@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 #nodes
 @onready var forward_attack = $ForwardAttack
-#@onready var downward_attack = $DownwardAttack
+@onready var downward_attack = $DownwardAttack
 @onready var upward_attack: Node2D = $UpwardAttack
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D

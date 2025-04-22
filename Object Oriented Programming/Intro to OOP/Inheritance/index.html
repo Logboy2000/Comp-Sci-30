@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>In Hair I Tance</title>
+	<script type="text/javascript" src="Tiles.js"></script>
+	<script>
+		function go() {
+			
+			const grass1 = new GrassTile(0, 0)
+			const stone1 = new StoneTile(1, 0)
+
+			console.log('--- Interact with Grass Tile ---')
+			grass1.interact()
+
+			console.log('--- Hit Grass Tile ---')
+			grass1.hit()
+			console.log('Is grass1 destroyed?', grass1.isDestroyed)
+
+			console.log('--- Regrow Grass ---')
+			grass1.regrow()
+
+			console.log('--- Interact with Stone Tile ---')
+			stone1.interact()
+
+			console.log('--- Hit Stone Tile 3 times ---')
+			stone1.hit() // 3 -> 2
+			stone1.hit() // 2 -> 1
+			stone1.hit() // 1 -> 0 (destroys)
+
+			console.log('Is stone1 destroyed?', stone1.isDestroyed)
+		}
+	</script>
+</head>
+
+<body onLoad="go()"></body>
+
+</html>

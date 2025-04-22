@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dykrla05monq3"]
 
-[ext_resource type="Script" path="res://testroom.gd" id="1_c7xoc"]
+[ext_resource type="Script" uid="uid://qh41ip6v0r4a" path="res://testroom.gd" id="1_c7xoc"]
 [ext_resource type="Texture2D" uid="uid://dyis8kds5mb8x" path="res://sprites/bigrat.jpg" id="1_dwq1p"]
 [ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://player/player.tscn" id="1_q11y4"]
 [ext_resource type="PackedScene" uid="uid://j7myepfg202f" path="res://lilguy.tscn" id="2_aes75"]
