@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bb6nm7yo2jyki"
-path="res://.godot/imported/rat_scratch_forward.png-124ede540659e13301ebc9316bb0fb14.ctex"
+uid="uid://bbtim2up15msd"
+path="res://.godot/imported/fall.png-4b735e8360876f3ab3030ca7660ad494.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/rat_scratch_forward.png"
-dest_files=["res://.godot/imported/rat_scratch_forward.png-124ede540659e13301ebc9316bb0fb14.ctex"]
+source_file="res://sprites/player/fall.png"
+dest_files=["res://.godot/imported/fall.png-4b735e8360876f3ab3030ca7660ad494.ctex"]
 
 [params]
 

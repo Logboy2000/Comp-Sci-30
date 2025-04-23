@@ -1,3 +1,4 @@
+// Abstract Class
 class Tile {
 	#x
 	#y
@@ -40,20 +41,27 @@ class Tile {
 	getColor() {
 		return this.#color
 	}
+
+	interact() {
+		return console.log('You interacted with ', this.#name, '!')
+	}
 }
 
+// Child Classes
 class GrassTile extends Tile {
 	constructor(x, y) {
 		super(x, y, 'grass', 'Grass Tile', 1, '#00FF00')
 		this.canGrow = true
 	}
 
+	// Overriding existing method
 	interact() {
 		if (!this.isDestroyed) {
 			console.log('You step on some soft, ' + this.getColor() + ' grass')
 		}
 	}
 
+	// Creating a new method
 	regrow() {
 		if (this.isDestroyed && this.canGrow) {
 			console.log('The grass regrows...')
@@ -70,13 +78,13 @@ class StoneTile extends Tile {
 	}
 
 	interact() {
-		console.log('You touch a cold, hard stone')
+		console.log('You touched a cold, hard stone')
 	}
 
 	destroy() {
 		if (this.breakable) {
 			super.destroy()
-			console.log('Stone crumbles')
+			console.log('The stone crumbles')
 		} else {
 			console.log('This stone cannot be broken')
 		}

@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bu7g5b5abhjrh"]
 
-[ext_resource type="Script" uid="uid://b8c4nq70htbfp" path="res://player/attack.gd" id="1_62ovl"]
-[ext_resource type="Texture2D" uid="uid://bb6nm7yo2jyki" path="res://sprites/rat_scratch_forward.png" id="2_fpvmp"]
+[ext_resource type="Script" uid="uid://b8c4nq70htbfp" path="res://scenes/player/attack.gd" id="1_62ovl"]
+[ext_resource type="Texture2D" uid="uid://bb6nm7yo2jyki" path="res://sprites/player/rat_scratch_forward.png" id="2_fpvmp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pav6m"]
 atlas = ExtResource("2_fpvmp")

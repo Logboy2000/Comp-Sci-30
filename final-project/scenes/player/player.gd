@@ -25,12 +25,14 @@ extends CharacterBody2D
 
 var gravity_multiplier = 1.0
 var is_jumping = false
+var is_pogoing = false
 var facing_right = true
 var coyote_timer = 0.0
 var jump_buffer_timer = 0.0
 var was_on_floor = false
 var attack_direction = Vector2.RIGHT 
 var is_attacking = false
+var input_dir = Vector2.ZERO
 
 func _ready():
 	# Make sure forward_attack is properly oriented
@@ -38,21 +40,13 @@ func _ready():
 
 func _physics_process(delta):
 	# Get input direction
-	var direction = Input.get_axis("left", "right")
+	input_dir = Input.get_axis("left", "right")
 	
 	
-	#if Input.is_action_pressed("run"):
-		#pass
 	
-	if direction != 0 and is_on_floor():
-		sprite.play("default")
-	else:
-		sprite.play("idle")
-	
-	
-	if direction != 0 and abs(velocity.x) < normal_top_speed:
+	if input_dir != 0 and abs(velocity.x) < normal_top_speed:
 		# Set speed directly
-		velocity.x += direction * accel
+		velocity.x += input_dir * accel
 	else:
 		# Apply friction to slow down
 		velocity.x = move_toward(velocity.x, 0, friction * delta)
@@ -71,6 +65,7 @@ func _physics_process(delta):
 	else:
 		gravity_multiplier = 1.0
 		is_jumping = false
+		is_pogoing = false
 	
 	# Handle coyote time
 	if was_on_floor and not is_on_floor():
@@ -90,14 +85,15 @@ func _physics_process(delta):
 	# Handle jump
 	if (is_on_floor() or coyote_timer > 0) and jump_buffer_timer > 0:
 		velocity.y = jump_velocity
+		is_pogoing = false
 		is_jumping = true
 		coyote_timer = 0
 		jump_buffer_timer = 0
 	
 	
 	# Update facing direction
-	if direction != 0:
-		facing_right = direction > 0
+	if input_dir != 0:
+		facing_right = input_dir > 0
 		sprite.flip_h = !facing_right
 	
 	
@@ -108,6 +104,7 @@ func _physics_process(delta):
 			attack_direction = Vector2.UP
 		elif Input.is_action_pressed("down") and not is_on_floor():
 			attack_direction = Vector2.DOWN
+			
 		else:
 			attack_direction = Vector2.RIGHT if facing_right else Vector2.LEFT
 			update_forward_attack_direction()
@@ -124,6 +121,23 @@ func _physics_process(delta):
 	
 	
 	move_and_slide()
+	update_sprite()
+
+func update_sprite():
+	var new_animation: StringName
+	if is_pogoing:
+		new_animation = "spin"
+	elif velocity.y > 0:
+		new_animation = "fall"
+	elif is_jumping:
+		new_animation = "jump"
+	elif input_dir != 0 and is_on_floor():
+		new_animation = "walk"
+	else:
+		new_animation = "idle"
+	
+	if sprite.animation != new_animation:
+		sprite.play(new_animation)
 
 
 func update_forward_attack_direction():
@@ -142,5 +156,6 @@ func _on_attack_finished():
 func pogo():
 	if is_on_floor():
 		return
+	is_pogoing = true
 	is_jumping = false
 	velocity.y = pogo_velocity

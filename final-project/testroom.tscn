@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://qh41ip6v0r4a" path="res://testroom.gd" id="1_c7xoc"]
 [ext_resource type="Texture2D" uid="uid://dyis8kds5mb8x" path="res://sprites/bigrat.jpg" id="1_dwq1p"]
-[ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://player/player.tscn" id="1_q11y4"]
+[ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://scenes/player/player.tscn" id="1_q11y4"]
 [ext_resource type="PackedScene" uid="uid://j7myepfg202f" path="res://lilguy.tscn" id="2_aes75"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q11y4"]
@@ -21,7 +21,7 @@ position = Vector2(0, -1)
 motion_scale = Vector2(0.3, 0.3)
 
 [node name="Bigrat" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
-position = Vector2(14, 90)
+position = Vector2(-471, -220)
 texture = ExtResource("1_dwq1p")
 
 [node name="Player" parent="." instance=ExtResource("1_q11y4")]
@@ -49,21 +49,28 @@ shape = SubResource("RectangleShape2D_aes75")
 
 [node name="lilguy" parent="." instance=ExtResource("2_aes75")]
 position = Vector2(-94, 3)
+affected_by_gravity = false
 
 [node name="lilguy2" parent="." instance=ExtResource("2_aes75")]
 position = Vector2(-77, -31)
+affected_by_gravity = false
 
 [node name="lilguy3" parent="." instance=ExtResource("2_aes75")]
 position = Vector2(-143, -56)
+affected_by_gravity = false
 
 [node name="lilguy4" parent="." instance=ExtResource("2_aes75")]
 position = Vector2(-114, -28)
+affected_by_gravity = false
 
 [node name="lilguy5" parent="." instance=ExtResource("2_aes75")]
-position = Vector2(-78, -75)
+position = Vector2(-94, -44)
+affected_by_gravity = false
 
 [node name="lilguy6" parent="." instance=ExtResource("2_aes75")]
 position = Vector2(-176, -28)
+affected_by_gravity = false
 
 [node name="lilguy7" parent="." instance=ExtResource("2_aes75")]
 position = Vector2(-224, -18)
+affected_by_gravity = false
