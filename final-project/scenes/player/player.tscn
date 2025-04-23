@@ -132,7 +132,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fm80t")
 }],
-"loop": true,
+"loop": false,
 "name": &"spin",
 "speed": 15.0
 }, {
@@ -201,7 +201,7 @@ debug_color = Color(0, 0.6, 0, 0.419608)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"walk"
+animation = &"spin"
 
 [node name="DownwardAttack" type="Node2D" parent="."]
 position = Vector2(0, 17)
@@ -279,6 +279,7 @@ polygon = PackedVector2Array(-10, -5, -3.5875, -7, 1.4125, -5, 3.4125, -2, 5.912
 wait_time = 0.1
 one_shot = true
 
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="attack_finished" from="DownwardAttack" to="." method="_on_attack_finished"]
 [connection signal="animation_finished" from="DownwardAttack/AnimatedSprite2D" to="DownwardAttack" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="DownwardAttack/Hitbox" to="DownwardAttack" method="_on_hitbox_body_entered"]

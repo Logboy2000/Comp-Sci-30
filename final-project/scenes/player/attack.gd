@@ -36,6 +36,9 @@ func start_attack(direction: Vector2 = Vector2.RIGHT):
 	if not can_attack:
 		return
 	
+	if direction == Vector2.DOWN:
+		sprite.flip_v = player.facing_right
+	
 	current_attack_direction = direction
 	can_attack = false
 	hit_enemies.clear()
