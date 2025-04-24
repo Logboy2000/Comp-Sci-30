@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bb6nm7yo2jyki" path="res://sprites/player/rat_scratch_forward.png" id="4_qjkh3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qk4a2"]
-size = Vector2(20, 12)
+size = Vector2(14, 13)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fcs02"]
 atlas = ExtResource("3_0owmy")
@@ -195,7 +195,7 @@ collision_layer = 2
 script = ExtResource("1_4flbx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 1)
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_qk4a2")
 debug_color = Color(0, 0.6, 0, 0.419608)
 

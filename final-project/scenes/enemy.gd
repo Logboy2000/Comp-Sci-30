@@ -8,6 +8,9 @@ class_name Enemy extends CharacterBody2D
 @export var affected_by_gravity = false
 @export var knockback_duration = 0.05  # How long knockback lasts
 
+# Audio
+# @onready var HURT_SOUND = preload("res://audio/hurt.wav")
+
 var current_health: int
 var is_invincible = false
 var facing_right = true

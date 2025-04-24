@@ -6,6 +6,9 @@ extends CharacterBody2D
 @onready var upward_attack: Node2D = $UpwardAttack
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+# Audio
+@onready var SLASH_SOUND = preload("res://audio/slash.wav")
+
 # Movement Variables
 @export_category("Horizontal Movement")
 @export var normal_top_speed := 100.0
@@ -14,7 +17,7 @@ extends CharacterBody2D
 @export var friction := 2000.0
 
 @export_category("Vertical Movement")
-@export var jump_velocity := -200.0
+@export var jump_velocity := -220.0
 @export var pogo_velocity := -250.0
 @export var gravity := 980.0
 @export var coyote_time := 0.15
@@ -107,6 +110,7 @@ func handle_attack():
 
 	if Input.is_action_just_pressed("attack"):
 		is_attacking = true
+		Audio.play_sound(SLASH_SOUND)
 		match attack_direction:
 			Vector2.UP:
 				
