@@ -3,17 +3,13 @@ extends Node
 signal setting_changed(name, value)
 
 const SETTINGS_PATH = "user://settings.ini"
-
-# Structure: {
-#   name: {
-#     "default": value,
-#     "type": TYPE_*,
-#     "value": value,
-#     "validator": Callable or null
-#   },
-#   ...
-# }
 var _settings = {}
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("fullscreen"):
+		set_setting("fullscreen", not get_setting("fullscreen"))
+	if event.is_action_pressed("borderless"):
+		set_setting("borderless", not get_setting("borderless"))
 
 # Add your initial settings here
 func _ready():
@@ -25,7 +21,6 @@ func _ready():
 		func(v): return v >= 0.0 and v <= 1.0,
 		func(v): AudioServer.set_bus_volume_db(0, linear_to_db(v))
 	)
-	# Fullscreen: true/false (Godot 4.x)
 	register_setting(
 		"fullscreen",
 		false,
@@ -36,6 +31,14 @@ func _ready():
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 			else:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	)
+	register_setting(
+		"borderless",
+		false,
+		TYPE_BOOL,
+		Callable(),
+		func(v):
+			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, v)
 	)
 	# Add more settings as needed
 	load_settings()

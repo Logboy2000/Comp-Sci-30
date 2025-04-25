@@ -1,22 +1,33 @@
-extends CharacterBody2D
+class_name Player extends CharacterBody2D
 
 # Nodes
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var forward_attack = $ForwardAttack
 @onready var downward_attack = $DownwardAttack
 @onready var upward_attack: Node2D = $UpwardAttack
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var health_bar: HBoxContainer = $PlayerHud/Control/MarginContainer/VBoxContainer/HealthBar
+@onready var owie_box: Area2D = $OwieBox
 
 # Audio
 @onready var SLASH_SOUND = preload("res://audio/slash.wav")
 
+@export var max_health: int = 10
+@export var invincibility_frames: int = 120
+@export var knockback_force: float = 400.0
+@export var knockback_freeze_time: float = 0.15
+
+
+var current_health: int = 10
+
 # Movement Variables
-@export_category("Horizontal Movement")
+@export_group("Horizontal Movement")
 @export var normal_top_speed := 100.0
 @export var run_top_speed := 150.0
 @export var accel := 100.0
 @export var friction := 2000.0
 
-@export_category("Vertical Movement")
+@export_group("Vertical Movement")
 @export var jump_velocity := -220.0
 @export var pogo_velocity := -250.0
 @export var gravity := 980.0
@@ -36,28 +47,54 @@ var was_on_floor := false
 var is_attacking := false
 var attack_direction := Vector2.RIGHT
 var input_dir := Vector2.ZERO
+var vulnurable := true
+var current_invincibility_frames := 0
+var facing_dir := 1.0
+var is_running := false
 
 func _ready():
+	Global.player = self
 	update_forward_attack_direction()
 
-func _physics_process(delta):
-	handle_input()
-	apply_horizontal_movement(delta)
-	apply_gravity(delta)
-	handle_jump_logic(delta)
-	update_facing_direction()
-	handle_attack()
-	move_and_slide()
+func _process(_delta):
 	update_sprite_anim()
+
+func _physics_process(delta):
+	if Global.is_transitioning:
+		velocity.x = sign(velocity.x) * normal_top_speed
+		apply_gravity(delta)
+		move_and_slide()
+	else:
+		if current_invincibility_frames > 0:
+			current_invincibility_frames -= 1
+			vulnurable = false
+		else:
+			vulnurable = true
+		
+		handle_input()
+		apply_horizontal_movement(delta)
+		apply_gravity(delta)
+		handle_jump_logic(delta)
+		update_facing_direction()
+		handle_attack()
+		handle_owie()
+		move_and_slide()
 
 func handle_input():
 	input_dir.x = Input.get_axis("left", "right")
+	is_running = Input.is_action_pressed("run")
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = jump_buffer_time
+	if Input.is_action_just_pressed("owie"):
+		owie(1)
+	if Input.is_action_just_pressed("reverse_owie"):
+		reverse_owie(1)
 
 func apply_horizontal_movement(delta):
-	if input_dir.x != 0 and abs(velocity.x) < normal_top_speed:
-		velocity.x += input_dir.x * accel
+	var target_speed = run_top_speed if is_running else normal_top_speed
+	if input_dir.x != 0:
+		# Accelerate smoothly toward running or walking speed
+		velocity.x = move_toward(velocity.x, input_dir.x * target_speed, accel)
 	else:
 		velocity.x = move_toward(velocity.x, 0, friction * delta)
 
@@ -84,7 +121,7 @@ func handle_jump_logic(delta):
 	if jump_buffer_timer > 0:
 		jump_buffer_timer -= delta
 
-	if (is_on_floor() or coyote_timer > 0) and jump_buffer_timer > 0:
+	if (is_on_floor() or coyote_timer > 0) and jump_buffer_timer > 0 and not is_jumping:
 		velocity.y = jump_velocity
 		is_jumping = true
 		is_pogoing = false
@@ -93,6 +130,7 @@ func handle_jump_logic(delta):
 
 func update_facing_direction():
 	if input_dir.x != 0:
+		facing_dir = input_dir.x
 		facing_right = input_dir.x > 0
 		sprite.flip_h = !facing_right
 
@@ -113,12 +151,21 @@ func handle_attack():
 		Audio.play_sound(SLASH_SOUND)
 		match attack_direction:
 			Vector2.UP:
-				
 				upward_attack.start_attack(attack_direction)
 			Vector2.DOWN:
 				downward_attack.start_attack(attack_direction)
 			_:
 				forward_attack.start_attack(attack_direction)
+
+func handle_owie():
+	if vulnurable:
+		animation_player.play("RESET")
+	else:
+		animation_player.play("invulnerable")
+	
+	for body in owie_box.get_overlapping_bodies():
+		if body is Enemy:
+			owie(1, body.position)
 
 func update_sprite_anim():
 	var new_animation: StringName = "idle"
@@ -150,3 +197,39 @@ func pogo():
 	velocity.y = pogo_velocity
 	sprite.stop()
 	sprite.play("spin")
+
+func reverse_owie(amount: int = 1):
+	current_health += amount
+	if current_health > max_health:
+		current_health = max_health
+	health_bar.update_health_ui()
+
+func owie(amount: int, damage_position: Vector2 = global_position):
+	if not vulnurable:
+		return
+	
+	is_attacking = false
+	current_invincibility_frames = invincibility_frames
+	current_health -= amount
+	health_bar.update_health_ui()
+	
+	
+	# Knockback based on player and damage position
+	var knockback_dir = Vector2(
+		sign(position.x - damage_position.x),
+		sign(position.y - damage_position.y)
+	)
+	velocity = Vector2(
+		knockback_dir.x * knockback_force,
+		knockback_dir.y * knockback_force
+	) 
+
+	if current_health <= 0:
+		die()
+
+	# Freeze game for a short duration
+	Global.freeze_game(knockback_freeze_time)
+	
+	
+func die():
+	pass

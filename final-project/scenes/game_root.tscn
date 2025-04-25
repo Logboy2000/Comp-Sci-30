@@ -1,0 +1,151 @@
+[gd_scene load_steps=14 format=3 uid="uid://dykrla05monq3"]
+
+[ext_resource type="Script" uid="uid://qh41ip6v0r4a" path="res://scenes/game_root.gd" id="1_nrhpl"]
+[ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://scenes/player/player.tscn" id="2_uc526"]
+[ext_resource type="Script" uid="uid://bnp1pw6uf28r3" path="res://scenes/room_manager.gd" id="3_nlfu4"]
+[ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="4_uc526"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="5_t6xqi"]
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="6_v5ckt"]
+[ext_resource type="Script" uid="uid://b2tmulursfq46" path="res://scenes/transition_manager.gd" id="7_t6xqi"]
+[ext_resource type="Texture2D" uid="uid://dyis8kds5mb8x" path="res://sprites/bigrat.jpg" id="8_v5ckt"]
+
+[sub_resource type="Resource" id="Resource_1ayw0"]
+script = ExtResource("5_t6xqi")
+duration = 1.0
+transition = 0
+ease = 2
+
+[sub_resource type="Animation" id="Animation_v5ckt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TransitionManager/ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TransitionManager/TextureRect:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1ayw0"]
+resource_name = "bigratjumpscare"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TransitionManager/TextureRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_t6xqi"]
+resource_name = "fade"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TransitionManager/ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v5ckt"]
+_data = {
+&"RESET": SubResource("Animation_v5ckt"),
+&"bigratjumpscare": SubResource("Animation_1ayw0"),
+&"fade": SubResource("Animation_t6xqi")
+}
+
+[node name="GameRoot" type="Node2D"]
+script = ExtResource("1_nrhpl")
+
+[node name="Player" parent="." instance=ExtResource("2_uc526")]
+
+[node name="RoomManager" type="Node2D" parent="."]
+script = ExtResource("3_nlfu4")
+starting_room = "uid://duh00pb5rj6qq"
+
+[node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
+top_level = true
+script = ExtResource("4_uc526")
+follow_mode = 2
+follow_target = NodePath("../Player")
+zoom = Vector2(2, 2)
+tween_resource = SubResource("Resource_1ayw0")
+follow_damping = true
+draw_limits = true
+limit_left = -1590
+limit_margin = Vector4i(4, 4, 4, 4)
+metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
+metadata/_edit_lock_ = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+physics_interpolation_mode = 1
+ignore_rotation = false
+zoom = Vector2(2, 2)
+process_callback = 0
+limit_left = -1590
+limit_smoothed = true
+editor_draw_limits = true
+editor_draw_drag_margin = true
+metadata/_edit_lock_ = true
+
+[node name="PhantomCameraHost" type="Node" parent="Camera2D"]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("6_v5ckt")
+
+[node name="TransitionManager" type="CanvasLayer" parent="."]
+layer = 100
+script = ExtResource("7_t6xqi")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TransitionManager"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_v5ckt")
+}
+
+[node name="ColorRect" type="ColorRect" parent="TransitionManager"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="TransitionManager"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_v5ckt")
