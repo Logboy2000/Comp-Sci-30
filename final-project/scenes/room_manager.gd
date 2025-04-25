@@ -35,9 +35,9 @@ func _add_new_room(ent_id: int):
 	add_child(current_room)
 	if current_room.has_method("go_to_entrance"):
 		current_room.go_to_entrance(ent_id)
-	Global.is_transitioning = false
-	phantom_camera_2d.set_limit_target(current_room.main_tile_map_layer.get_path())
 	phantom_camera_2d.teleport_position()
+	Global.is_transitioning = false
+	phantom_camera_2d.set_limit_target(current_room.camera_bounds.get_path())
 	transition_manager.fade_out()
 
 func _input(event: InputEvent) -> void:

@@ -6,6 +6,8 @@ volume_db = 24.0
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_j3pel"]
 resource_name = "Reverb"
+room_size = 1.0
+damping = 0.0
 
 [resource]
 bus/0/effect/0/effect = SubResource("AudioEffectAmplify_j3pel")

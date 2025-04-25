@@ -13,10 +13,9 @@ var fade_timer: float = 0.0
 var start_volume: float = 0.0
 
 func _ready():
-	# Initialize the music player
 	music_player = AudioStreamPlayer.new()
-	music_player.bus = 'Music'
 	music_player.process_mode = Node.PROCESS_MODE_ALWAYS
+	music_player.bus = 'Music'
 	add_child(music_player)
 	
 	# Preload a bunch of reusable AudioStreamPlayers

@@ -3,6 +3,7 @@ class_name Room extends Node2D
 @onready var entrances: Node = $Entrances
 @onready var entities: Node = $Entities
 @onready var main_tile_map_layer: TileMapLayer = $TileMapLayer
+@onready var camera_bounds: CollisionShape2D = $CameraBounds
 
 func go_to_entrance(id: int):
 	for entrance in entrances.get_children():
