@@ -1,14 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://bx0uc0hvhd30j"]
 
 [ext_resource type="Script" uid="uid://dybneynpfo5ny" path="res://scenes/triggers/entrance.gd" id="1_lc7a3"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lc7a3"]
-size = Vector2(14, 13)
+[ext_resource type="Texture2D" uid="uid://1ymshet4dsas" path="res://sprites/player/walk.png" id="2_i1crt"]
 
 [node name="Entrance" type="Node2D"]
 script = ExtResource("1_lc7a3")
 
-[node name="playerhitbox" type="CollisionShape2D" parent="."]
-position = Vector2(0, 0.5)
-shape = SubResource("RectangleShape2D_lc7a3")
-debug_color = Color(0, 0.6, 0, 0.419608)
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_i1crt")
+hframes = 5

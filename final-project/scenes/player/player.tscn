@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://b21mvgyc8m3eb" path="res://sprites/missing_cheese.png" id="10_h17s1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qk4a2"]
-size = Vector2(14, 13)
+size = Vector2(14, 11)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fcs02"]
 atlas = ExtResource("3_0owmy")
@@ -236,13 +236,13 @@ collision_layer = 6
 script = ExtResource("1_4flbx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 0.5)
+position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_qk4a2")
 debug_color = Color(0, 0.6, 0, 0.419608)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"spin"
+animation = &"idle"
 
 [node name="DownwardAttack" type="Node2D" parent="."]
 visible = false
@@ -363,7 +363,7 @@ empty_icon = ExtResource("10_h17s1")
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
-text = "[shake]look[/shake] [tornado radius=3.0 freq=10.0 connected=1]mom[/tornado] [i]I[/i] made some [rainbow freq=1.0 sat=0.8 val=0.8 speed=1.0]silly[/rainbow] [pulse freq=5.0 color=#ffffff40 ease=-2.0]text![/pulse]
+text = "[shake]look[/shake] [tornado radius=3.0 freq=10.0 connected=1]I made some[/tornado] [rainbow freq=1.0 sat=0.8 val=0.8 speed=1.0]silly[/rainbow] [pulse freq=5.0 color=#ffffff40 ease=-2.0]text![/pulse]
 
 "
 
@@ -373,7 +373,7 @@ collision_mask = 2
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="OwieBox"]
-position = Vector2(0, 0.5)
+position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_qk4a2")
 debug_color = Color(0, 0.6, 0, 0.419608)
 

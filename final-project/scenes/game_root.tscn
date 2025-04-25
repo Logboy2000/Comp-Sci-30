@@ -84,11 +84,11 @@ _data = {
 [node name="GameRoot" type="Node2D"]
 script = ExtResource("1_nrhpl")
 
-[node name="Player" parent="." instance=ExtResource("2_uc526")]
-
 [node name="RoomManager" type="Node2D" parent="."]
 script = ExtResource("3_nlfu4")
 starting_room = "uid://duh00pb5rj6qq"
+
+[node name="Player" parent="." instance=ExtResource("2_uc526")]
 
 [node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
 top_level = true
@@ -97,7 +97,7 @@ follow_mode = 2
 follow_target = NodePath("../Player")
 zoom = Vector2(2, 2)
 tween_resource = SubResource("Resource_1ayw0")
-follow_damping = true
+tween_on_load = false
 draw_limits = true
 limit_left = -1590
 limit_margin = Vector4i(4, 4, 4, 4)

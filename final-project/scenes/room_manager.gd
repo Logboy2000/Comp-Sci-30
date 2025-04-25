@@ -6,12 +6,18 @@ class_name RoomManager extends Node2D
 
 @export_file("*.tscn") var starting_room: String
 
+var current_scene_path := ""
+var current_entrance := 0
+
 func _ready() -> void:
 	await get_tree().process_frame
 	Global.room_manager = self
 	change_room(starting_room, 0, false)
 
 func change_room(scene_path: String, entrance_id: int = 0, use_transition: bool = true):
+	if Global.is_transitioning:
+		return
+	
 	Global.is_transitioning = true
 	if use_transition:
 		await transition_manager.fade_in()
@@ -27,19 +33,21 @@ func change_room(scene_path: String, entrance_id: int = 0, use_transition: bool 
 	
 	
 	current_room = new_room_scene.instantiate()
+	current_scene_path = scene_path
+	current_entrance = entrance_id
 	
-	call_deferred("_add_new_room", entrance_id)
+	call_deferred("_add_new_room")
 
 
-func _add_new_room(ent_id: int):
+func _add_new_room():
 	add_child(current_room)
 	if current_room.has_method("go_to_entrance"):
-		current_room.go_to_entrance(ent_id)
+		current_room.go_to_entrance(current_entrance)
+	phantom_camera_2d.set_limit_target(current_room.camera_bounds.get_path())
 	phantom_camera_2d.teleport_position()
 	Global.is_transitioning = false
-	phantom_camera_2d.set_limit_target(current_room.camera_bounds.get_path())
 	transition_manager.fade_out()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("reload"):
-		get_tree().reload_current_scene()
+		change_room(current_scene_path, current_entrance)

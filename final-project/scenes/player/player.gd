@@ -61,7 +61,7 @@ func _process(_delta):
 
 func _physics_process(delta):
 	if Global.is_transitioning:
-		velocity.x = sign(velocity.x) * normal_top_speed
+		velocity.x = facing_dir * normal_top_speed
 		apply_gravity(delta)
 		move_and_slide()
 	else:
