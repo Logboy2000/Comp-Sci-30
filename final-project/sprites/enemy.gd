@@ -32,11 +32,11 @@ func _physics_process(delta: float) -> void:
 	
 	# If not in knockback, update velocity based on enemy behavior
 	if not is_knockback:
-		update_movement(delta)
+		_update_movement(delta)
 	
 	move_and_slide()
 
-func update_movement(delta: float):
+func _update_movement(_delta: float):
 	# Override this in child classes to implement specific movement patterns
 	pass
 

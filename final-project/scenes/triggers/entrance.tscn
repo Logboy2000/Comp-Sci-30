@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bx0uc0hvhd30j"]
+
+[ext_resource type="Script" uid="uid://dybneynpfo5ny" path="res://scenes/triggers/entrance.gd" id="1_lc7a3"]
+
+[node name="Entrance" type="Node2D"]
+script = ExtResource("1_lc7a3")

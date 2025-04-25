@@ -26,8 +26,7 @@ var player: CharacterBody2D
 var has_applied_knockback = false
 
 func _ready():
-	hitbox.visible = false
-	sprite.visible = false
+	visible = false
 	hitbox.monitoring = false
 	hitbox.monitorable = false
 	player = get_parent()
@@ -45,7 +44,7 @@ func start_attack(direction: Vector2 = Vector2.RIGHT):
 	has_applied_knockback = false
 	current_state = AttackState.ACTIVE
 	
-	sprite.visible = true
+	visible = true
 	sprite.play("attack")
 	hitbox.monitoring = true
 	hitbox.monitorable = true
@@ -76,7 +75,7 @@ func _on_hitbox_body_entered(body):
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	current_state = AttackState.RECOVERY
-	sprite.visible = false
+	visible = false
 	hitbox.monitoring = false
 	hitbox.monitorable = false
 	recovery_timer.start()

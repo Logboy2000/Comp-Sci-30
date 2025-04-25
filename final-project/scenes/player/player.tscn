@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://b4hrdpl5dijvs"]
+[gd_scene load_steps=37 format=3 uid="uid://b4hrdpl5dijvs"]
 
 [ext_resource type="Script" uid="uid://bgnlnc30p3wb3" path="res://scenes/player/player.gd" id="1_4flbx"]
 [ext_resource type="Texture2D" uid="uid://bbtim2up15msd" path="res://sprites/player/fall.png" id="3_0owmy"]
@@ -7,6 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://d1fpj01ihpfyl" path="res://sprites/player/ratspin.png" id="3_p47bc"]
 [ext_resource type="Script" uid="uid://b8c4nq70htbfp" path="res://scenes/player/attack.gd" id="3_yw30f"]
 [ext_resource type="Texture2D" uid="uid://bb6nm7yo2jyki" path="res://sprites/player/rat_scratch_forward.png" id="4_qjkh3"]
+[ext_resource type="Script" uid="uid://bg05oi26f4w61" path="res://scenes/ui/health_bar.gd" id="8_5gtgg"]
+[ext_resource type="Texture2D" uid="uid://cdarct5x6n1jg" path="res://sprites/cheese.png" id="9_h17s1"]
+[ext_resource type="Texture2D" uid="uid://b21mvgyc8m3eb" path="res://sprites/missing_cheese.png" id="10_h17s1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qk4a2"]
 size = Vector2(14, 13)
@@ -190,8 +193,46 @@ animations = [{
 "speed": 20.0
 }]
 
+[sub_resource type="Animation" id="Animation_je7p5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_h17s1"]
+resource_name = "invulnerable"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_je7p5"]
+_data = {
+&"RESET": SubResource("Animation_je7p5"),
+&"invulnerable": SubResource("Animation_h17s1")
+}
+
 [node name="Player" type="CharacterBody2D"]
-collision_layer = 2
+collision_layer = 6
 script = ExtResource("1_4flbx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -204,6 +245,7 @@ sprite_frames = SubResource("SpriteFrames_hqtel")
 animation = &"spin"
 
 [node name="DownwardAttack" type="Node2D" parent="."]
+visible = false
 position = Vector2(0, 17)
 script = ExtResource("3_yw30f")
 metadata/_edit_group_ = true
@@ -229,6 +271,7 @@ wait_time = 0.1
 one_shot = true
 
 [node name="ForwardAttack" type="Node2D" parent="."]
+visible = false
 script = ExtResource("3_yw30f")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ForwardAttack"]
@@ -254,6 +297,7 @@ wait_time = 0.1
 one_shot = true
 
 [node name="UpwardAttack" type="Node2D" parent="."]
+visible = false
 position = Vector2(-1, -3)
 script = ExtResource("3_yw30f")
 metadata/_edit_group_ = true
@@ -278,6 +322,65 @@ polygon = PackedVector2Array(-10, -5, -3.5875, -7, 1.4125, -5, 3.4125, -2, 5.912
 [node name="RecoveryTimer" type="Timer" parent="UpwardAttack"]
 wait_time = 0.1
 one_shot = true
+
+[node name="PlayerHud" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="PlayerHud"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.998105, 1)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerHud/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerHud/Control/MarginContainer"]
+layout_mode = 2
+
+[node name="HealthBar" type="HBoxContainer" parent="PlayerHud/Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource("8_5gtgg")
+full_icon = ExtResource("9_h17s1")
+empty_icon = ExtResource("10_h17s1")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerHud/Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[shake]look[/shake] [tornado radius=3.0 freq=10.0 connected=1]mom[/tornado] [i]I[/i] made some [rainbow freq=1.0 sat=0.8 val=0.8 speed=1.0]silly[/rainbow] [pulse freq=5.0 color=#ffffff40 ease=-2.0]text![/pulse]
+
+"
+
+[node name="OwieBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OwieBox"]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_qk4a2")
+debug_color = Color(0, 0.6, 0, 0.419608)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_je7p5")
+}
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="attack_finished" from="DownwardAttack" to="." method="_on_attack_finished"]
