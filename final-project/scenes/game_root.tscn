@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dykrla05monq3"]
+[gd_scene load_steps=15 format=3 uid="uid://dykrla05monq3"]
 
 [ext_resource type="Script" uid="uid://qh41ip6v0r4a" path="res://scenes/game_root.gd" id="1_nrhpl"]
 [ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://scenes/player/player.tscn" id="2_uc526"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="4_uc526"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="5_t6xqi"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="6_v5ckt"]
+[ext_resource type="Theme" uid="uid://di4h7o0l41s3u" path="res://theme.tres" id="7_6v30a"]
 [ext_resource type="Script" uid="uid://b2tmulursfq46" path="res://scenes/transition_manager.gd" id="7_t6xqi"]
 [ext_resource type="Texture2D" uid="uid://dyis8kds5mb8x" path="res://sprites/bigrat.jpg" id="8_v5ckt"]
 
@@ -20,7 +21,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("TransitionManager/ColorRect:modulate")
+tracks/0/path = NodePath("OverlayLayer/Control/TransitionManager/ColorRect:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -32,7 +33,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("TransitionManager/TextureRect:modulate")
+tracks/1/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -48,7 +49,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("TransitionManager/TextureRect:modulate")
+tracks/0/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -64,7 +65,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("TransitionManager/ColorRect:modulate")
+tracks/0/path = NodePath("OverlayLayer/Control/TransitionManager/ColorRect:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -120,18 +121,36 @@ process_priority = 300
 process_physics_priority = 300
 script = ExtResource("6_v5ckt")
 
-[node name="TransitionManager" type="CanvasLayer" parent="."]
+[node name="OverlayLayer" type="CanvasLayer" parent="."]
 layer = 100
+
+[node name="Control" type="Control" parent="OverlayLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("7_6v30a")
+
+[node name="TransitionManager" type="Control" parent="OverlayLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("7_t6xqi")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="TransitionManager"]
-root_node = NodePath("../..")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="OverlayLayer/Control/TransitionManager"]
+root_node = NodePath("../../../..")
 libraries = {
 &"": SubResource("AnimationLibrary_v5ckt")
 }
 
-[node name="ColorRect" type="ColorRect" parent="TransitionManager"]
+[node name="ColorRect" type="ColorRect" parent="OverlayLayer/Control/TransitionManager"]
 modulate = Color(1, 1, 1, 0)
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -139,8 +158,9 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="TextureRect" type="TextureRect" parent="TransitionManager"]
+[node name="TextureRect" type="TextureRect" parent="OverlayLayer/Control/TransitionManager"]
 modulate = Color(1, 1, 1, 0)
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -149,3 +169,44 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("8_v5ckt")
+
+[node name="DeathScreen" type="Control" parent="OverlayLayer/Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="OverlayLayer/Control/DeathScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.301961)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OverlayLayer/Control/DeathScreen/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="OverlayLayer/Control/DeathScreen/ColorRect/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 91
+bbcode_enabled = true
+text = "[shake rate=20.0 level=20 connected=1]DEAD[/shake]"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="OverlayLayer/Control/DeathScreen/ColorRect/VBoxContainer"]
+layout_mode = 2
+text = "again"

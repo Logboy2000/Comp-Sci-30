@@ -2,7 +2,7 @@ class_name RoomManager extends Node2D
 
 @onready var current_room: Room
 @onready var phantom_camera_2d: PhantomCamera2D = $"../PhantomCamera2D"
-@onready var transition_manager: TransitionManager = $"../TransitionManager"
+@onready var transition_manager: TransitionManager = $"../OverlayLayer/Control/TransitionManager"
 
 @export_file("*.tscn") var starting_room: String
 

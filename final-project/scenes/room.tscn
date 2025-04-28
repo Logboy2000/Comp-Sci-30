@@ -10,13 +10,10 @@ metadata/_custom_type_script = "uid://dlh3o1mvi8728"
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
 [node name="ParallaxLayerFarther" type="ParallaxLayer" parent="ParallaxBackground"]
-position = Vector2(0, -1)
 motion_scale = Vector2(0.3, 0.3)
 metadata/_edit_lock_ = true
 
 [node name="ParallaxLayerFar" type="ParallaxLayer" parent="ParallaxBackground"]
-modulate = Color(0.435192, 0.435192, 0.435192, 1)
-position = Vector2(0, -1)
 motion_scale = Vector2(0.6, 0.6)
 metadata/_edit_lock_ = true
 

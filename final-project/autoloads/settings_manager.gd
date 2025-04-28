@@ -2,7 +2,7 @@ extends Node
 
 signal setting_changed(name, value)
 
-const SETTINGS_PATH = "user://settings.ini"
+const SETTINGS_PATH = "user://settings_and_save_file_because_they_use_the_same_system.ini"
 var _settings = {}
 
 func _input(event: InputEvent) -> void:
@@ -18,14 +18,13 @@ func _ready():
 		"volume",
 		0.5,
 		TYPE_FLOAT,
+		func(v): AudioServer.set_bus_volume_db(0, linear_to_db(v)),
 		func(v): return v >= 0.0 and v <= 1.0,
-		func(v): AudioServer.set_bus_volume_db(0, linear_to_db(v))
 	)
 	register_setting(
 		"fullscreen",
 		false,
 		TYPE_BOOL,
-		Callable(),
 		func(v):
 			if v:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
@@ -36,9 +35,22 @@ func _ready():
 		"borderless",
 		false,
 		TYPE_BOOL,
-		Callable(),
-		func(v):
+		func(v: bool):
 			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, v)
+	)
+	register_setting(
+		"amped_audio",
+		false,
+		TYPE_BOOL,
+		func(v: bool):
+			AudioServer.set_bus_effect_enabled(0, 0, v)
+	)
+	register_setting(
+		"bathroom_audio",
+		false,
+		TYPE_BOOL,
+		func(v: bool):
+			AudioServer.set_bus_effect_enabled(0, 1, v)
 	)
 	# Add more settings as needed
 	load_settings()
@@ -46,7 +58,7 @@ func _ready():
 
 
 # Register a new setting
-func register_setting(setting_name: String, default_value, value_type: int, validator: Callable = Callable(), apply_callback: Callable = Callable()) -> void:
+func register_setting(setting_name: String, default_value, value_type: int, apply_callback: Callable = Callable(), validator: Callable = Callable()) -> void:
 	if _settings.has(setting_name):
 		push_warning("Setting '%s' already registered!" % setting_name)
 		return

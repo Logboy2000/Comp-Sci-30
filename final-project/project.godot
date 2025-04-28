@@ -17,10 +17,11 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Global="*res://scenes/autoloads/global.gd"
+Global="*res://autoloads/global.gd"
 PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
-Audio="*res://scenes/autoloads/audio.tscn"
-SettingsManager="*res://scenes/autoloads/settings_manager.gd"
+Audio="*res://autoloads/audio.tscn"
+SettingsManager="*res://autoloads/settings_manager.gd"
+SaveSystem="*res://addons/save_system/save_system.gd"
 
 [display]
 
@@ -28,7 +29,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/phantom_camera/plugin.cfg")
+enabled=PackedStringArray("res://addons/phantom_camera/plugin.cfg", "res://addons/save_system/plugin.cfg")
 
 [input]
 

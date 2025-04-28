@@ -1,4 +1,4 @@
-class_name TransitionManager extends CanvasLayer
+class_name TransitionManager extends Control
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 var transition = "fade"
 const TRANSITION_SOUND = preload("res://audio/ford-ajar.mp3")

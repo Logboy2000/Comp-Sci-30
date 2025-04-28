@@ -12,9 +12,9 @@ class_name Player extends CharacterBody2D
 # Audio
 @onready var SLASH_SOUND = preload("res://audio/slash.wav")
 
-@export var max_health: int = 10
-@export var invincibility_frames: int = 120
-@export var knockback_force: float = 400.0
+@export var max_health: int = 5
+@export var invincibility_frames: int = 80
+@export var knockback_force: Vector2 = Vector2(400.0, 250.0)
 @export var knockback_freeze_time: float = 0.15
 
 
@@ -52,7 +52,10 @@ var current_invincibility_frames := 0
 var facing_dir := 1.0
 var is_running := false
 
+#
+
 func _ready():
+	current_health = max_health
 	Global.player = self
 	update_forward_attack_direction()
 
@@ -220,16 +223,12 @@ func owie(amount: int, damage_position: Vector2 = global_position):
 		sign(position.y - damage_position.y)
 	)
 	velocity = Vector2(
-		knockback_dir.x * knockback_force,
-		knockback_dir.y * knockback_force
+		knockback_dir.x * knockback_force.x,
+		knockback_dir.y * knockback_force.y
 	) 
-
 	if current_health <= 0:
 		die()
-
-	# Freeze game for a short duration
-	Global.freeze_game(knockback_freeze_time)
 	
 	
 func die():
-	pass
+	Global.die()

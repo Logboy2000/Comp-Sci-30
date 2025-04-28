@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8tvrgyewwydp"
-path="res://.godot/imported/illustration-of-lightning-strike-lightning-bolt-close-up-thunder-storm-background-generative-ai-png.webp-ab3cba6b2e2639c80609c12e7f70a90f.ctex"
+uid="uid://dhsqvh4qbp6ot"
+path="res://.godot/imported/plugin_logo.png-1f0305143f7a1a7c79d7f4bc7c21433d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://illustration-of-lightning-strike-lightning-bolt-close-up-thunder-storm-background-generative-ai-png.webp"
-dest_files=["res://.godot/imported/illustration-of-lightning-strike-lightning-bolt-close-up-thunder-storm-background-generative-ai-png.webp-ab3cba6b2e2639c80609c12e7f70a90f.ctex"]
+source_file="res://addons/save_system/plugin_logo.png"
+dest_files=["res://.godot/imported/plugin_logo.png-1f0305143f7a1a7c79d7f4bc7c21433d.ctex"]
 
 [params]
 
