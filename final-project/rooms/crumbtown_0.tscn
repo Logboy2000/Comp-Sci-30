@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://c85gasvl3udjx" path="res://rooms/video_stream_player.gd" id="3_de6wn"]
 [ext_resource type="PackedScene" uid="uid://j7myepfg202f" path="res://scenes/lilguy.tscn" id="3_px3o6"]
 [ext_resource type="PackedScene" uid="uid://crlo22wks8oky" path="res://scenes/triggers/room_transition.tscn" id="3_ymwvd"]
-[ext_resource type="VideoStream" uid="uid://bijfri3lcvnu4" path="res://audio/Steve's Lava Chicken.ogv" id="4_t7xaq"]
+[ext_resource type="VideoStream" path="res://audio/Steve's Lava Chicken.ogv" id="4_t7xaq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t7xaq"]
 size = Vector2(726.5, 782)
@@ -25,6 +25,7 @@ pivot_offset = Vector2(500, 500)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stream = ExtResource("4_t7xaq")
+volume_db = -80.0
 autoplay = true
 expand = true
 loop = true

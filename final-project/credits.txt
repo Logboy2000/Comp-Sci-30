@@ -1,6 +1,0 @@
-Big Rat: https://bigrat.monster
-Cursors: https://shmorgus.itch.io/tiny-cursors
-Cheese: https://pixerelia.itch.io/vf-cheesery
-PhantomCamera Plugin: ramoks
-Art Program: Pixelorama
-Tileset Editor: Tilesetter
