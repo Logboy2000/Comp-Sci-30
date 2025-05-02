@@ -1,37 +1,14 @@
-[gd_scene load_steps=8 format=4 uid="uid://duh00pb5rj6qq"]
+[gd_scene load_steps=6 format=4 uid="uid://duh00pb5rj6qq"]
 
 [ext_resource type="PackedScene" uid="uid://b7x3e2rg17srt" path="res://scenes/room.tscn" id="1_wssal"]
 [ext_resource type="PackedScene" uid="uid://bx0uc0hvhd30j" path="res://scenes/triggers/entrance.tscn" id="2_nmuv3"]
-[ext_resource type="Script" uid="uid://c85gasvl3udjx" path="res://rooms/video_stream_player.gd" id="3_de6wn"]
 [ext_resource type="PackedScene" uid="uid://j7myepfg202f" path="res://scenes/lilguy.tscn" id="3_px3o6"]
 [ext_resource type="PackedScene" uid="uid://crlo22wks8oky" path="res://scenes/triggers/room_transition.tscn" id="3_ymwvd"]
-[ext_resource type="VideoStream" path="res://audio/Steve's Lava Chicken.ogv" id="4_t7xaq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t7xaq"]
 size = Vector2(726.5, 782)
 
 [node name="Crumbtown_0" instance=ExtResource("1_wssal")]
-
-[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="ParallaxBackground/ParallaxLayerFar" index="0"]
-custom_minimum_size = Vector2(1000, 1000)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 1000.0
-offset_bottom = 1000.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(500, 500)
-size_flags_horizontal = 3
-size_flags_vertical = 3
-stream = ExtResource("4_t7xaq")
-volume_db = -80.0
-autoplay = true
-expand = true
-loop = true
-bus = &"SFX"
-script = ExtResource("3_de6wn")
-metadata/_edit_lock_ = true
 
 [node name="lilguy" parent="Entities" index="0" instance=ExtResource("3_px3o6")]
 position = Vector2(434, 574)

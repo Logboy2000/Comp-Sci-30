@@ -3,9 +3,9 @@ class_name RoomManager extends Node2D
 @onready var current_room: Room
 @onready var phantom_camera_2d: PhantomCamera2D = $"../PhantomCamera2D"
 @onready var transition_manager: TransitionManager = $"../OverlayLayer/Control/TransitionManager"
-
 @export_file("*.tscn") var starting_room: String
 
+signal new_room_loaded
 var current_scene_path := ""
 var current_entrance := 0
 
@@ -39,6 +39,7 @@ func change_room(scene_path: String, entrance_id: int = 0, use_transition: bool 
 	call_deferred("_add_new_room")
 
 
+
 func _add_new_room():
 	add_child(current_room)
 	if current_room.has_method("go_to_entrance"):
@@ -46,8 +47,11 @@ func _add_new_room():
 	phantom_camera_2d.set_limit_target(current_room.camera_bounds.get_path())
 	phantom_camera_2d.teleport_position()
 	Global.is_transitioning = false
+	new_room_loaded.emit()
 	transition_manager.fade_out()
-
+	
+func reload_current_room(entrance_id: int = 0, use_transition: bool = true):
+	change_room(current_scene_path, entrance_id, use_transition)
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("reload"):
 		change_room(current_scene_path, current_entrance)

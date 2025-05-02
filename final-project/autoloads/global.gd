@@ -3,6 +3,7 @@ var game_root: GameRoot
 var player: Player
 var room_manager: RoomManager
 var main_tilemap_layer: TileMapLayer
+var player_hp_bar: HBoxContainer
 
 var is_transitioning: bool = false
 var allow_pausing: bool = true

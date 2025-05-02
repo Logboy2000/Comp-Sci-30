@@ -6,7 +6,6 @@ class_name Player extends CharacterBody2D
 @onready var downward_attack = $DownwardAttack
 @onready var upward_attack: Node2D = $UpwardAttack
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var health_bar: HBoxContainer = $PlayerHud/Control/MarginContainer/VBoxContainer/HealthBar
 @onready var owie_box: Area2D = $OwieBox
 
 # Audio
@@ -51,8 +50,7 @@ var vulnurable := true
 var current_invincibility_frames := 0
 var facing_dir := 1.0
 var is_running := false
-
-#
+var is_dead := false
 
 func _ready():
 	current_health = max_health
@@ -63,6 +61,9 @@ func _process(_delta):
 	update_sprite_anim()
 
 func _physics_process(delta):
+	visible = !is_dead
+	if is_dead:
+		return
 	if Global.is_transitioning:
 		velocity.x = facing_dir * normal_top_speed
 		apply_gravity(delta)
@@ -92,6 +93,8 @@ func handle_input():
 		owie(1)
 	if Input.is_action_just_pressed("reverse_owie"):
 		reverse_owie(1)
+	if Input.is_action_just_pressed("die"):
+		die()
 
 func apply_horizontal_movement(delta):
 	var target_speed = run_top_speed if is_running else normal_top_speed
@@ -205,7 +208,7 @@ func reverse_owie(amount: int = 1):
 	current_health += amount
 	if current_health > max_health:
 		current_health = max_health
-	health_bar.update_health_ui()
+	Global.player_hp_bar.update_health_ui()
 
 func owie(amount: int, damage_position: Vector2 = global_position):
 	if not vulnurable:
@@ -214,7 +217,7 @@ func owie(amount: int, damage_position: Vector2 = global_position):
 	is_attacking = false
 	current_invincibility_frames = invincibility_frames
 	current_health -= amount
-	health_bar.update_health_ui()
+	Global.player_hp_bar.update_health_ui()
 	
 	
 	# Knockback based on player and damage position
@@ -231,4 +234,11 @@ func owie(amount: int, damage_position: Vector2 = global_position):
 	
 	
 func die():
+	is_dead = true
 	Global.die()
+
+func respawn():
+	is_dead = false
+	visible = true
+	current_health = max_health
+	Global.player_hp_bar.update_health_ui()

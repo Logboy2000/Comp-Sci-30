@@ -4,9 +4,11 @@ extends HBoxContainer
 @export var empty_icon: Texture
 
 func _ready():
+	Global.player_hp_bar = self
 	await get_tree().process_frame
 	setup_health_icons()
 	update_health_ui()
+	
 
 func setup_health_icons():
 	# Clear any existing icons
