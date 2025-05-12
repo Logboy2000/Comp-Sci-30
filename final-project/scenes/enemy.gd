@@ -8,9 +8,6 @@ class_name Enemy extends CharacterBody2D
 @export var affected_by_gravity = false
 @export var knockback_duration = 0.05  # How long knockback lasts
 
-# Audio
-# @onready var HURT_SOUND = preload("res://audio/hurt.wav")
-
 var current_health: int
 var is_invincible = false
 var facing_right = true
@@ -25,7 +22,7 @@ func _ready():
 	else:
 		motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 
-func _physics_process(delta: float) -> void:
+func _process(delta: float) -> void:
 	if affected_by_gravity:
 		if not is_on_floor():
 			velocity.y += gravity * delta
@@ -45,7 +42,6 @@ func take_damage(amount: int, knockback_direction: Vector2 = Vector2.ZERO, knock
 		return
 		
 	current_health -= amount
-	print(current_health)
 	
 	# Apply knockback if any
 	if knockback_force > 0:

@@ -2,13 +2,12 @@ extends Enemy
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-var direction = 1  # 1 for right, -1 for left
+var direction = 1
 var speed = 1000
 
 
 func _update_movement(delta: float):
 	velocity.x = direction * speed * delta
-	move_and_slide()
 
 
 func _on_timer_timeout() -> void:

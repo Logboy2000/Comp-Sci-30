@@ -1,7 +1,7 @@
 class_name TransitionManager extends Control
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 var transition = "fade"
-const TRANSITION_SOUND = preload("res://audio/ford-ajar.mp3")
+const TRANSITION_SOUND = preload("res://audio/ford_ajar.mp3")
 
 func fade_in():
 	Audio.play_sound(TRANSITION_SOUND)

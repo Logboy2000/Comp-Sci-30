@@ -10,18 +10,6 @@ size = Vector2(726.5, 782)
 
 [node name="Crumbtown_0" instance=ExtResource("1_wssal")]
 
-[node name="lilguy" parent="Entities" index="0" instance=ExtResource("3_px3o6")]
-position = Vector2(434, 574)
-
-[node name="lilguy2" parent="Entities" index="1" instance=ExtResource("3_px3o6")]
-position = Vector2(684, 630)
-
-[node name="lilguy3" parent="Entities" index="2" instance=ExtResource("3_px3o6")]
-position = Vector2(387, 615)
-
-[node name="lilguy4" parent="Entities" index="3" instance=ExtResource("3_px3o6")]
-position = Vector2(500, 604)
-
 [node name="Entrance0" parent="Entrances" index="0" instance=ExtResource("2_nmuv3")]
 position = Vector2(393, 22)
 
@@ -44,3 +32,21 @@ entrance_id = 1
 visible = false
 position = Vector2(374.75, 420)
 shape = SubResource("RectangleShape2D_t7xaq")
+
+[node name="lilguy" parent="." index="7" instance=ExtResource("3_px3o6")]
+position = Vector2(430, 483)
+
+[node name="lilguy2" parent="." index="8" instance=ExtResource("3_px3o6")]
+position = Vector2(452, 506)
+
+[node name="lilguy3" parent="." index="9" instance=ExtResource("3_px3o6")]
+position = Vector2(392, 514)
+
+[node name="lilguy4" parent="." index="10" instance=ExtResource("3_px3o6")]
+position = Vector2(381, 459)
+
+[node name="lilguy5" parent="." index="11" instance=ExtResource("3_px3o6")]
+position = Vector2(403, 482)
+
+[node name="lilguy6" parent="." index="12" instance=ExtResource("3_px3o6")]
+position = Vector2(343, 490)

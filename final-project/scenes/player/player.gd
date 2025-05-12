@@ -9,7 +9,8 @@ class_name Player extends CharacterBody2D
 @onready var owie_box: Area2D = $OwieBox
 
 # Audio
-@onready var SLASH_SOUND = preload("res://audio/slash.wav")
+const SLASH_SOUND = preload("res://audio/slash.wav")
+const CLASSIC_HURT = preload("res://audio/classic_hurt.mp3")
 
 @export var max_health: int = 5
 @export var invincibility_frames: int = 80
@@ -57,11 +58,9 @@ func _ready():
 	Global.player = self
 	update_forward_attack_direction()
 
-func _process(_delta):
-	update_sprite_anim()
-
 func _physics_process(delta):
 	visible = !is_dead
+	update_sprite_anim()
 	if is_dead:
 		return
 	if Global.is_transitioning:
@@ -232,7 +231,7 @@ func owie(amount: int, damage_position: Vector2 = global_position):
 	if current_health <= 0:
 		die()
 	
-	
+	Audio.play_sound(CLASSIC_HURT)
 func die():
 	is_dead = true
 	Global.die()

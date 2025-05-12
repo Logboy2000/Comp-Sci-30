@@ -13,6 +13,7 @@ func _input(event: InputEvent) -> void:
 
 # Add your initial settings here
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	# Volume: 0.0 (mute) to 1.0 (max)
 	register_setting(
 		"volume",
