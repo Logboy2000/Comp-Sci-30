@@ -19,6 +19,7 @@ const CLASSIC_HURT = preload("res://audio/classic_hurt.mp3")
 
 
 var current_health: int = 10
+var damaged_this_frame: bool = false
 
 # Movement Variables
 @export_group("Horizontal Movement")
@@ -35,6 +36,7 @@ var current_health: int = 10
 @export var jump_buffer_time := 0.1
 @export var cap_fall_speed := true
 @export var max_fall_speed := 300.0
+var transition_move_speed := 0
 
 # State Variables
 var gravity_multiplier := 1.0
@@ -52,6 +54,7 @@ var current_invincibility_frames := 0
 var facing_dir := 1.0
 var is_running := false
 var is_dead := false
+var current_transition_dir: Vector2i = Vector2i.ZERO
 
 func _ready():
 	current_health = max_health
@@ -60,11 +63,16 @@ func _ready():
 
 func _physics_process(delta):
 	visible = !is_dead
-	update_sprite_anim()
 	if is_dead:
 		return
 	if Global.is_transitioning:
-		velocity.x = facing_dir * normal_top_speed
+		if current_transition_dir == Vector2i.UP:
+			transition_move_speed = jump_velocity
+		elif current_transition_dir == Vector2i.DOWN:
+			transition_move_speed = max_fall_speed
+		else:
+			transition_move_speed = normal_top_speed
+		velocity = transition_move_speed * current_transition_dir
 		apply_gravity(delta)
 		move_and_slide()
 	else:
@@ -82,6 +90,7 @@ func _physics_process(delta):
 		handle_attack()
 		handle_owie()
 		move_and_slide()
+	update_sprite_anim()
 
 func handle_input():
 	input_dir.x = Input.get_axis("left", "right")
@@ -214,6 +223,8 @@ func owie(amount: int, damage_position: Vector2 = global_position):
 		return
 	
 	is_attacking = false
+	vulnurable = false
+	
 	current_invincibility_frames = invincibility_frames
 	current_health -= amount
 	Global.player_hp_bar.update_health_ui()
@@ -232,6 +243,7 @@ func owie(amount: int, damage_position: Vector2 = global_position):
 		die()
 	
 	Audio.play_sound(CLASSIC_HURT)
+
 func die():
 	is_dead = true
 	Global.die()
@@ -241,3 +253,9 @@ func respawn():
 	visible = true
 	current_health = max_health
 	Global.player_hp_bar.update_health_ui()
+
+
+func _on_owie_box_area_entered(area: Area2D) -> void:
+	if area is RoomTransition:
+		Global.room_manager.change_room(area.target_room, area.entrance_id)
+		current_transition_dir = area.transition_dir

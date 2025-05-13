@@ -2,13 +2,14 @@ class_name TransitionManager extends Control
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 var transition = "fade"
 const TRANSITION_SOUND = preload("res://audio/ford_ajar.mp3")
-
+const BATMAN_TRANSITION = preload("res://audio/batman_transition.mp3")
 func fade_in():
-	Audio.play_sound(TRANSITION_SOUND)
 	if randi_range(1, 100) == 1:
-		transition = "bigratjumpscare"
+		transition = "bigratjumpscare2"
+		Audio.play_sound(BATMAN_TRANSITION)
 	else:
 		transition = "fade"
+		Audio.play_sound(TRANSITION_SOUND)
 	await _play_transition(false)
 
 func fade_out():

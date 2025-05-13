@@ -46,9 +46,10 @@ func _add_new_room():
 		current_room.go_to_entrance(current_entrance)
 	phantom_camera_2d.set_limit_target(current_room.camera_bounds.get_path())
 	phantom_camera_2d.teleport_position()
-	Global.is_transitioning = false
+	print("transi")
 	new_room_loaded.emit()
-	transition_manager.fade_out()
+	await transition_manager.fade_out()
+	Global.is_transitioning = false
 	
 func reload_current_room(entrance_id: int = 0, use_transition: bool = true):
 	change_room(current_scene_path, entrance_id, use_transition)
