@@ -1,6 +1,6 @@
 [gd_scene load_steps=34 format=3 uid="uid://b4hrdpl5dijvs"]
 
-[ext_resource type="Script" uid="uid://bgnlnc30p3wb3" path="res://scenes/player/player.gd" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://dhkyapc38n0xe" path="res://scenes/player/UltimatePlatformerController.gd" id="1_0owmy"]
 [ext_resource type="Texture2D" uid="uid://bbtim2up15msd" path="res://sprites/player/fall.png" id="3_0owmy"]
 [ext_resource type="Texture2D" uid="uid://cra0lg6vdlokr" path="res://sprites/player/jump.png" id="3_75vfm"]
 [ext_resource type="Texture2D" uid="uid://1ymshet4dsas" path="res://sprites/player/walk.png" id="3_i3pqv"]
@@ -30,6 +30,18 @@ region = Rect2(0, 0, 24, 14)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ugbui"]
 atlas = ExtResource("3_75vfm")
 region = Rect2(24, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqtel"]
+atlas = ExtResource("3_i3pqv")
+region = Rect2(24, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sweqy"]
+atlas = ExtResource("3_i3pqv")
+region = Rect2(48, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hs0m"]
+atlas = ExtResource("3_i3pqv")
+region = Rect2(72, 0, 24, 14)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p47bc"]
 atlas = ExtResource("3_p47bc")
@@ -63,18 +75,6 @@ region = Rect2(144, 0, 24, 24)
 atlas = ExtResource("3_p47bc")
 region = Rect2(168, 0, 24, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hqtel"]
-atlas = ExtResource("3_i3pqv")
-region = Rect2(24, 0, 24, 14)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_sweqy"]
-atlas = ExtResource("3_i3pqv")
-region = Rect2(48, 0, 24, 14)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2hs0m"]
-atlas = ExtResource("3_i3pqv")
-region = Rect2(72, 0, 24, 14)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_hqtel"]
 animations = [{
 "frames": [{
@@ -85,7 +85,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_myrg7")
 }],
 "loop": true,
-"name": &"fall",
+"name": &"falling",
 "speed": 5.0
 }, {
 "frames": [{
@@ -106,6 +106,23 @@ animations = [{
 "loop": false,
 "name": &"jump",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i3pqv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hqtel")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sweqy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2hs0m")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -228,9 +245,24 @@ _data = {
 &"invulnerable": SubResource("Animation_h17s1")
 }
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("PlayerSprite", "PlayerCollider", "animation_player", "leftRaycast", "middleRaycast", "rightRaycast")]
 collision_layer = 6
-script = ExtResource("1_4flbx")
+script = ExtResource("1_0owmy")
+PlayerSprite = NodePath("AnimatedSprite2D")
+PlayerCollider = NodePath("CollisionShape2D")
+animation_player = NodePath("AnimationPlayer")
+timeToReachZeroSpeed = 0.1
+jumpBuffering = 0.1
+dashType = 1
+dashLength = 4.0
+leftRaycast = NodePath("RayCastLeft")
+middleRaycast = NodePath("RayCastUp")
+rightRaycast = NodePath("RayCastRight")
+run = true
+jump = true
+idle = true
+walk = true
+falling = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.5)
@@ -239,7 +271,7 @@ debug_color = Color(0, 0.6, 0, 0.419608)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"idle"
+animation = &"run"
 
 [node name="DownwardAttack" type="Node2D" parent="."]
 visible = false
@@ -331,19 +363,26 @@ shape = SubResource("RectangleShape2D_qk4a2")
 debug_color = Color(0, 0.6, 0, 0.419608)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
 libraries = {
 &"": SubResource("AnimationLibrary_je7p5")
 }
 
-[connection signal="attack_finished" from="DownwardAttack" to="." method="_on_attack_finished"]
+[node name="RayCastUp" type="RayCast2D" parent="."]
+target_position = Vector2(0, -5)
+
+[node name="RayCastRight" type="RayCast2D" parent="."]
+target_position = Vector2(8, 0)
+
+[node name="RayCastLeft" type="RayCast2D" parent="."]
+target_position = Vector2(-8, 0)
+
 [connection signal="animation_finished" from="DownwardAttack/AnimatedSprite2D" to="DownwardAttack" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="DownwardAttack/Hitbox" to="DownwardAttack" method="_on_hitbox_body_entered"]
 [connection signal="timeout" from="DownwardAttack/RecoveryTimer" to="DownwardAttack" method="_on_recovery_timer_timeout"]
-[connection signal="attack_finished" from="ForwardAttack" to="." method="_on_attack_finished"]
 [connection signal="animation_finished" from="ForwardAttack/AnimatedSprite2D" to="ForwardAttack" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="ForwardAttack/Hitbox" to="ForwardAttack" method="_on_hitbox_body_entered"]
 [connection signal="timeout" from="ForwardAttack/RecoveryTimer" to="ForwardAttack" method="_on_recovery_timer_timeout"]
-[connection signal="attack_finished" from="UpwardAttack" to="." method="_on_attack_finished"]
 [connection signal="animation_finished" from="UpwardAttack/AnimatedSprite2D" to="UpwardAttack" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="UpwardAttack/Hitbox" to="UpwardAttack" method="_on_hitbox_body_entered"]
 [connection signal="timeout" from="UpwardAttack/RecoveryTimer" to="UpwardAttack" method="_on_recovery_timer_timeout"]

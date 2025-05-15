@@ -1,7 +1,7 @@
 class_name GameRoot extends Node2D
 @onready var phantom_camera_2d: PhantomCamera2D = $PhantomCamera2D
 @onready var death_screen: Control = $OverlayLayer/Control/DeathScreen
-@onready var player: Player = $Player
+@onready var player: PlatformerController2D = $Player
 @onready var room_manager: RoomManager = $RoomManager
 
 func _ready() -> void:

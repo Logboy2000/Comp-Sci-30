@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b7x3e2rg17srt" path="res://scenes/room.tscn" id="1_wssal"]
 [ext_resource type="PackedScene" uid="uid://bx0uc0hvhd30j" path="res://scenes/triggers/entrance.tscn" id="2_nmuv3"]
-[ext_resource type="PackedScene" uid="uid://j7myepfg202f" path="res://scenes/lilguy.tscn" id="3_px3o6"]
+[ext_resource type="PackedScene" uid="uid://j7myepfg202f" path="res://scenes/enemies/lilguy.tscn" id="3_px3o6"]
 [ext_resource type="PackedScene" uid="uid://crlo22wks8oky" path="res://scenes/triggers/room_transition.tscn" id="3_ymwvd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t7xaq"]
