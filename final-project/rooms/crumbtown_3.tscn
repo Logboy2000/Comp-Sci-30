@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://ggqcryh3vbd6"]
+
+[ext_resource type="PackedScene" uid="uid://b7x3e2rg17srt" path="res://scenes/room.tscn" id="1_ygkeh"]
+
+[node name="crumbtown_3" instance=ExtResource("1_ygkeh")]

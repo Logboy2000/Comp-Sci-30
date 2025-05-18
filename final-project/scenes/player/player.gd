@@ -23,7 +23,7 @@ var damaged_this_frame: bool = false
 
 # Movement Variables
 @export_group("Horizontal Movement")
-@export var normal_top_speed := 100.0
+@export var normal_top_speed: float = 100.0
 @export var run_top_speed := 150.0
 @export var accel := 100.0
 @export var friction := 2000.0
@@ -36,7 +36,7 @@ var damaged_this_frame: bool = false
 @export var jump_buffer_time := 0.1
 @export var cap_fall_speed := true
 @export var max_fall_speed := 300.0
-var transition_move_speed := 0
+var transition_move_speed: float = 0
 
 # State Variables
 var gravity_multiplier := 1.0
@@ -58,7 +58,7 @@ var current_transition_dir: Vector2i = Vector2i.ZERO
 
 func _ready():
 	current_health = max_health
-	Global.player = self
+	#Global.player = self
 	update_forward_attack_direction()
 
 func _physics_process(delta):

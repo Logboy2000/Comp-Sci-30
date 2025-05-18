@@ -87,25 +87,9 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_t6xqi"]
-resource_name = "fade"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OverlayLayer/Control/TransitionManager/ColorRect:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
-}
-
 [sub_resource type="Animation" id="Animation_ywsqi"]
 resource_name = "bigratjumpscare2"
-length = 0.5
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -113,7 +97,7 @@ tracks/0/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:rot
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(0.732043, 1.23),
 "update": 0,
 "values": [0.0, 6.28319]
@@ -125,7 +109,7 @@ tracks/1/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:sca
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(0.732043, 1.23),
 "update": 0,
 "values": [Vector2(0, 0), Vector2(1, 1)]
@@ -143,6 +127,22 @@ tracks/2/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_t6xqi"]
+resource_name = "fade"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OverlayLayer/Control/TransitionManager/ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v5ckt"]
 _data = {
 &"RESET": SubResource("Animation_v5ckt"),
@@ -155,7 +155,6 @@ _data = {
 script = ExtResource("1_nrhpl")
 
 [node name="RoomManager" type="Node2D" parent="."]
-process_mode = 3
 script = ExtResource("3_nlfu4")
 starting_room = "uid://duh00pb5rj6qq"
 

@@ -1,6 +1,6 @@
 extends Node
 var game_root: GameRoot
-var player: Player
+var player: PlatformerController2D
 var room_manager: RoomManager
 var main_tilemap_layer: TileMapLayer
 var player_hp_bar: HBoxContainer

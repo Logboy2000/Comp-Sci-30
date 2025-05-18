@@ -22,7 +22,7 @@ func _ready():
 	else:
 		motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if affected_by_gravity:
 		if not is_on_floor():
 			velocity.y += gravity * delta
