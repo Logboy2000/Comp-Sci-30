@@ -155,7 +155,6 @@ _data = {
 script = ExtResource("1_nrhpl")
 
 [node name="RoomManager" type="Node2D" parent="."]
-process_mode = 3
 script = ExtResource("3_nlfu4")
 starting_room = "uid://duh00pb5rj6qq"
 
