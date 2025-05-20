@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bb6nm7yo2jyki" path="res://sprites/player/rat_scratch_forward.png" id="4_qjkh3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qk4a2"]
-size = Vector2(14, 11)
+size = Vector2(12, 11)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fcs02"]
 atlas = ExtResource("3_0owmy")
@@ -245,7 +245,7 @@ _data = {
 &"invulnerable": SubResource("Animation_h17s1")
 }
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("PlayerSprite", "PlayerCollider", "animation_player", "leftRaycast", "middleRaycast", "rightRaycast")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("PlayerSprite", "PlayerCollider", "animation_player")]
 collision_layer = 6
 script = ExtResource("1_0owmy")
 PlayerSprite = NodePath("AnimatedSprite2D")
@@ -253,11 +253,11 @@ PlayerCollider = NodePath("CollisionShape2D")
 animation_player = NodePath("AnimationPlayer")
 timeToReachZeroSpeed = 0.1
 jumpBuffering = 0.1
+wallJump = true
+wallSliding = 2.5
 dashType = 1
+dashCancel = false
 dashLength = 4.0
-leftRaycast = NodePath("RayCastLeft")
-middleRaycast = NodePath("RayCastUp")
-rightRaycast = NodePath("RayCastRight")
 run = true
 jump = true
 idle = true
@@ -277,6 +277,7 @@ animation = &"run"
 visible = false
 position = Vector2(0, 17)
 script = ExtResource("3_yw30f")
+attack_direction = Vector2(0, 1)
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="DownwardAttack"]
@@ -299,16 +300,16 @@ polygon = PackedVector2Array(-10, 13, -4, 15.5, 1.5, 13, 3.5, 10, 5.9125, 5, -14
 wait_time = 0.1
 one_shot = true
 
-[node name="ForwardAttack" type="Node2D" parent="."]
+[node name="RightAttack" type="Node2D" parent="."]
 visible = false
 script = ExtResource("3_yw30f")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ForwardAttack"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RightAttack"]
 position = Vector2(22.905, 1)
 sprite_frames = SubResource("SpriteFrames_17371")
 animation = &"attack"
 
-[node name="Hitbox" type="Area2D" parent="ForwardAttack"]
+[node name="Hitbox" type="Area2D" parent="RightAttack"]
 position = Vector2(22.905, 0)
 collision_layer = 0
 collision_mask = 3
@@ -316,12 +317,39 @@ monitoring = false
 monitorable = false
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionPolygon2D" parent="ForwardAttack/Hitbox"]
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="RightAttack/Hitbox"]
 position = Vector2(10, 7)
 scale = Vector2(2, 2)
 polygon = PackedVector2Array(-10.5, -8.5, -6, -11, 0.5, -7, 0.5, 0.5, -2, 3.5, -10.5, 3.5, -10.5, -2)
 
-[node name="RecoveryTimer" type="Timer" parent="ForwardAttack"]
+[node name="RecoveryTimer" type="Timer" parent="RightAttack"]
+wait_time = 0.1
+one_shot = true
+
+[node name="LeftAttack" type="Node2D" parent="."]
+scale = Vector2(-1, 1)
+script = ExtResource("3_yw30f")
+attack_direction = Vector2(-1, 0)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="LeftAttack"]
+position = Vector2(22.905, 1)
+sprite_frames = SubResource("SpriteFrames_17371")
+animation = &"attack"
+
+[node name="Hitbox" type="Area2D" parent="LeftAttack"]
+position = Vector2(22.905, 0)
+collision_layer = 0
+collision_mask = 3
+monitoring = false
+monitorable = false
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="LeftAttack/Hitbox"]
+position = Vector2(10, 7)
+scale = Vector2(2, 2)
+polygon = PackedVector2Array(-10.5, -8.5, -6, -11, 0.5, -7, 0.5, 0.5, -2, 3.5, -10.5, 3.5, -10.5, -2)
+
+[node name="RecoveryTimer" type="Timer" parent="LeftAttack"]
 wait_time = 0.1
 one_shot = true
 
@@ -329,6 +357,7 @@ one_shot = true
 visible = false
 position = Vector2(-1, -3)
 script = ExtResource("3_yw30f")
+attack_direction = Vector2(0, -1)
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UpwardAttack"]
@@ -368,21 +397,19 @@ libraries = {
 &"": SubResource("AnimationLibrary_je7p5")
 }
 
-[node name="RayCastUp" type="RayCast2D" parent="."]
-target_position = Vector2(0, -5)
-
-[node name="RayCastRight" type="RayCast2D" parent="."]
-target_position = Vector2(8, 0)
-
-[node name="RayCastLeft" type="RayCast2D" parent="."]
-target_position = Vector2(-8, 0)
-
+[connection signal="attack_finished" from="DownwardAttack" to="." method="_on_downward_attack_attack_finished"]
 [connection signal="animation_finished" from="DownwardAttack/AnimatedSprite2D" to="DownwardAttack" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="DownwardAttack/Hitbox" to="DownwardAttack" method="_on_hitbox_body_entered"]
 [connection signal="timeout" from="DownwardAttack/RecoveryTimer" to="DownwardAttack" method="_on_recovery_timer_timeout"]
-[connection signal="animation_finished" from="ForwardAttack/AnimatedSprite2D" to="ForwardAttack" method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="body_entered" from="ForwardAttack/Hitbox" to="ForwardAttack" method="_on_hitbox_body_entered"]
-[connection signal="timeout" from="ForwardAttack/RecoveryTimer" to="ForwardAttack" method="_on_recovery_timer_timeout"]
+[connection signal="attack_finished" from="RightAttack" to="." method="_on_forward_attack_attack_finished"]
+[connection signal="animation_finished" from="RightAttack/AnimatedSprite2D" to="RightAttack" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="RightAttack/Hitbox" to="RightAttack" method="_on_hitbox_body_entered"]
+[connection signal="timeout" from="RightAttack/RecoveryTimer" to="RightAttack" method="_on_recovery_timer_timeout"]
+[connection signal="attack_finished" from="LeftAttack" to="." method="_on_forward_attack_attack_finished"]
+[connection signal="animation_finished" from="LeftAttack/AnimatedSprite2D" to="LeftAttack" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="LeftAttack/Hitbox" to="LeftAttack" method="_on_hitbox_body_entered"]
+[connection signal="timeout" from="LeftAttack/RecoveryTimer" to="LeftAttack" method="_on_recovery_timer_timeout"]
+[connection signal="attack_finished" from="UpwardAttack" to="." method="_on_upward_attack_attack_finished"]
 [connection signal="animation_finished" from="UpwardAttack/AnimatedSprite2D" to="UpwardAttack" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="UpwardAttack/Hitbox" to="UpwardAttack" method="_on_hitbox_body_entered"]
 [connection signal="timeout" from="UpwardAttack/RecoveryTimer" to="UpwardAttack" method="_on_recovery_timer_timeout"]

@@ -6,17 +6,13 @@ class_name PlatformerController2D
 const SLASH_SOUND = preload("res://audio/slash.wav")
 const CLASSIC_HURT = preload("res://audio/classic_hurt.mp3")
 
-@onready var forward_attack = $ForwardAttack
+@onready var right_attack: Node2D = $RightAttack
+@onready var left_attack: Node2D = $LeftAttack
 @onready var downward_attack = $DownwardAttack
 @onready var upward_attack: = $UpwardAttack
 @onready var owie_box: Area2D = $OwieBox
-
-@export var README: String = "IMPORTANT: MAKE SURE TO ASSIGN 'left' 'right' 'jump' 'dash' 'up' 'down' 'roll' 'latch' 'twirl' 'run' in the project settings input map. Usage tips. 1. Hover over each toggle and variable to read what it does and to make sure nothing bugs. 2. Animations are very primitive. To make full use of your custom art, you may want to slightly change the code for the animations"
-#INFO READEME 
-#IMPORTANT: MAKE SURE TO ASSIGN 'left' 'right' 'jump' 'dash' 'up' 'down' 'roll' 'latch' 'twirl' 'run'  in the project settings input map. THIS IS REQUIRED
-#Usage tips. 
-#1. Hover over each toggle and variable to read what it does and to make sure nothing bugs. 
-#2. Animations are very primitive. To make full use of your custom art, you may want to slightly change the code for the animations
+var attack_direction: Vector2
+var is_attacking: bool = false
 
 @export_category("Necesary Child Nodes")
 @export var PlayerSprite: AnimatedSprite2D
@@ -57,6 +53,9 @@ const CLASSIC_HURT = preload("res://audio/classic_hurt.mp3")
 @export_range(0, 0.5) var coyoteTime: float = 0.2
 ##The window of time (in seconds) that your player can press the jump button before hitting the ground and still have their input registered as a jump. This is set to 0.2 seconds by default.
 @export_range(0, 0.5) var jumpBuffering: float = 0.2
+
+@export var pogo_velocity: float = -300.0
+
 
 #INFO EXTRAS
 @export_category("Wall Jumping")
@@ -176,7 +175,6 @@ var animScaleLock : Vector2
 
 var vulnurable := true
 var current_invincibility_frames := 0
-var is_attacking := false
 var is_dead := false
 
 #Input Variables for the whole script
@@ -199,12 +197,14 @@ var twirlTap
 
 @export var max_health: int = 5
 @export var invincibility_frames: int = 80
-var current_health: int = 10
+var current_health: int = 0
 @export var knockback_force: Vector2 = Vector2(400.0, 250.0)
 @export var knockback_freeze_time: float = 0.15
+var facing_right: bool = true
 
 func _ready():
 	Global.player = self
+	current_health = max_health
 	
 	wasMovingR = true
 	anim = PlayerSprite
@@ -281,7 +281,6 @@ func _process(_delta):
 	visible = !is_dead
 	if is_dead:
 		return
-	print(runHold)
 	
 	#INFO animations
 	#directions
@@ -293,9 +292,11 @@ func _process(_delta):
 		_setLatch(0.2, false)
 
 	if rightHold and !latched:
-		anim.scale.x = animScaleLock.x
+		facing_right = true
+		anim.flip_h = false
 	if leftHold and !latched:
-		anim.scale.x = animScaleLock.x * -1
+		facing_right = false
+		anim.flip_h = true
 	
 	#run
 	if run and idle and !dashing and !crouching and !walk:
@@ -357,7 +358,7 @@ func _process(_delta):
 
 func _physics_process(delta):
 	visible = !is_dead
-	if is_dead:
+	if is_dead or Global.is_transitioning:
 		return
 	if current_invincibility_frames > 0:
 		current_invincibility_frames -= 1
@@ -559,7 +560,7 @@ func _physics_process(delta):
 			
 			
 	#INFO dashing
-	if is_on_floor():
+	if is_on_floor() or is_on_wall():
 		dashCount = dashes
 	if eightWayDash and dashTap and dashCount > 0 and !rolling:
 		var input_direction = Input.get_vector("left", "right", "up", "down")
@@ -578,7 +579,7 @@ func _physics_process(delta):
 	if twoWayDashVertical and dashTap and dashCount > 0 and !rolling:
 		var dTime = 0.0625 * dashLength
 		if upHold and downHold:
-			_placeHolder()
+			pass
 		elif upHold:
 			_dashingTime(dTime)
 			_pauseGravity(dTime)
@@ -637,10 +638,32 @@ func _physics_process(delta):
 	if is_on_floor() and groundPounding:
 		_endGroundPound()
 	move_and_slide()
-	
+	# Update attack direction based on input
+	if not is_attacking:
+		if Input.is_action_pressed("up"):
+			attack_direction = Vector2.UP
+		elif Input.is_action_pressed("down") and not is_on_floor():
+			attack_direction = Vector2.DOWN
+		else:
+			attack_direction = Vector2.RIGHT if facing_right else Vector2.LEFT
+		
+		# Handle attack
+		if Input.is_action_just_pressed("attack"):
+			is_attacking = true
+			if attack_direction == Vector2.UP:
+				upward_attack.start_attack()
+			elif attack_direction == Vector2.DOWN:
+				downward_attack.start_attack()
+			elif attack_direction == Vector2.LEFT:
+				left_attack.start_attack()
+			else:
+				right_attack.start_attack()
 	if upToCancel and upHold and groundPound:
 		_endGroundPound()
 	
+	
+	
+
 func _bufferJump():
 	await get_tree().create_timer(jumpBuffering).timeout
 	jumpWasPressed = false
@@ -719,9 +742,6 @@ func _endGroundPound():
 	appliedTerminalVelocity = terminalVelocity
 	gravityActive = true
 
-func _placeHolder():
-	pass
-
 
 func _on_owie_box_area_entered(area: Area2D) -> void:
 	if area is RoomTransition:
@@ -778,3 +798,17 @@ func handle_owie():
 	for body in owie_box.get_overlapping_bodies():
 		if body is Enemy:
 			owie(1, body.position)
+
+func _on_forward_attack_attack_finished():
+	is_attacking = false
+
+func _on_upward_attack_attack_finished() -> void:
+	is_attacking = false
+
+func _on_downward_attack_attack_finished() -> void:
+	is_attacking = false
+
+func pogo():
+	if is_on_floor():
+		return
+	velocity.y = pogo_velocity

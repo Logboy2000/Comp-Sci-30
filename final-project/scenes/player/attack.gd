@@ -21,8 +21,8 @@ enum AttackState {
 var current_state = AttackState.IDLE
 var can_attack = true
 var hit_enemies = []
-var current_attack_direction = Vector2.RIGHT
-var player: CharacterBody2D
+@export var attack_direction = Vector2.RIGHT
+var player: PlatformerController2D
 var has_applied_knockback = false
 
 func _ready():
@@ -31,14 +31,14 @@ func _ready():
 	hitbox.monitorable = false
 	player = get_parent()
 
-func start_attack(direction: Vector2 = Vector2.RIGHT):
+
+func start_attack():
 	if not can_attack:
 		return
 	
-	if direction == Vector2.DOWN:
+	if attack_direction == Vector2.DOWN:
 		sprite.flip_v = player.facing_right
 	
-	current_attack_direction = direction
 	can_attack = false
 	hit_enemies.clear()
 	has_applied_knockback = false
@@ -52,16 +52,16 @@ func start_attack(direction: Vector2 = Vector2.RIGHT):
 func apply_knockback(is_pogoable = false):
 	if has_applied_knockback: return
 	# Apply knockback in the opposite direction of the attack
-	var knockback_direction = -current_attack_direction
+	var knockback_direction = -attack_direction
 	
 	# Only affect velocity in the direction of the wall hit
-	if abs(current_attack_direction.x) > abs(current_attack_direction.y):
+	if abs(attack_direction.x) > abs(attack_direction.y):
 		# Horizontal wall hit - only affect x velocity
 		player.velocity.x = knockback_direction.x * wall_knockback_force
-	elif current_attack_direction.y > 0 and is_pogoable:
+	elif attack_direction.y > 0 and is_pogoable:
 		# Downward slash - pogo off enemy
 		player.pogo()
-	elif current_attack_direction.y < 0:
+	elif attack_direction.y < 0:
 		# Ceiling hit - only affect y velocity
 		player.velocity.y = knockback_direction.y * wall_knockback_force
 
@@ -70,7 +70,7 @@ func _on_hitbox_body_entered(body):
 		hit_enemies.append(body)
 		apply_knockback(true)
 		# Apply knockback to enemy
-		body.take_damage(damage, current_attack_direction, enemy_knockback)
+		body.take_damage(damage, attack_direction, enemy_knockback)
 		has_applied_knockback = true
 
 func _on_animated_sprite_2d_animation_finished() -> void:
