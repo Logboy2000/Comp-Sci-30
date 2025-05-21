@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=4 uid="uid://duh00pb5rj6qq"]
+[gd_scene load_steps=7 format=4 uid="uid://duh00pb5rj6qq"]
 
 [ext_resource type="PackedScene" uid="uid://b7x3e2rg17srt" path="res://scenes/room.tscn" id="1_wssal"]
 [ext_resource type="PackedScene" uid="uid://bx0uc0hvhd30j" path="res://scenes/triggers/entrance.tscn" id="2_nmuv3"]
 [ext_resource type="PackedScene" uid="uid://j7myepfg202f" path="res://scenes/enemies/lilguy.tscn" id="3_px3o6"]
 [ext_resource type="PackedScene" uid="uid://crlo22wks8oky" path="res://scenes/triggers/room_transition.tscn" id="3_ymwvd"]
+[ext_resource type="PackedScene" uid="uid://be87stkbkn6yd" path="res://scenes/enemies/flying_rat.tscn" id="5_px3o6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t7xaq"]
 size = Vector2(726.5, 782)
@@ -50,3 +51,7 @@ position = Vector2(403, 482)
 
 [node name="lilguy6" parent="." index="12" instance=ExtResource("3_px3o6")]
 position = Vector2(343, 490)
+
+[node name="FlyingRat" parent="." index="13" instance=ExtResource("5_px3o6")]
+position = Vector2(472, 633)
+collision_layer = 4

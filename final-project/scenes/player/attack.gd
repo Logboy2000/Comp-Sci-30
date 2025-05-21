@@ -22,7 +22,7 @@ var current_state = AttackState.IDLE
 var can_attack = true
 var hit_enemies = []
 @export var attack_direction = Vector2.RIGHT
-var player: PlatformerController2D
+var player: Player
 var has_applied_knockback = false
 
 func _ready():

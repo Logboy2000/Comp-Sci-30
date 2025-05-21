@@ -17,10 +17,12 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="lilguy" type="CharacterBody2D"]
+[node name="lilguy" type="CharacterBody2D" node_paths=PackedStringArray("animated_sprite")]
 collision_layer = 2
 script = ExtResource("1_iwjhx")
 affected_by_gravity = true
+animated_sprite = NodePath("AnimatedSprite2D")
+metadata/_custom_type_script = "uid://cin3uwpgfq1s1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 0.5)

@@ -7,6 +7,7 @@ class_name Enemy extends CharacterBody2D
 @export var gravity = 980
 @export var affected_by_gravity = false
 @export var knockback_duration = 0.05  # How long knockback lasts
+@export var animated_sprite: AnimatedSprite2D
 
 var current_health: int
 var is_invincible = false
@@ -16,6 +17,8 @@ var pre_knockback_velocity = Vector2.ZERO
 
 
 func _ready():
+	if animated_sprite:
+		animated_sprite.play("default")
 	current_health = max_health
 	if affected_by_gravity:
 		motion_mode = CharacterBody2D.MOTION_MODE_GROUNDED

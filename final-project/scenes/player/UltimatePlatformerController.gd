@@ -1,11 +1,10 @@
 extends CharacterBody2D
 
-class_name PlatformerController2D
+class_name Player
 
 # Audio
 const SLASH_SOUND = preload("res://audio/slash.wav")
 const CLASSIC_HURT = preload("res://audio/classic_hurt.mp3")
-
 @onready var right_attack: Node2D = $RightAttack
 @onready var left_attack: Node2D = $LeftAttack
 @onready var downward_attack = $DownwardAttack
@@ -770,8 +769,8 @@ func owie(amount: int, damage_position: Vector2 = global_position):
 	) 
 	if current_health <= 0:
 		die()
-	
-	Audio.play_sound(CLASSIC_HURT)
+	else:
+		Audio.play_sound(CLASSIC_HURT)
 
 func die():
 	is_dead = true
