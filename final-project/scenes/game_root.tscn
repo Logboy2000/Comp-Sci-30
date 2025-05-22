@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dykrla05monq3"]
+[gd_scene load_steps=22 format=3 uid="uid://dykrla05monq3"]
 
 [ext_resource type="Script" uid="uid://qh41ip6v0r4a" path="res://scenes/game_root.gd" id="1_nrhpl"]
 [ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://scenes/player/player.tscn" id="2_uc526"]
@@ -108,62 +108,6 @@ tracks/3/keys = {
 "values": [Vector2(1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_1ayw0"]
-resource_name = "bigratjumpscare"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_ywsqi"]
-resource_name = "bigratjumpscare2"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.732043, 1.23),
-"update": 0,
-"values": [0.0, 6.28319]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.732043, 1.23),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
 [sub_resource type="Animation" id="Animation_t6xqi"]
 resource_name = "fade"
 length = 0.2
@@ -180,11 +124,50 @@ tracks/0/keys = {
 "values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_ywsqi"]
+resource_name = "bigratjumpscare"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.732043, 1.62299),
+"update": 0,
+"values": [0.0, 12.5664]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.732043, 1.86433),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("OverlayLayer/Control/TransitionManager/TextureRect:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v5ckt"]
 _data = {
 &"RESET": SubResource("Animation_v5ckt"),
-&"bigratjumpscare": SubResource("Animation_1ayw0"),
-&"bigratjumpscare2": SubResource("Animation_ywsqi"),
+&"bigratjumpscare": SubResource("Animation_ywsqi"),
 &"fade": SubResource("Animation_t6xqi")
 }
 
@@ -203,7 +186,7 @@ top_level = true
 script = ExtResource("4_uc526")
 follow_mode = 2
 follow_target = NodePath("../Player")
-zoom = Vector2(4, 4)
+zoom = Vector2(2.5, 2.5)
 tween_resource = SubResource("Resource_1ayw0")
 tween_on_load = false
 draw_limits = true
@@ -216,7 +199,7 @@ metadata/_edit_lock_ = true
 process_mode = 3
 physics_interpolation_mode = 1
 ignore_rotation = false
-zoom = Vector2(4, 4)
+zoom = Vector2(2.5, 2.5)
 process_callback = 0
 limit_left = -1590
 limit_smoothed = true
