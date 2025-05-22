@@ -31,6 +31,12 @@ func _physics_process(delta: float) -> void:
 			velocity.y += gravity * delta
 	
 	# If not in knockback, update velocity based on enemy behavior
+	
+	if velocity.x > 0:
+		animated_sprite.flip_h = false
+	if velocity.x < 0:
+		animated_sprite.flip_h = true
+	
 	if not is_knockback:
 		_update_movement(delta)
 	

@@ -25,14 +25,14 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("OverlayLayer/Control/DeathScreen/ColorRect2:modulate")
+tracks/0/path = NodePath("OverlayLayer/Control/DeathScreen:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_i7pw8"]
@@ -41,14 +41,14 @@ length = 2.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("OverlayLayer/Control/DeathScreen/ColorRect2:modulate")
+tracks/0/path = NodePath("OverlayLayer/Control/DeathScreen:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 2),
+"times": PackedFloat32Array(0, 1.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6puu6"]
@@ -203,7 +203,7 @@ top_level = true
 script = ExtResource("4_uc526")
 follow_mode = 2
 follow_target = NodePath("../Player")
-zoom = Vector2(4, 4)
+zoom = Vector2(2, 2)
 tween_resource = SubResource("Resource_1ayw0")
 tween_on_load = false
 draw_limits = true
@@ -216,7 +216,7 @@ metadata/_edit_lock_ = true
 process_mode = 3
 physics_interpolation_mode = 1
 ignore_rotation = false
-zoom = Vector2(4, 4)
+zoom = Vector2(2, 2)
 process_callback = 0
 limit_left = -1590
 limit_smoothed = true
@@ -342,6 +342,7 @@ text = "QUIT GAME"
 
 [node name="DeathScreen" type="Control" parent="OverlayLayer/Control"]
 visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -389,15 +390,6 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 text = "again"
-
-[node name="ColorRect2" type="ColorRect" parent="OverlayLayer/Control/DeathScreen"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
 
 [node name="TransitionManager" type="Control" parent="OverlayLayer/Control"]
 layout_mode = 1

@@ -1,28 +1,29 @@
 extends Enemy
 
-var target: Player = null
-var start_pos: Vector2 = Vector2.ZERO
-const MAX_DISTANCE: float = 100.0
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@export var acceleration: float = 100
+@export var max_speed: float = 300
+var direction = 1
+var speed = 1000
+var target: Player
 
-func _ready() -> void:
-	super._ready()
-	start_pos = global_position
 
-func _update_movement(delta: float) -> void:
-	if target:
-		# Follow target
-		var direction = (target.global_position - global_position).normalized()
-		velocity = direction * move_speed
+
+# CAlLED BY PARENT CLASS
+func _update_movement(delta: float):
+	if target != null:
+		var to_target = (target.global_position - global_position).normalized()
+		var desired_velocity = to_target * max_speed
+		# Smoothly approach desired velocity
+		velocity = velocity.lerp(desired_velocity, acceleration * delta / max_speed)
 	else:
-		var distance_from_start = global_position.distance_to(start_pos)
-		if distance_from_start > MAX_DISTANCE:
-			# Move back to start position
-			var return_dir = (start_pos - global_position).normalized()
-			velocity = return_dir * move_speed
-		else:
-			# Idle: stop movement
-			velocity = Vector2.ZERO
+		# Smoothly decelerate to stop
+		velocity = velocity.move_toward(Vector2.ZERO, acceleration * delta)
 
+
+
+# COnnECTED thru editor
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is Player:
 		target = body
+		print("player seen!")

@@ -1,4 +1,4 @@
-class_name Player extends CharacterBody2D
+extends CharacterBody2D
 
 # Nodes
 @onready var animation_player: AnimationPlayer = $AnimationPlayer

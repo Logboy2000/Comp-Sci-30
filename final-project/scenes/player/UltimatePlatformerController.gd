@@ -1,6 +1,4 @@
-extends CharacterBody2D
-
-class_name Player
+class_name Player extends CharacterBody2D
 
 # Audio
 const SLASH_SOUND = preload("res://audio/slash.wav")
