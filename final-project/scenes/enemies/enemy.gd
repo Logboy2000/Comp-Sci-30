@@ -9,6 +9,9 @@ class_name Enemy extends CharacterBody2D
 @export var knockback_duration = 0.05  # How long knockback lasts
 @export var animated_sprite: AnimatedSprite2D
 
+var enemy_id: String
+var room_name: String
+
 var current_health: int
 var is_invincible = false
 var facing_right = true
@@ -17,6 +20,16 @@ var pre_knockback_velocity = Vector2.ZERO
 
 
 func _ready():
+	# Auto-assign room name using the current scene's name
+	room_name = get_tree().current_scene.name
+
+	# Auto-assign enemy ID if not already set in the editor
+	if enemy_id == "":
+		enemy_id = generate_unique_id()
+
+	if Global.is_enemy_killed(room_name, enemy_id):
+		queue_free()  # Enemy was already killed
+	
 	if animated_sprite:
 		animated_sprite.play("default")
 	current_health = max_health
@@ -24,6 +37,10 @@ func _ready():
 		motion_mode = CharacterBody2D.MOTION_MODE_GROUNDED
 	else:
 		motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+
+func generate_unique_id() -> String:
+	# Use the scene path + node name (or position) to ensure uniqueness
+	return "%s_%s" % [room_name, name]
 
 func _physics_process(delta: float) -> void:
 	if affected_by_gravity:
@@ -77,6 +94,7 @@ func start_knockback_timer():
 
 func die():
 	# Override this in child classes for death effects
+	Global.mark_enemy_killed(room_name,enemy_id)
 	queue_free()
 
 func on_hit():

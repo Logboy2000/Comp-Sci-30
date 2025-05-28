@@ -646,6 +646,7 @@ func _physics_process(delta):
 		
 		# Handle attack
 		if Input.is_action_just_pressed("attack"):
+			Audio.play_sound(SLASH_SOUND, 0.9, 1.1)
 			is_attacking = true
 			if attack_direction == Vector2.UP:
 				upward_attack.start_attack()

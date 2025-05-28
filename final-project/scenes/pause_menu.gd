@@ -1,4 +1,5 @@
 extends Control
+@onready var death_screen: Control = $"../DeathScreen"
 
 func _ready() -> void:
 	visible = false
@@ -12,9 +13,10 @@ func _on_resume_button_pressed() -> void:
 	toggle_pause()
 
 func toggle_pause():
+	if death_screen.visible: return
 	visible = !visible
 	get_tree().paused = visible
 
 
 func _on_quit_button_pressed() -> void:
-	get_tree().quit(0)
+	get_tree().quit(69)
