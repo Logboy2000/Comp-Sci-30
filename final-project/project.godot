@@ -13,7 +13,9 @@ config_version=5
 config/name="Final Project"
 run/main_scene="uid://dykrla05monq3"
 config/features=PackedStringArray("4.4", "Mobile")
-config/icon="res://icon.svg"
+boot_splash/bg_color=Color(1, 1, 1, 1)
+boot_splash/fullsize=false
+boot_splash/image="uid://cd0vb6a1u7xpu"
 
 [autoload]
 
