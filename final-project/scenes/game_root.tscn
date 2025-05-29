@@ -1,7 +1,7 @@
 [gd_scene load_steps=22 format=3 uid="uid://dykrla05monq3"]
 
 [ext_resource type="Script" uid="uid://qh41ip6v0r4a" path="res://scenes/game_root.gd" id="1_nrhpl"]
-[ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://scenes/player/player.tscn" id="2_uc526"]
+[ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://scenes/objects/player/player.tscn" id="2_uc526"]
 [ext_resource type="Script" uid="uid://bnp1pw6uf28r3" path="res://scenes/room_manager.gd" id="3_nlfu4"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="4_uc526"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="5_t6xqi"]
@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://b2tmulursfq46" path="res://scenes/transition_manager.gd" id="7_t6xqi"]
 [ext_resource type="Texture2D" uid="uid://dyis8kds5mb8x" path="res://sprites/bigrat.jpg" id="8_v5ckt"]
 [ext_resource type="Script" uid="uid://bg05oi26f4w61" path="res://scenes/ui/health_bar.gd" id="10_5dyip"]
-[ext_resource type="Script" uid="uid://cxh0fk7yl5cov" path="res://scenes/pause_menu.gd" id="11_i7pw8"]
+[ext_resource type="Script" uid="uid://cxh0fk7yl5cov" path="res://scenes/ui/pause_menu.gd" id="11_i7pw8"]
 [ext_resource type="Texture2D" uid="uid://cdarct5x6n1jg" path="res://sprites/cheese.png" id="11_ywsqi"]
 [ext_resource type="Texture2D" uid="uid://b21mvgyc8m3eb" path="res://sprites/missing_cheese.png" id="12_i7pw8"]
 
@@ -263,18 +263,7 @@ script = ExtResource("10_5dyip")
 full_icon = ExtResource("11_ywsqi")
 empty_icon = ExtResource("12_i7pw8")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="OverlayLayer/Control/PlayerHud/MarginContainer/VBoxContainer"]
-clip_contents = false
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-bbcode_enabled = true
-text = "[shake]look[/shake] [tornado radius=3.0 freq=10.0 connected=1]I made some[/tornado] [rainbow freq=1.0 sat=0.8 val=0.8 speed=1.0]silly[/rainbow] [pulse freq=5.0 color=#ffffff40 ease=-2.0]text![/pulse]
-
-"
-
 [node name="PauseMenu" type="Control" parent="OverlayLayer/Control"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -293,34 +282,62 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.443137)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="OverlayLayer/Control/PauseMenu/ColorRect"]
+[node name="CenterContainer" type="CenterContainer" parent="OverlayLayer/Control/PauseMenu/ColorRect"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -243.0
+offset_top = -107.0
+offset_right = 243.0
+offset_bottom = 107.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer"]
+layout_mode = 2
 alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="OverlayLayer/Control/PauseMenu/ColorRect/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer"]
 clip_contents = false
 layout_mode = 2
+size_flags_vertical = 6
 theme_override_font_sizes/normal_font_size = 91
 bbcode_enabled = true
 text = "pause"
 fit_content = true
+scroll_active = false
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="OverlayLayer/Control/PauseMenu/ColorRect/VBoxContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_constants/margin_top = 30
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+bbcode_enabled = true
+text = "[shake]look[/shake] [tornado radius=3.0 freq=10.0 connected=1]I made some[/tornado] [rainbow freq=1.0 sat=0.8 val=0.8 speed=1.0]silly[/rainbow] [pulse freq=5.0 color=#ffffff40 ease=-2.0]text![/pulse]"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+
+[node name="ResumeButton" type="Button" parent="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer"]
+layout_mode = 2
 size_flags_vertical = 4
 text = "Resume"
 
-[node name="QuitButton" type="Button" parent="OverlayLayer/Control/PauseMenu/ColorRect/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
 text = "QUIT GAME"
 
 [node name="DeathScreen" type="Control" parent="OverlayLayer/Control"]
@@ -427,6 +444,6 @@ pivot_offset = Vector2(591, 344)
 mouse_filter = 2
 texture = ExtResource("8_v5ckt")
 
-[connection signal="pressed" from="OverlayLayer/Control/PauseMenu/ColorRect/VBoxContainer/ResumeButton" to="OverlayLayer/Control/PauseMenu" method="_on_resume_button_pressed"]
-[connection signal="pressed" from="OverlayLayer/Control/PauseMenu/ColorRect/VBoxContainer/QuitButton" to="OverlayLayer/Control/PauseMenu" method="_on_quit_button_pressed"]
+[connection signal="pressed" from="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer/ResumeButton" to="OverlayLayer/Control/PauseMenu" method="_on_resume_button_pressed"]
+[connection signal="pressed" from="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer/QuitButton" to="OverlayLayer/Control/PauseMenu" method="_on_quit_button_pressed"]
 [connection signal="pressed" from="OverlayLayer/Control/DeathScreen/ColorRect/VBoxContainer/Button" to="." method="_on_respawn_pressed"]

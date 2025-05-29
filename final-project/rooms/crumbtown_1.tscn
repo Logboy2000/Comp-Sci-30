@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=4 uid="uid://dbi14usjagogw"]
 
 [ext_resource type="PackedScene" uid="uid://b7x3e2rg17srt" path="res://scenes/room.tscn" id="1_8gnwq"]
-[ext_resource type="PackedScene" uid="uid://bx0uc0hvhd30j" path="res://scenes/triggers/entrance.tscn" id="2_ftf7v"]
-[ext_resource type="PackedScene" uid="uid://crlo22wks8oky" path="res://scenes/triggers/room_transition.tscn" id="3_tmsqw"]
+[ext_resource type="PackedScene" uid="uid://bx0uc0hvhd30j" path="res://scenes/objects/triggers/entrance.tscn" id="2_ftf7v"]
+[ext_resource type="PackedScene" uid="uid://crlo22wks8oky" path="res://scenes/objects/triggers/room_transition.tscn" id="3_tmsqw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tmsqw"]
 size = Vector2(594.5, 604)

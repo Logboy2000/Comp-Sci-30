@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bx0uc0hvhd30j"]
 
-[ext_resource type="Script" uid="uid://dybneynpfo5ny" path="res://scenes/triggers/entrance.gd" id="1_lc7a3"]
+[ext_resource type="Script" uid="uid://dybneynpfo5ny" path="res://scenes/objects/triggers/entrance.gd" id="1_lc7a3"]
 [ext_resource type="Texture2D" uid="uid://1ymshet4dsas" path="res://sprites/player/walk.png" id="2_i1crt"]
 
 [node name="Entrance" type="Node2D"]

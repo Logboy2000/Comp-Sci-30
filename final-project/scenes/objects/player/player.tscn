@@ -1,11 +1,11 @@
 [gd_scene load_steps=34 format=3 uid="uid://b4hrdpl5dijvs"]
 
-[ext_resource type="Script" uid="uid://dhkyapc38n0xe" path="res://scenes/player/UltimatePlatformerController.gd" id="1_0owmy"]
+[ext_resource type="Script" uid="uid://dhkyapc38n0xe" path="res://scenes/objects/player/player.gd" id="1_0owmy"]
 [ext_resource type="Texture2D" uid="uid://bbtim2up15msd" path="res://sprites/player/fall.png" id="3_0owmy"]
 [ext_resource type="Texture2D" uid="uid://cra0lg6vdlokr" path="res://sprites/player/jump.png" id="3_75vfm"]
 [ext_resource type="Texture2D" uid="uid://1ymshet4dsas" path="res://sprites/player/walk.png" id="3_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://d1fpj01ihpfyl" path="res://sprites/player/ratspin.png" id="3_p47bc"]
-[ext_resource type="Script" uid="uid://b8c4nq70htbfp" path="res://scenes/player/attack.gd" id="3_yw30f"]
+[ext_resource type="Script" uid="uid://b8c4nq70htbfp" path="res://scenes/objects/player/attack.gd" id="3_yw30f"]
 [ext_resource type="Texture2D" uid="uid://bb6nm7yo2jyki" path="res://sprites/player/rat_scratch_forward.png" id="4_qjkh3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qk4a2"]
@@ -414,3 +414,4 @@ libraries = {
 [connection signal="body_entered" from="UpwardAttack/Hitbox" to="UpwardAttack" method="_on_hitbox_body_entered"]
 [connection signal="timeout" from="UpwardAttack/RecoveryTimer" to="UpwardAttack" method="_on_recovery_timer_timeout"]
 [connection signal="area_entered" from="OwieBox" to="." method="_on_owie_box_area_entered"]
+[connection signal="body_entered" from="OwieBox" to="." method="_on_owie_box_body_entered"]

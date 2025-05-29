@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://bu5aorryq6rlu"]
+
+[ext_resource type="Script" uid="uid://cshqp6c7d61ca" path="res://scenes/objects/rat_trap.gd" id="1_2fbbt"]
+[ext_resource type="Texture2D" uid="uid://2jeotgbyy24q" path="res://sprites/tiles/grass/grass_bottom.png" id="1_8ek7r"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_2sqpi"]
+a = Vector2(-5, 5)
+b = Vector2(5, 5)
+
+[node name="RatTrap" type="RigidBody2D"]
+collision_layer = 0
+script = ExtResource("1_2fbbt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(-2.53111e-07, 2.89525)
+rotation = 3.14159
+scale = Vector2(1, 0.638094)
+texture = ExtResource("1_8ek7r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("SegmentShape2D_2sqpi")

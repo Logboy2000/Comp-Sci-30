@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://c6v3coaws53d1"]
 
-[ext_resource type="Script" uid="uid://d1t1j0ebckcx3" path="res://scenes/enemies/flying_rat.gd" id="1_wjifv"]
+[ext_resource type="Script" uid="uid://d1t1j0ebckcx3" path="res://scenes/objects/enemies/flying_rat.gd" id="1_wjifv"]
 [ext_resource type="Texture2D" uid="uid://bo0bdo5jqnxn1" path="res://sprites/enemies/Bat_Fly.png" id="2_wjifv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wjifv"]

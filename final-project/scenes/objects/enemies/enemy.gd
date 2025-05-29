@@ -1,14 +1,16 @@
 class_name Enemy extends CharacterBody2D
 
 @export var max_health = 30
-@export var move_speed = 50.0
 @export var knockback_resistance = 0.5  # 0 = no resistance, 1 = full resistance
 @export var invincibility_duration = 0.2  # Seconds of invincibility after being hit
 @export var gravity = 980
 @export var affected_by_gravity = false
 @export var knockback_duration = 0.05  # How long knockback lasts
-@export var animated_sprite: AnimatedSprite2D
+@export var contact_damage: int = 1
 
+@export_group("Nodes")
+@export var animated_sprite: AnimatedSprite2D
+@export var collision_shape: CollisionShape2D
 var enemy_id: String
 var room_name: String
 

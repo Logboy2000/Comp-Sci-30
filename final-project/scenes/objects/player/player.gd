@@ -746,7 +746,7 @@ func _on_owie_box_area_entered(area: Area2D) -> void:
 		Global.room_manager.change_room(area.target_room, area.entrance_id)
 
 func owie(amount: int, damage_position: Vector2 = global_position):
-	if not vulnurable:
+	if not vulnurable or amount <= 0:
 		return
 	
 	is_attacking = false
@@ -792,10 +792,6 @@ func handle_owie():
 		animation_player.play("RESET")
 	else:
 		animation_player.play("invulnerable")
-	
-	for body in owie_box.get_overlapping_bodies():
-		if body is Enemy:
-			owie(1, body.position)
 
 func _on_forward_attack_attack_finished():
 	is_attacking = false
@@ -810,3 +806,8 @@ func pogo():
 	if is_on_floor():
 		return
 	velocity.y = pogo_velocity
+
+
+func _on_owie_box_body_entered(body: Node2D) -> void:
+	if body is Enemy:
+		owie(body.contact_damage)

@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://dvbnhu4ci8e6o"]
+
+[ext_resource type="Script" uid="uid://d1lrcf2k584u3" path="res://scenes/objects/enemies/trapper.gd" id="1_ygauy"]
+[ext_resource type="Texture2D" uid="uid://8ulebl3mdo3c" path="res://sprites/cursors/blackwhite.png" id="2_fbrt1"]
+[ext_resource type="PackedScene" uid="uid://bu5aorryq6rlu" path="res://scenes/objects/rat_trap.tscn" id="2_xr4bh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iwjhx"]
+size = Vector2(13, 13)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ln6qp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_fbrt1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xr4bh"]
+size = Vector2(244, 83)
+
+[node name="trapper" type="CharacterBody2D" node_paths=PackedStringArray("animated_sprite", "collision_shape")]
+collision_layer = 2
+script = ExtResource("1_ygauy")
+trap_scene = ExtResource("2_xr4bh")
+contact_damage = 0
+animated_sprite = NodePath("AnimatedSprite2D")
+collision_shape = NodePath("CollisionShape2D")
+metadata/_custom_type_script = "uid://cin3uwpgfq1s1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 2.5)
+shape = SubResource("RectangleShape2D_iwjhx")
+debug_color = Color(1, 0, 0, 0.419608)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(1, 0.2, 1, 1)
+sprite_frames = SubResource("SpriteFrames_ln6qp")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(0, -41.5)
+shape = SubResource("RectangleShape2D_xr4bh")
+
+[node name="TrapTimer" type="Timer" parent="."]
+wait_time = 2.0
+
+[connection signal="timeout" from="TrapTimer" to="." method="_on_trap_timer_timeout"]

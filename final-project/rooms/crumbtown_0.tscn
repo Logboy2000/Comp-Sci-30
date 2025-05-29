@@ -1,10 +1,9 @@
-[gd_scene load_steps=7 format=4 uid="uid://duh00pb5rj6qq"]
+[gd_scene load_steps=6 format=4 uid="uid://duh00pb5rj6qq"]
 
 [ext_resource type="PackedScene" uid="uid://b7x3e2rg17srt" path="res://scenes/room.tscn" id="1_wssal"]
-[ext_resource type="PackedScene" uid="uid://bx0uc0hvhd30j" path="res://scenes/triggers/entrance.tscn" id="2_nmuv3"]
-[ext_resource type="PackedScene" uid="uid://j7myepfg202f" path="res://scenes/enemies/lilguy.tscn" id="3_px3o6"]
-[ext_resource type="PackedScene" uid="uid://crlo22wks8oky" path="res://scenes/triggers/room_transition.tscn" id="3_ymwvd"]
-[ext_resource type="PackedScene" uid="uid://c6v3coaws53d1" path="res://scenes/enemies/flying_rat.tscn" id="5_px3o6"]
+[ext_resource type="PackedScene" uid="uid://bx0uc0hvhd30j" path="res://scenes/objects/triggers/entrance.tscn" id="2_nmuv3"]
+[ext_resource type="PackedScene" uid="uid://crlo22wks8oky" path="res://scenes/objects/triggers/room_transition.tscn" id="3_ymwvd"]
+[ext_resource type="PackedScene" uid="uid://dvbnhu4ci8e6o" path="res://scenes/objects/enemies/trapper.tscn" id="4_t7xaq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t7xaq"]
 size = Vector2(726.5, 782)
@@ -34,23 +33,5 @@ position = Vector2(763, 741)
 target_room = "uid://dbi14usjagogw"
 entrance_id = 1
 
-[node name="lilguy" parent="." index="7" instance=ExtResource("3_px3o6")]
-position = Vector2(430, 483)
-
-[node name="lilguy2" parent="." index="8" instance=ExtResource("3_px3o6")]
-position = Vector2(452, 506)
-
-[node name="lilguy3" parent="." index="9" instance=ExtResource("3_px3o6")]
-position = Vector2(392, 514)
-
-[node name="lilguy4" parent="." index="10" instance=ExtResource("3_px3o6")]
-position = Vector2(381, 459)
-
-[node name="lilguy5" parent="." index="11" instance=ExtResource("3_px3o6")]
-position = Vector2(403, 482)
-
-[node name="lilguy6" parent="." index="12" instance=ExtResource("3_px3o6")]
-position = Vector2(343, 490)
-
-[node name="FlyingRat" parent="." index="13" instance=ExtResource("5_px3o6")]
-position = Vector2(516, 691)
+[node name="trapper" parent="." index="7" instance=ExtResource("4_t7xaq")]
+position = Vector2(273, 725)

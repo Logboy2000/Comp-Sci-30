@@ -1,10 +1,10 @@
 [gd_scene load_steps=5 format=3 uid="uid://j7myepfg202f"]
 
-[ext_resource type="Script" uid="uid://brqfmuhp48ojm" path="res://scenes/enemies/lilguy.gd" id="1_iwjhx"]
+[ext_resource type="Script" uid="uid://brqfmuhp48ojm" path="res://scenes/objects/enemies/lilguy.gd" id="1_iwjhx"]
 [ext_resource type="Texture2D" uid="uid://8ulebl3mdo3c" path="res://sprites/cursors/blackwhite.png" id="2_dgipi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iwjhx"]
-size = Vector2(13, 17)
+size = Vector2(13, 13)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ln6qp"]
 animations = [{
@@ -20,19 +20,31 @@ animations = [{
 [node name="lilguy" type="CharacterBody2D" node_paths=PackedStringArray("animated_sprite")]
 collision_layer = 2
 script = ExtResource("1_iwjhx")
+speed = 100
 affected_by_gravity = true
 animated_sprite = NodePath("AnimatedSprite2D")
 metadata/_custom_type_script = "uid://cin3uwpgfq1s1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, 0.5)
+position = Vector2(-0.5, 2.5)
 shape = SubResource("RectangleShape2D_iwjhx")
 debug_color = Color(1, 0, 0, 0.419608)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_ln6qp")
 
-[node name="Timer" type="Timer" parent="."]
-autostart = true
+[node name="RayCastLL" type="RayCast2D" parent="."]
+position = Vector2(-7, 0)
+target_position = Vector2(-0.5, 0)
 
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[node name="RayCastRR" type="RayCast2D" parent="."]
+position = Vector2(6, 0)
+target_position = Vector2(0.5, 0)
+
+[node name="RayCastRD" type="RayCast2D" parent="."]
+position = Vector2(7, 8)
+target_position = Vector2(0, 7)
+
+[node name="RayCastLD" type="RayCast2D" parent="."]
+position = Vector2(-8, 8)
+target_position = Vector2(0, 7)

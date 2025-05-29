@@ -4,7 +4,7 @@ var transition = "fade"
 const TRANSITION_SOUND = preload("res://audio/ford_ajar.mp3")
 const BATMAN_TRANSITION = preload("res://audio/batman_transition.mp3")
 func fade_in():
-	if randi_range(1, 2) == 1:
+	if randi_range(1, 100) == 1:
 		transition = "bigratjumpscare"
 		Audio.play_sound(BATMAN_TRANSITION)
 	else:

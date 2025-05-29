@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://crlo22wks8oky"]
 
-[ext_resource type="Script" uid="uid://b2hqbgehng1d5" path="res://scenes/triggers/room_transition.gd" id="1_2ij56"]
+[ext_resource type="Script" uid="uid://b2hqbgehng1d5" path="res://scenes/objects/triggers/room_transition.gd" id="1_2ij56"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ot5uh"]
 size = Vector2(50, 50)
