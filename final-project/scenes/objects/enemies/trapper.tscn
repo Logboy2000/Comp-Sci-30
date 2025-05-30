@@ -25,6 +25,7 @@ size = Vector2(244, 83)
 collision_layer = 2
 script = ExtResource("1_ygauy")
 trap_scene = ExtResource("2_xr4bh")
+knockback_resistance = 1.0
 contact_damage = 0
 animated_sprite = NodePath("AnimatedSprite2D")
 collision_shape = NodePath("CollisionShape2D")
