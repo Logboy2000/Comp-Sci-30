@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://du5mht80p2tkk"]
+
+[ext_resource type="Theme" uid="uid://di4h7o0l41s3u" path="res://theme.tres" id="1_ehata"]
+[ext_resource type="Script" uid="uid://k8pg3cv0w81b" path="res://autoloads/debug_menu.gd" id="1_gkmjo"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+layer = 100
+
+[node name="DebugMenu" type="Control" parent="."]
+z_index = 4096
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme = ExtResource("1_ehata")
+script = ExtResource("1_gkmjo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugMenu"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -47.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="FPS" type="Label" parent="DebugMenu/VBoxContainer"]
+layout_mode = 2
+text = "fps:"
+
+[node name="UpdateTimer" type="Timer" parent="DebugMenu"]
+autostart = true
+ignore_time_scale = true
+
+[connection signal="timeout" from="DebugMenu/UpdateTimer" to="DebugMenu" method="_on_update_timer_timeout"]

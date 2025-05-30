@@ -8,7 +8,7 @@ class_name Enemy extends CharacterBody2D
 @export var knockback_duration = 0.05  # How long knockback lasts
 @export var contact_damage: int = 1
 
-@export_group("Nodes")
+@export_category("Nodes")
 @export var animated_sprite: AnimatedSprite2D
 @export var collision_shape: CollisionShape2D
 var enemy_id: String

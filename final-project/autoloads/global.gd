@@ -19,7 +19,7 @@ func freeze_game(duration_seconds: float):
 	get_tree().paused = false
 	
 func die():
-	#Audio.play_sound(FLASHBANG)
+	Audio.play_sound(FLASHBANG)
 	game_root.show_death_screen()
 
 

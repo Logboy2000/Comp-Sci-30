@@ -26,6 +26,7 @@ collision_layer = 2
 script = ExtResource("1_ygauy")
 trap_scene = ExtResource("2_xr4bh")
 knockback_resistance = 1.0
+affected_by_gravity = true
 contact_damage = 0
 animated_sprite = NodePath("AnimatedSprite2D")
 collision_shape = NodePath("CollisionShape2D")
@@ -48,5 +49,6 @@ shape = SubResource("RectangleShape2D_xr4bh")
 
 [node name="TrapTimer" type="Timer" parent="."]
 wait_time = 2.0
+autostart = true
 
 [connection signal="timeout" from="TrapTimer" to="." method="_on_trap_timer_timeout"]

@@ -192,7 +192,7 @@ var rollTap
 var downTap
 var twirlTap
 
-@export var max_health: int = 5
+@export var max_health: int = 10
 @export var invincibility_frames: int = 80
 var current_health: int = 0
 @export var knockback_force: Vector2 = Vector2(400.0, 250.0)
@@ -362,6 +362,9 @@ func _physics_process(delta):
 		vulnurable = false
 	else:
 		vulnurable = true
+		for body in owie_box.get_overlapping_bodies():
+			if body is Enemy:
+				owie(body.contact_damage, body.global_position)
 	if is_dead:
 		return
 	if !dset:
@@ -810,4 +813,4 @@ func pogo():
 
 func _on_owie_box_body_entered(body: Node2D) -> void:
 	if body is Enemy:
-		owie(body.contact_damage)
+		owie(body.contact_damage, body.global_position)
