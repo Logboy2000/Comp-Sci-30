@@ -16,6 +16,5 @@ func show_death_screen():
 func _on_respawn_pressed() -> void:
 	room_manager.reload_current_room()
 	await room_manager.new_room_loaded
-	Global.reset_killed_enemies()
 	death_screen.hide()
 	player.respawn()

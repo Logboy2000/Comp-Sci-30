@@ -20,6 +20,7 @@ func freeze_game(duration_seconds: float):
 	
 func die():
 	Audio.play_sound(FLASHBANG)
+	reset_killed_enemies()
 	game_root.show_death_screen()
 
 
@@ -34,7 +35,7 @@ func is_enemy_killed(room_name: String, enemy_id: String) -> bool:
 	return killed_enemies.get(room_name, []).has(enemy_id)
 
 func reset_killed_enemies():
-	killed_enemies.clear()
+	killed_enemies = {}
 	
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("respawn_enemies"):
