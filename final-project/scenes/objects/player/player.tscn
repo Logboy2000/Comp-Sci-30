@@ -245,7 +245,7 @@ _data = {
 &"invulnerable": SubResource("Animation_h17s1")
 }
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("PlayerSprite", "PlayerCollider", "animation_player")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("PlayerSprite", "PlayerCollider", "animation_player") groups=["player"]]
 collision_layer = 6
 script = ExtResource("1_0owmy")
 PlayerSprite = NodePath("AnimatedSprite2D")

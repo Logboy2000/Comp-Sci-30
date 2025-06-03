@@ -34,6 +34,10 @@ window/vsync/vsync_mode=0
 
 enabled=PackedStringArray("res://addons/phantom_camera/plugin.cfg", "res://addons/save_system/plugin.cfg")
 
+[global_group]
+
+player=""
+
 [input]
 
 left={
