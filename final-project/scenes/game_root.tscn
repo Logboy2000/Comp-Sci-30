@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dykrla05monq3"]
+[gd_scene load_steps=25 format=3 uid="uid://dykrla05monq3"]
 
 [ext_resource type="Script" uid="uid://qh41ip6v0r4a" path="res://scenes/game_root.gd" id="1_nrhpl"]
 [ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://scenes/objects/player/player.tscn" id="2_uc526"]
@@ -7,12 +7,14 @@
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="5_t6xqi"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="6_v5ckt"]
 [ext_resource type="Theme" uid="uid://di4h7o0l41s3u" path="res://theme.tres" id="7_6v30a"]
+[ext_resource type="Shader" uid="uid://cxou6h8d2m5gi" path="res://rat.gdshader" id="7_i7pw8"]
 [ext_resource type="Script" uid="uid://b2tmulursfq46" path="res://scenes/transition_manager.gd" id="7_t6xqi"]
 [ext_resource type="Texture2D" uid="uid://dyis8kds5mb8x" path="res://sprites/bigrat.jpg" id="8_v5ckt"]
 [ext_resource type="Script" uid="uid://bg05oi26f4w61" path="res://scenes/ui/health_bar.gd" id="10_5dyip"]
 [ext_resource type="Script" uid="uid://cxh0fk7yl5cov" path="res://scenes/ui/pause_menu.gd" id="11_i7pw8"]
 [ext_resource type="Texture2D" uid="uid://cdarct5x6n1jg" path="res://sprites/cheese.png" id="11_ywsqi"]
 [ext_resource type="Texture2D" uid="uid://b21mvgyc8m3eb" path="res://sprites/missing_cheese.png" id="12_i7pw8"]
+[ext_resource type="Script" uid="uid://c3e28folvaxwk" path="res://scenes/shader_overlay.gd" id="15_x5456"]
 
 [sub_resource type="Resource" id="Resource_1ayw0"]
 script = ExtResource("5_t6xqi")
@@ -170,6 +172,10 @@ _data = {
 &"bigratjumpscare": SubResource("Animation_ywsqi"),
 &"fade": SubResource("Animation_t6xqi")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x5456"]
+shader = ExtResource("7_i7pw8")
+shader_parameter/blur_radius = 1.0
 
 [node name="GameRoot" type="Node2D"]
 script = ExtResource("1_nrhpl")
@@ -443,6 +449,18 @@ grow_vertical = 2
 pivot_offset = Vector2(591, 344)
 mouse_filter = 2
 texture = ExtResource("8_v5ckt")
+
+[node name="ShaderOverlay" type="ColorRect" parent="OverlayLayer"]
+z_index = 4096
+material = SubResource("ShaderMaterial_x5456")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 0.995551)
+mouse_filter = 2
+script = ExtResource("15_x5456")
 
 [connection signal="pressed" from="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer/ResumeButton" to="OverlayLayer/Control/PauseMenu" method="_on_resume_button_pressed"]
 [connection signal="pressed" from="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer/QuitButton" to="OverlayLayer/Control/PauseMenu" method="_on_quit_button_pressed"]

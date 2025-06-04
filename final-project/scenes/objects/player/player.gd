@@ -814,3 +814,5 @@ func pogo():
 func _on_owie_box_body_entered(body: Node2D) -> void:
 	if body is Enemy:
 		owie(body.contact_damage, body.global_position)
+		if body.kill_self_on_contact == true:
+			body.die()

@@ -53,6 +53,13 @@ func _ready():
 		func(v: bool):
 			AudioServer.set_bus_effect_enabled(0, 1, v)
 	)
+	register_setting(
+		"rat_mode",
+		false,
+		TYPE_BOOL,
+		func(v: bool):
+			Global.rat_mode = v
+	)
 	# Add more settings as needed
 	load_settings()
 	apply_all_settings()

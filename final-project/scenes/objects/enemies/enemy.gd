@@ -7,6 +7,8 @@ class_name Enemy extends CharacterBody2D
 @export var affected_by_gravity = false
 @export var knockback_duration = 0.05  # How long knockback lasts
 @export var contact_damage: int = 1
+@export var kill_self_on_contact: bool = false
+@export var mark_killed_on_death: bool = true
 
 @export_category("Nodes")
 @export var animated_sprite: AnimatedSprite2D
@@ -49,13 +51,12 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 			velocity.y += gravity * delta
 	
-	# If not in knockback, update velocity based on enemy behavior
-	
 	if velocity.x > 0:
 		animated_sprite.flip_h = false
 	if velocity.x < 0:
 		animated_sprite.flip_h = true
 	
+	# If not in knockback, update velocity based on enemy behavior
 	if not is_knockback:
 		_update_movement(delta)
 	
@@ -95,8 +96,9 @@ func start_knockback_timer():
 	velocity = pre_knockback_velocity
 
 func die():
-	# Override this in child classes for death effects
-	Global.mark_enemy_killed(room_name,enemy_id)
+	# Override in child classes for death effect
+	if mark_killed_on_death == true:
+		Global.mark_enemy_killed(room_name, enemy_id)
 	queue_free()
 
 func on_hit():

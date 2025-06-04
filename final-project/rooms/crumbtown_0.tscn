@@ -34,4 +34,4 @@ target_room = "uid://dbi14usjagogw"
 entrance_id = 1
 
 [node name="trapper" parent="." index="7" instance=ExtResource("4_t7xaq")]
-position = Vector2(340, 727)
+position = Vector2(342, 743)

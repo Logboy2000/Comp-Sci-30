@@ -28,9 +28,19 @@ offset_left = -47.0
 offset_bottom = 40.0
 grow_horizontal = 0
 
+[node name="version" type="Label" parent="DebugMenu/VBoxContainer"]
+layout_mode = 2
+text = "RAT TALES v0.0.1"
+
+[node name="NodeCount" type="Label" parent="DebugMenu/VBoxContainer"]
+layout_mode = 2
+text = "Node Count: "
+horizontal_alignment = 2
+
 [node name="FPS" type="Label" parent="DebugMenu/VBoxContainer"]
 layout_mode = 2
 text = "fps:"
+horizontal_alignment = 2
 
 [node name="UpdateTimer" type="Timer" parent="DebugMenu"]
 autostart = true

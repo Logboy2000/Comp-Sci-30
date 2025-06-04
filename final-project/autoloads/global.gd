@@ -13,6 +13,8 @@ var allow_pausing: bool = true
 
 var can_respawn_enemies: bool = true
 
+var rat_mode: bool = false
+
 func freeze_game(duration_seconds: float):
 	get_tree().paused = true
 	await get_tree().create_timer(duration_seconds).timeout
