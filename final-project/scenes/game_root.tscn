@@ -182,9 +182,10 @@ script = ExtResource("1_nrhpl")
 
 [node name="RoomManager" type="Node2D" parent="."]
 script = ExtResource("3_nlfu4")
-starting_room = "uid://duh00pb5rj6qq"
+starting_room = "uid://dbi14usjagogw"
 
 [node name="Player" parent="." instance=ExtResource("2_uc526")]
+roll = true
 
 [node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
 process_mode = 3

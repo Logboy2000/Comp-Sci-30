@@ -42,3 +42,9 @@ func reset_killed_enemies():
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("respawn_enemies"):
 		reset_killed_enemies()
+
+func save_game(save_point: SavePoint):
+	SettingsManager.set_setting("has_roll", player.canRoll)
+	SettingsManager.set_setting("save_room", room_manager.current_scene_path)
+	SettingsManager.set_setting("save_entrance_id", save_point.entrance_id)
+	print("game saved!")

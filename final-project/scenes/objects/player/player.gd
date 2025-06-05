@@ -68,32 +68,11 @@ var is_attacking: bool = false
 @export var wallLatching: bool = false
 ##wall latching must be enabled for this to work. #If enabled, the player must hold down the "latch" key to wall latch. Assign "latch" in the project input settings. The player's input will be ignored when latching.
 @export var wallLatchingModifer: bool = false
-@export_category("Dashing")
-##The type of dashes the player can do.
-@export_enum("None", "Horizontal", "Vertical", "Four Way", "Eight Way") var dashType: int
-##How many dashes your player can do before needing to hit the ground.
-@export_range(0, 10) var dashes: int = 1
-##If enabled, pressing the opposite direction of a dash, during a dash, will zero the player's velocity.
-@export var dashCancel: bool = true
-##How far the player will dash. One of the dashing toggles must be on for this to be used.
-@export_range(1.5, 4) var dashLength: float = 2.5
-@export_category("Corner Cutting/Jump Correct")
-##If the player's head is blocked by a jump but only by a little, the player will be nudged in the right direction and their jump will execute as intended. NEEDS RAYCASTS TO BE ATTACHED TO THE PLAYER NODE. AND ASSIGNED TO MOUNTING RAYCAST. DISTANCE OF MOUNTING DETERMINED BY PLACEMENT OF RAYCAST.
-@export var cornerCutting: bool = false
-##How many pixels the player will be pushed (per frame) if corner cutting is needed to correct a jump.
-@export_range(1, 5) var correctionAmount: float = 1.5
-##Raycast used for corner cutting calculations. Place above and to the left of the players head point up. ALL ARE NEEDED FOR IT TO WORK.
-@export var leftRaycast: RayCast2D
-##Raycast used for corner cutting calculations. Place above of the players head point up. ALL ARE NEEDED FOR IT TO WORK.
-@export var middleRaycast: RayCast2D
-##Raycast used for corner cutting calculations. Place above and to the right of the players head point up. ALL ARE NEEDED FOR IT TO WORK.
-@export var rightRaycast: RayCast2D
+
 @export_category("Down Input")
-##Holding down will crouch the player. Crouching script may need to be changed depending on how your player's size proportions are. It is built for 32x player's sprites.
-@export var crouch: bool = false
 ##Holding down and pressing the input for "roll" will execute a roll if the player is grounded. Assign a "roll" input in project settings input.
 @export var canRoll: bool
-@export_range(1.25, 2) var rollLength: float = 2
+@export var rollLength: float = 4
 ##If enabled, the player will stop all horizontal movement midair, wait (groundPoundPause) seconds, and then slam down into the ground when down is pressed. 
 @export var groundPound: bool
 ##The amount of time the player will hover in the air before completing a ground pound (in seconds)
@@ -140,15 +119,8 @@ var jumpMagnitude: float = 500.0
 var jumpCount: int
 var jumpWasPressed: bool = false
 var coyoteActive: bool = false
-var dashMagnitude: float
 var gravityActive: bool = true
-var dashing: bool = false
-var dashCount: int
 var rolling: bool = false
-
-var twoWayDashHorizontal
-var twoWayDashVertical
-var eightWayDash
 
 var wasMovingR: bool
 var wasPressingR: bool
@@ -163,7 +135,6 @@ var colliderPosLockY
 
 var latched
 var wasLatched
-var crouching
 var groundPounding
 
 var anim
@@ -186,11 +157,8 @@ var rightRelease
 var jumpTap
 var jumpRelease
 var runHold
-var latchHold
-var dashTap
 var rollTap
 var downTap
-var twirlTap
 
 @export var max_health: int = 10
 @export var invincibility_frames: int = 80
@@ -200,6 +168,7 @@ var current_health: int = 0
 var facing_right: bool = true
 
 func _ready():
+	canRoll = SettingsManager.get_setting("has_roll")
 	Global.player = self
 	current_health = max_health
 	
@@ -218,8 +187,6 @@ func _updateData():
 	jumpMagnitude = (10.0 * jumpHeight) * gravityScale
 	jumpCount = jumps
 	
-	dashMagnitude = maxSpeed * dashLength
-	dashCount = dashes
 	
 	maxSpeedLock = maxSpeed
 	
@@ -257,20 +224,6 @@ func _updateData():
 		instantStop = true
 	
 	
-	twoWayDashHorizontal = false
-	twoWayDashVertical = false
-	eightWayDash = false
-	if dashType == 0:
-		pass
-	if dashType == 1:
-		twoWayDashHorizontal = true
-	elif dashType == 2:
-		twoWayDashVertical = true
-	elif dashType == 3:
-		twoWayDashHorizontal = true
-		twoWayDashVertical = true
-	elif dashType == 4:
-		eightWayDash = true
 	
 	
 
@@ -281,7 +234,7 @@ func _process(_delta):
 	
 	#INFO animations
 	#directions
-	if is_on_wall() and !is_on_floor() and latch and wallLatching and ((wallLatchingModifer and latchHold) or !wallLatchingModifer):
+	if is_on_wall() and !is_on_floor() and latch and wallLatching:
 		latched = true
 	else:
 		latched = false
@@ -296,14 +249,14 @@ func _process(_delta):
 		anim.flip_h = true
 	
 	#run
-	if run and idle and !dashing and !crouching and !walk:
+	if run and idle and !walk:
 		if abs(velocity.x) > 0.1 and is_on_floor() and !is_on_wall():
 			anim.speed_scale = abs(velocity.x / 150)
 			anim.play("run")
 		elif abs(velocity.x) < 0.1 and is_on_floor():
 			anim.speed_scale = 1
 			anim.play("idle")
-	elif run and idle and walk and !dashing and !crouching:
+	elif run and idle and walk:
 		if abs(velocity.x) > 0.1 and is_on_floor() and !is_on_wall():
 			anim.speed_scale = abs(velocity.x / 150)
 			if abs(velocity.x) < (maxSpeedLock):
@@ -315,11 +268,11 @@ func _process(_delta):
 			anim.play("idle")
 		
 	#jump
-	if velocity.y < 0 and jump and !dashing:
+	if velocity.y < 0 and jump:
 		anim.speed_scale = 1
 		anim.play("jump")
 		
-	if velocity.y > 40 and falling and !dashing and !crouching:
+	if velocity.y > 40 and falling:
 		anim.speed_scale = 1
 		anim.play("falling")
 		
@@ -332,19 +285,7 @@ func _process(_delta):
 			anim.speed_scale = 1
 			anim.play("slide")
 			
-		#dash
-		if dashing:
-			anim.speed_scale = 1
-			anim.play("dash")
-			
-		#crouch
-		if crouching and !rolling:
-			if abs(velocity.x) > 10:
-				anim.speed_scale = 1
-				anim.play("crouch_walk")
-			else:
-				anim.speed_scale = 1
-				anim.play("crouch_idle")
+		
 		
 		if rollTap and canRoll and roll:
 			anim.speed_scale = 1
@@ -382,11 +323,8 @@ func _physics_process(delta):
 	jumpTap = Input.is_action_just_pressed("jump")
 	jumpRelease = Input.is_action_just_released("jump")
 	runHold = Input.is_action_pressed("run")
-	latchHold = Input.is_action_pressed("latch")
-	dashTap = Input.is_action_just_pressed("dash")
 	rollTap = Input.is_action_just_pressed("roll")
 	downTap = Input.is_action_just_pressed("down")
-	twirlTap = Input.is_action_just_pressed("twirl")
 	if Input.is_action_just_pressed("owie"):
 		owie(1)
 	if Input.is_action_just_pressed("reverse_owie"):
@@ -444,44 +382,27 @@ func _physics_process(delta):
 		else:
 			velocity.x = 0
 			
-	#INFO Crouching
-	if crouch:
-		if downHold and is_on_floor():
-			crouching = true
-		elif !downHold and !rolling:
-			crouching = false
 			
-	if !is_on_floor():
-		crouching = false
 			
-	if crouching:
-		maxSpeed = maxSpeedLock / 2
-		col.scale.y = colliderScaleLockY / 2
-		col.position.y = colliderPosLockY + (8 * colliderScaleLockY)
-	elif !runningModifier or (runningModifier and runHold):
+	if !runningModifier or (runningModifier and runHold):
 		maxSpeed = maxSpeedLock
 		col.scale.y = colliderScaleLockY
 		col.position.y = colliderPosLockY
 		
 	#INFO Rolling
-	if canRoll and is_on_floor() and rollTap and crouching:
+	if canRoll and is_on_floor() and rollTap:
 		_rollingTime(rollLength * 0.25)
-		if wasPressingR and !(upHold):
+		if facing_right:
 			velocity.y = 0
 			velocity.x = maxSpeedLock * rollLength
-			dashCount += -1
 			movementInputMonitoring = Vector2(false, false)
 			_inputPauseReset(rollLength * 0.0625)
-		elif !(upHold):
+		else:
 			velocity.y = 0
 			velocity.x = -maxSpeedLock * rollLength
-			dashCount += -1
 			movementInputMonitoring = Vector2(false, false)
 			_inputPauseReset(rollLength * 0.0625)
 		
-	if canRoll and rolling:
-		#if you want your player to become immune or do something else while rolling, add that here.
-		pass
 			
 	#INFO Jump and Gravity
 	if velocity.y > 0:
@@ -491,7 +412,7 @@ func _physics_process(delta):
 	
 	if is_on_wall() and !groundPounding:
 		appliedTerminalVelocity = terminalVelocity / wallSliding
-		if wallLatching and ((wallLatchingModifer and latchHold) or !wallLatchingModifer):
+		if wallLatching:
 			appliedGravity = 0
 			
 			if velocity.y < 0:
@@ -499,8 +420,6 @@ func _physics_process(delta):
 			if velocity.y > 0:
 				velocity.y = 0
 				
-			if wallLatchingModifer and latchHold and movementInputMonitoring == Vector2(true, true):
-				velocity.x = 0
 			
 		elif wallSliding != 1 and velocity.y > 0:
 			appliedGravity = appliedGravity / wallSliding
@@ -559,75 +478,10 @@ func _physics_process(delta):
 			_endGroundPound()
 			
 			
-	#INFO dashing
-	if is_on_floor() or is_on_wall():
-		dashCount = dashes
-	if eightWayDash and dashTap and dashCount > 0 and !rolling:
-		var input_direction = Input.get_vector("left", "right", "up", "down")
-		var dTime = 0.0625 * dashLength
-		_dashingTime(dTime)
-		_pauseGravity(dTime)
-		velocity = dashMagnitude * input_direction
-		if (!rightHold and !leftHold and !downHold and !upHold) and wasMovingR:
-			velocity.x = dashMagnitude
-		elif (!rightHold and !leftHold and !downHold and !upHold) and !wasMovingR:
-			velocity.x = -dashMagnitude
-		dashCount += -1
-		movementInputMonitoring = Vector2(false, false)
-		_inputPauseReset(dTime)
 	
-	if twoWayDashVertical and dashTap and dashCount > 0 and !rolling:
-		var dTime = 0.0625 * dashLength
-		if upHold and downHold:
-			pass
-		elif upHold:
-			_dashingTime(dTime)
-			_pauseGravity(dTime)
-			velocity.x = 0
-			velocity.y = -dashMagnitude
-			dashCount += -1
-			movementInputMonitoring = Vector2(false, false)
-			_inputPauseReset(dTime)
-		elif downHold and dashCount > 0:
-			_dashingTime(dTime)
-			_pauseGravity(dTime)
-			velocity.x = 0
-			velocity.y = dashMagnitude
-			dashCount += -1
-			movementInputMonitoring = Vector2(false, false)
-			_inputPauseReset(dTime)
 	
-	if twoWayDashHorizontal and dashTap and dashCount > 0 and !rolling:
-		var dTime = 0.0625 * dashLength
-		if wasPressingR and !(upHold or downHold):
-			velocity.y = 0
-			velocity.x = dashMagnitude
-			_pauseGravity(dTime)
-			_dashingTime(dTime)
-			dashCount += -1
-			movementInputMonitoring = Vector2(false, false)
-			_inputPauseReset(dTime)
-		elif !(upHold or downHold):
-			velocity.y = 0
-			velocity.x = -dashMagnitude
-			_pauseGravity(dTime)
-			_dashingTime(dTime)
-			dashCount += -1
-			movementInputMonitoring = Vector2(false, false)
-			_inputPauseReset(dTime)
-			
-	if dashing and velocity.x > 0 and leftTap and dashCancel:
-		velocity.x = 0
-	if dashing and velocity.x < 0 and rightTap and dashCancel:
-		velocity.x = 0
 	
-	#INFO Corner Cutting
-	if cornerCutting:
-		if velocity.y < 0 and leftRaycast.is_colliding() and !rightRaycast.is_colliding() and !middleRaycast.is_colliding():
-			position.x += correctionAmount
-		if velocity.y < 0 and !leftRaycast.is_colliding() and rightRaycast.is_colliding() and !middleRaycast.is_colliding():
-			position.x -= correctionAmount
-			
+	
 	#INFO Ground Pound
 	if groundPound and downTap and !is_on_floor() and !is_on_wall():
 		groundPounding = true
@@ -686,8 +540,6 @@ func _wallJump():
 	var verticalWallKick = abs(jumpMagnitude * sin(wallKickAngle * (PI / 180)))
 	velocity.y = -verticalWallKick
 	var dir = 1
-	if wallLatchingModifer and latchHold:
-		dir = -1
 	if wasMovingR:
 		velocity.x = -horizontalWallKick  * dir
 	else:
@@ -722,13 +574,6 @@ func _pauseGravity(time):
 	await get_tree().create_timer(time).timeout
 	gravityActive = true
 
-func _dashingTime(time):
-	dashing = true
-	await get_tree().create_timer(time).timeout
-	dashing = false
-	if !is_on_floor():
-		velocity.y = -gravityScale * 10
-
 func _rollingTime(time):
 	rolling = true
 	await get_tree().create_timer(time).timeout
@@ -749,7 +594,7 @@ func _on_owie_box_area_entered(area: Area2D) -> void:
 		Global.room_manager.change_room(area.target_room, area.entrance_id)
 
 func owie(amount: int, damage_position: Vector2 = global_position):
-	if not vulnurable or amount <= 0:
+	if rolling or not vulnurable or amount <= 0:
 		return
 	
 	is_attacking = false
@@ -811,8 +656,10 @@ func pogo():
 	velocity.y = pogo_velocity
 
 
+
+
 func _on_owie_box_body_entered(body: Node2D) -> void:
-	if body is Enemy:
+	if body is Enemy and vulnurable and not rolling:
 		owie(body.contact_damage, body.global_position)
 		if body.kill_self_on_contact == true:
 			body.die()

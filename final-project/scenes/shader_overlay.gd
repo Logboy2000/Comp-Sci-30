@@ -5,5 +5,5 @@ func _ready() -> void:
 	visible = Global.rat_mode
 	
 
-func _setting_changed(name, value):
+func _setting_changed(_name, _value):
 	visible = Global.rat_mode

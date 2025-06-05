@@ -17,8 +17,6 @@ metadata/_edit_lock_ = true
 motion_scale = Vector2(0.6, 0.6)
 metadata/_edit_lock_ = true
 
-[node name="Entities" type="Node" parent="."]
-
 [node name="Entrances" type="Node" parent="."]
 
 [node name="TileMapLayerBG" type="TileMapLayer" parent="."]

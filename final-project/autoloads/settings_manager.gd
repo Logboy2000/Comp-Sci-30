@@ -60,6 +60,25 @@ func _ready():
 		func(v: bool):
 			Global.rat_mode = v
 	)
+	
+	#game save file
+	
+	register_setting(
+		"has_roll", 
+		false, 
+		TYPE_BOOL
+	)
+	register_setting(
+		"save_room",
+		"",
+		TYPE_STRING
+	)
+	register_setting(
+		"save_entrance_id",
+		0,
+		TYPE_INT
+	)
+	
 	# Add more settings as needed
 	load_settings()
 	apply_all_settings()
