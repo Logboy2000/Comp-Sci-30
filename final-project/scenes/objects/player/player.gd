@@ -169,12 +169,16 @@ var facing_right: bool = true
 
 func _ready():
 	canRoll = SettingsManager.get_setting("has_roll")
+	max_health = SettingsManager.get_setting("max_hp")
+	wallJump = SettingsManager.get_setting("has_wj")
+	
 	Global.player = self
 	current_health = max_health
 	
 	wasMovingR = true
 	anim = PlayerSprite
 	col = PlayerCollider
+	
 	
 	
 	
@@ -231,6 +235,7 @@ func _process(_delta):
 	visible = !is_dead
 	if is_dead:
 		return
+	
 	
 	#INFO animations
 	#directions
@@ -297,6 +302,7 @@ func _process(_delta):
 func _physics_process(delta):
 	visible = !is_dead
 	if is_dead or Global.is_transitioning:
+		move_and_slide()
 		return
 	if current_invincibility_frames > 0:
 		current_invincibility_frames -= 1

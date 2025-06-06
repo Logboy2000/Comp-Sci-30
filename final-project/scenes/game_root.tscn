@@ -463,6 +463,7 @@ scale = Vector2(1, 0.995551)
 mouse_filter = 2
 script = ExtResource("15_x5456")
 
+[connection signal="new_room_loaded" from="RoomManager" to="." method="_on_room_manager_new_room_loaded"]
 [connection signal="pressed" from="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer/ResumeButton" to="OverlayLayer/Control/PauseMenu" method="_on_resume_button_pressed"]
 [connection signal="pressed" from="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer/QuitButton" to="OverlayLayer/Control/PauseMenu" method="_on_quit_button_pressed"]
 [connection signal="pressed" from="OverlayLayer/Control/DeathScreen/ColorRect/VBoxContainer/Button" to="." method="_on_respawn_pressed"]

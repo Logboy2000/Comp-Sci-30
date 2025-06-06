@@ -12,12 +12,16 @@ var current_entrance := 0
 func _ready() -> void:
 	await get_tree().process_frame
 	Global.room_manager = self
+	return_to_save_point(false)
+
+
+func return_to_save_point(use_transition: bool = true):
 	var save_room = SettingsManager.get_setting("save_room")
 	var save_entrance_id = SettingsManager.get_setting("save_entrance_id")
 	if save_room == "":
-		change_room(starting_room, 0, false)
+		change_room(starting_room, 0, use_transition)
 	else:
-		change_room(save_room,save_entrance_id, false)
+		change_room(save_room, save_entrance_id, use_transition)
 
 func change_room(scene_path: String, entrance_id: int = 0, use_transition: bool = true):
 	if Global.is_transitioning:
@@ -52,7 +56,6 @@ func _add_new_room():
 		current_room.go_to_entrance(current_entrance)
 	phantom_camera_2d.set_limit_target(current_room.camera_bounds.get_path())
 	phantom_camera_2d.teleport_position()
-	print("transi")
 	new_room_loaded.emit()
 	await transition_manager.fade_out()
 	Global.is_transitioning = false

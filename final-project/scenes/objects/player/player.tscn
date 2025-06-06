@@ -254,6 +254,7 @@ animation_player = NodePath("AnimationPlayer")
 timeToReachZeroSpeed = 0.1
 jumpBuffering = 0.1
 wallJump = true
+inputPauseAfterWallJump = 0.2
 wallSliding = 2.5
 canRoll = true
 run = true

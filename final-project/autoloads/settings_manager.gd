@@ -20,7 +20,6 @@ func _ready():
 		0.5,
 		TYPE_FLOAT,
 		func(v): AudioServer.set_bus_volume_db(0, linear_to_db(v)),
-		func(v): return v >= 0.0 and v <= 1.0,
 	)
 	register_setting(
 		"fullscreen",
@@ -61,31 +60,23 @@ func _ready():
 			Global.rat_mode = v
 	)
 	
-	#game save file
+	#Player Save
 	
-	register_setting(
-		"has_roll", 
-		false, 
-		TYPE_BOOL
-	)
-	register_setting(
-		"save_room",
-		"",
-		TYPE_STRING
-	)
-	register_setting(
-		"save_entrance_id",
-		0,
-		TYPE_INT
-	)
+	register_setting("has_roll", false, TYPE_BOOL)
+	register_setting("save_room", "", TYPE_STRING)
+	register_setting("save_entrance_id", 0, TYPE_INT)
+	register_setting("max_hp", 3, TYPE_INT)
+	register_setting("has_wj", false, TYPE_BOOL)
 	
 	# Add more settings as needed
 	load_settings()
 	apply_all_settings()
+	
+	print(_settings)
 
 
 # Register a new setting
-func register_setting(setting_name: String, default_value, value_type: int, apply_callback: Callable = Callable(), validator: Callable = Callable()) -> void:
+func register_setting(setting_name: String, default_value, value_type: int, apply_callback: Callable = Callable()) -> void:
 	if _settings.has(setting_name):
 		push_warning("Setting '%s' already registered!" % setting_name)
 		return
@@ -93,7 +84,6 @@ func register_setting(setting_name: String, default_value, value_type: int, appl
 		"default": default_value,
 		"type": value_type,
 		"value": default_value,
-		"validator": validator,
 		"apply": apply_callback
 	}
 
@@ -112,9 +102,6 @@ func set_setting(setting_name: String, value) -> void:
 	var s = _settings[setting_name]
 	if typeof(value) != s["type"]:
 		push_error("Type mismatch for setting '%s'!" % setting_name)
-		return
-	if s["validator"] != Callable() and not s["validator"].call(value):
-		push_error("Validation failed for setting '%s'!" % setting_name)
 		return
 	s["value"] = value
 	emit_signal("setting_changed", setting_name, value)
@@ -152,9 +139,6 @@ func load_settings() -> void:
 			val = config.get_value("settings", setting_name)
 		set_setting(setting_name, val)
 
-
-
-# Convenience: get/set via []
 func _get(property):
 	return get_setting(property)
 func _set(property, value):

@@ -14,7 +14,10 @@ func show_death_screen():
 	death_screen.show()
 
 func _on_respawn_pressed() -> void:
-	room_manager.reload_current_room()
-	await room_manager.new_room_loaded
-	death_screen.hide()
-	player.respawn()
+	Global.room_manager.return_to_save_point()
+
+
+func _on_room_manager_new_room_loaded() -> void:
+	if player.is_dead:
+		death_screen.hide()
+		player.respawn()

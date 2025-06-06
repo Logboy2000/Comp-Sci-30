@@ -47,4 +47,5 @@ func save_game(save_point: SavePoint):
 	SettingsManager.set_setting("has_roll", player.canRoll)
 	SettingsManager.set_setting("save_room", room_manager.current_scene_path)
 	SettingsManager.set_setting("save_entrance_id", save_point.entrance_id)
+	SettingsManager.set_setting("max_hp", Global.player.max_health)
 	print("game saved!")
