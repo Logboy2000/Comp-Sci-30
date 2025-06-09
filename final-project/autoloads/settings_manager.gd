@@ -72,7 +72,6 @@ func _ready():
 	load_settings()
 	apply_all_settings()
 	
-	print(_settings)
 
 
 # Register a new setting

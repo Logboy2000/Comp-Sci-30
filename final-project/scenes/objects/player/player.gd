@@ -69,16 +69,10 @@ var is_attacking: bool = false
 ##wall latching must be enabled for this to work. #If enabled, the player must hold down the "latch" key to wall latch. Assign "latch" in the project input settings. The player's input will be ignored when latching.
 @export var wallLatchingModifer: bool = false
 
-@export_category("Down Input")
+@export_category("Roll")
 ##Holding down and pressing the input for "roll" will execute a roll if the player is grounded. Assign a "roll" input in project settings input.
 @export var canRoll: bool
 @export var rollLength: float = 4
-##If enabled, the player will stop all horizontal movement midair, wait (groundPoundPause) seconds, and then slam down into the ground when down is pressed. 
-@export var groundPound: bool
-##The amount of time the player will hover in the air before completing a ground pound (in seconds)
-@export_range(0.05, 0.75) var groundPoundPause: float = 0.25
-##If enabled, pressing up will end the ground pound early
-@export var upToCancel: bool = false
 
 @export_category("Animations (Check Box if has animation)")
 ##Animations must be named "run" all lowercase as the check box says
@@ -135,7 +129,6 @@ var colliderPosLockY
 
 var latched
 var wasLatched
-var groundPounding
 
 var anim
 var col
@@ -416,7 +409,7 @@ func _physics_process(delta):
 	else:
 		appliedGravity = gravityScale
 	
-	if is_on_wall() and !groundPounding:
+	if is_on_wall() and wallJump:
 		appliedTerminalVelocity = terminalVelocity / wallSliding
 		if wallLatching:
 			appliedGravity = 0
@@ -429,7 +422,7 @@ func _physics_process(delta):
 			
 		elif wallSliding != 1 and velocity.y > 0:
 			appliedGravity = appliedGravity / wallSliding
-	elif !is_on_wall() and !groundPounding:
+	elif !is_on_wall():
 		appliedTerminalVelocity = terminalVelocity
 	
 	if gravityActive:
@@ -481,22 +474,13 @@ func _physics_process(delta):
 		elif jumpTap and jumpCount > 0:
 			velocity.y = -jumpMagnitude
 			jumpCount = jumpCount - 1
-			_endGroundPound()
 			
 			
 	
 	
 	
 	
-	#INFO Ground Pound
-	if groundPound and downTap and !is_on_floor() and !is_on_wall():
-		groundPounding = true
-		gravityActive = false
-		velocity.y = 0
-		await get_tree().create_timer(groundPoundPause).timeout
-		_groundPound()
-	if is_on_floor() and groundPounding:
-		_endGroundPound()
+
 	move_and_slide()
 	# Update attack direction based on input
 	if not is_attacking:
@@ -519,8 +503,6 @@ func _physics_process(delta):
 				left_attack.start_attack()
 			else:
 				right_attack.start_attack()
-	if upToCancel and upHold and groundPound:
-		_endGroundPound()
 	
 	
 	
@@ -584,15 +566,6 @@ func _rollingTime(time):
 	rolling = true
 	await get_tree().create_timer(time).timeout
 	rolling = false
-
-func _groundPound():
-	appliedTerminalVelocity = terminalVelocity * 10
-	velocity.y = jumpMagnitude * 2
-	
-func _endGroundPound():
-	groundPounding = false
-	appliedTerminalVelocity = terminalVelocity
-	gravityActive = true
 
 
 func _on_owie_box_area_entered(area: Area2D) -> void:

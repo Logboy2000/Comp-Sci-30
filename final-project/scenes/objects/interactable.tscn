@@ -1,16 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://duvm1asdki0cw"]
+[gd_scene load_steps=5 format=3 uid="uid://brcfr2vw38vbb"]
 
-[ext_resource type="Script" uid="uid://cnv74e2yp5kbu" path="res://scenes/objects/save_point.gd" id="1_v51y8"]
-[ext_resource type="Texture2D" uid="uid://cdarct5x6n1jg" path="res://sprites/cheese.png" id="1_yqx2y"]
-[ext_resource type="Theme" uid="uid://di4h7o0l41s3u" path="res://theme.tres" id="3_sxbaj"]
+[ext_resource type="Script" uid="uid://cbu8nti8gxn3" path="res://scenes/objects/interactable.gd" id="1_hmirf"]
+[ext_resource type="Texture2D" uid="uid://cdarct5x6n1jg" path="res://sprites/cheese.png" id="2_p3rrf"]
+[ext_resource type="Theme" uid="uid://di4h7o0l41s3u" path="res://theme.tres" id="3_51ki7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v51y8"]
 
-[node name="SavePoint" type="Node2D"]
-script = ExtResource("1_v51y8")
+[node name="Interactable" type="Node2D"]
+script = ExtResource("1_hmirf")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_yqx2y")
+texture = ExtResource("2_p3rrf")
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 0
@@ -33,8 +33,8 @@ offset_right = 34.5
 offset_bottom = -10.5
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_sxbaj")
-text = "Save"
+theme = ExtResource("3_51ki7")
+text = "Interact"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
