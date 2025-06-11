@@ -43,9 +43,16 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("respawn_enemies"):
 		reset_killed_enemies()
 
-func save_game(save_point: SavePoint):
-	SettingsManager.set_setting("has_roll", player.canRoll)
-	SettingsManager.set_setting("save_room", room_manager.current_scene_path)
-	SettingsManager.set_setting("save_entrance_id", save_point.entrance_id)
-	SettingsManager.set_setting("max_hp", Global.player.max_health)
+func save_point(room_scene_path: String, entrance_id: int):
+	SettingsManager.set_setting("save_room", room_scene_path)
+	SettingsManager.set_setting("save_entrance_id", entrance_id)
+	save_progress()
+
+
+func save_progress():
+	SettingsManager.set_setting("has_roll", player.has_roll)
+	SettingsManager.set_setting("max_hp", player.max_health)
+	SettingsManager.set_setting("has_wj", player.has_wall_jump)
 	print("game saved!")
+	print(player.has_roll)
+	SettingsManager.save_settings()

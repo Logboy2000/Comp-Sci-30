@@ -258,7 +258,7 @@ script = ExtResource("6_v5ckt")
 
 [node name="OverlayLayer" type="CanvasLayer" parent="."]
 process_mode = 3
-layer = 100
+layer = 10
 
 [node name="Control" type="Control" parent="OverlayLayer"]
 layout_mode = 3

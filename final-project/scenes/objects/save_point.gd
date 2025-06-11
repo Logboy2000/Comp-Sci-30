@@ -6,4 +6,4 @@ func _process(delta: float) -> void:
 	sprite_2d.rotate(10 * delta)
 
 func _interact() -> void:
-	Global.save_game(self)
+	Global.save_point(Global.room_manager.current_scene_path, entrance_id)

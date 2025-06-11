@@ -19,4 +19,5 @@ func toggle_pause():
 
 
 func _on_quit_button_pressed() -> void:
+	Global.save_progress()
 	get_tree().quit(69)

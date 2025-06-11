@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://k8pg3cv0w81b" path="res://autoloads/debug_menu.gd" id="1_gkmjo"]
 
 [node name="CanvasLayer" type="CanvasLayer"]
+process_mode = 3
 layer = 100
 
 [node name="DebugMenu" type="Control" parent="."]
@@ -19,31 +20,48 @@ size_flags_vertical = 8
 theme = ExtResource("1_ehata")
 script = ExtResource("1_gkmjo")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DebugMenu"]
+[node name="Panel" type="Panel" parent="DebugMenu"]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 522.0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugMenu/Panel"]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
-offset_left = -47.0
-offset_bottom = 40.0
-grow_horizontal = 0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="version" type="Label" parent="DebugMenu/VBoxContainer"]
+[node name="RichTextLabel" type="Label" parent="DebugMenu/Panel/VBoxContainer"]
 layout_mode = 2
-text = "RAT TALES v0.0.1"
+theme_override_font_sizes/font_size = 31
+text = "~ DEBUG MENU ~"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="NodeCount" type="Label" parent="DebugMenu/VBoxContainer"]
+[node name="quitwosave" type="Button" parent="DebugMenu/Panel/VBoxContainer"]
 layout_mode = 2
-text = "Node Count: "
-horizontal_alignment = 2
+text = "quit without saving"
 
-[node name="FPS" type="Label" parent="DebugMenu/VBoxContainer"]
+[node name="save" type="Button" parent="DebugMenu/Panel/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "fps:"
-horizontal_alignment = 2
+text = "SAVE GAME"
 
-[node name="UpdateTimer" type="Timer" parent="DebugMenu"]
-autostart = true
-ignore_time_scale = true
+[node name="dashbutton" type="CheckButton" parent="DebugMenu/Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Has Roll?"
 
-[connection signal="timeout" from="DebugMenu/UpdateTimer" to="DebugMenu" method="_on_update_timer_timeout"]
+[node name="wjbutton" type="CheckButton" parent="DebugMenu/Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Has Wall Jump?"
+
+[connection signal="pressed" from="DebugMenu/Panel/VBoxContainer/quitwosave" to="DebugMenu" method="_on_quitwosave_pressed"]
+[connection signal="pressed" from="DebugMenu/Panel/VBoxContainer/save" to="DebugMenu" method="_on_save_pressed"]
+[connection signal="toggled" from="DebugMenu/Panel/VBoxContainer/dashbutton" to="DebugMenu" method="_on_dashbutton_toggled"]
+[connection signal="toggled" from="DebugMenu/Panel/VBoxContainer/wjbutton" to="DebugMenu" method="_on_wjbutton_toggled"]

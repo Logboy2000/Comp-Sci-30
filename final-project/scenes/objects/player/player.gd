@@ -57,9 +57,9 @@ var is_attacking: bool = false
 #INFO EXTRAS
 @export_category("Wall Jumping")
 ##Allows your player to jump off of walls. Without a Wall Kick Angle, the player will be able to scale the wall.
-@export var wallJump: bool = false
+@export var has_wall_jump: bool = false
 ##How long the player's movement input will be ignored after wall jumping.
-@export_range(0, 0.5) var inputPauseAfterWallJump: float = 0.1
+@export_range(0, 0.5) var inputPauseAfterhas_wall_jump: float = 0.1
 ##The angle at which your player will jump away from the wall. 0 is straight away from the wall, 90 is straight up. Does not account for gravity
 @export_range(0, 90) var wallKickAngle: float = 60.0
 ##The player's gravity will be divided by this number when touch a wall and descending. Set to 1 by default meaning no change will be made to the gravity and there is effectively no wall sliding. THIS IS OVERRIDDED BY WALL LATCH.
@@ -71,7 +71,7 @@ var is_attacking: bool = false
 
 @export_category("Roll")
 ##Holding down and pressing the input for "roll" will execute a roll if the player is grounded. Assign a "roll" input in project settings input.
-@export var canRoll: bool
+@export var has_roll: bool
 @export var rollLength: float = 4
 
 @export_category("Animations (Check Box if has animation)")
@@ -161,9 +161,9 @@ var current_health: int = 0
 var facing_right: bool = true
 
 func _ready():
-	canRoll = SettingsManager.get_setting("has_roll")
+	has_roll = SettingsManager.get_setting("has_roll")
 	max_health = SettingsManager.get_setting("max_hp")
-	wallJump = SettingsManager.get_setting("has_wj")
+	has_wall_jump = SettingsManager.get_setting("has_wj")
 	
 	Global.player = self
 	current_health = max_health
@@ -285,7 +285,7 @@ func _process(_delta):
 			
 		
 		
-		if rollTap and canRoll and roll:
+		if rollTap and has_roll and roll:
 			anim.speed_scale = 1
 			anim.play("roll")
 		
@@ -389,7 +389,7 @@ func _physics_process(delta):
 		col.position.y = colliderPosLockY
 		
 	#INFO Rolling
-	if canRoll and is_on_floor() and rollTap:
+	if has_roll and is_on_floor() and rollTap:
 		_rollingTime(rollLength * 0.25)
 		if facing_right:
 			velocity.y = 0
@@ -409,7 +409,7 @@ func _physics_process(delta):
 	else:
 		appliedGravity = gravityScale
 	
-	if is_on_wall() and wallJump:
+	if is_on_wall() and has_wall_jump:
 		appliedTerminalVelocity = terminalVelocity / wallSliding
 		if wallLatching:
 			appliedGravity = 0
@@ -450,10 +450,10 @@ func _physics_process(delta):
 			elif jumpBuffering == 0 and coyoteTime == 0 and is_on_floor():
 				_jump()
 		elif jumpTap and is_on_wall() and !is_on_floor():
-			if wallJump and !latched:
-				_wallJump()
-			elif wallJump and latched:
-				_wallJump()
+			if has_wall_jump and !latched:
+				_has_wall_jump()
+			elif has_wall_jump and latched:
+				_has_wall_jump()
 		elif jumpTap and is_on_floor():
 			_jump()
 			
@@ -469,8 +469,8 @@ func _physics_process(delta):
 	elif jumps > 1:
 		if is_on_floor():
 			jumpCount = jumps
-		if jumpTap and is_on_wall() and wallJump:
-			_wallJump()
+		if jumpTap and is_on_wall() and has_wall_jump:
+			_has_wall_jump()
 		elif jumpTap and jumpCount > 0:
 			velocity.y = -jumpMagnitude
 			jumpCount = jumpCount - 1
@@ -523,7 +523,7 @@ func _jump():
 		jumpCount += -1
 		jumpWasPressed = false
 		
-func _wallJump():
+func _has_wall_jump():
 	var horizontalWallKick = abs(jumpMagnitude * cos(wallKickAngle * (PI / 180)))
 	var verticalWallKick = abs(jumpMagnitude * sin(wallKickAngle * (PI / 180)))
 	velocity.y = -verticalWallKick
@@ -532,9 +532,9 @@ func _wallJump():
 		velocity.x = -horizontalWallKick  * dir
 	else:
 		velocity.x = horizontalWallKick * dir
-	if inputPauseAfterWallJump != 0:
+	if inputPauseAfterhas_wall_jump != 0:
 		movementInputMonitoring = Vector2(false, false)
-		_inputPauseReset(inputPauseAfterWallJump)
+		_inputPauseReset(inputPauseAfterhas_wall_jump)
 			
 func _setLatch(delay, setBool):
 	await get_tree().create_timer(delay).timeout
@@ -600,6 +600,7 @@ func owie(amount: int, damage_position: Vector2 = global_position):
 
 func die():
 	is_dead = true
+	velocity = Vector2.ZERO
 	Global.die()
 
 func respawn():

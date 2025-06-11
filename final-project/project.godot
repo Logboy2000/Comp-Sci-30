@@ -10,7 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Final Project"
+config/name="Rat Tales"
+config/version="0.0.1"
 run/main_scene="uid://dykrla05monq3"
 config/features=PackedStringArray("4.4", "Mobile")
 boot_splash/bg_color=Color(0, 0, 0, 1)

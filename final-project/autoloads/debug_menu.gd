@@ -1,20 +1,29 @@
 extends Control
-
-@onready var fps: Label = $VBoxContainer/FPS
-@onready var node_count: Label = $VBoxContainer/NodeCount
-
-
-func menu_update():
-	fps.text = "FPS: " + str(Engine.get_frames_per_second())
-	node_count.text = "Node Count: " + str(get_tree().get_node_count())
+@onready var save: Button = %save
+@onready var rollbutton: CheckButton = %dashbutton
+@onready var wjbutton: CheckButton = %wjbutton
 
 func _ready() -> void:
-	menu_update()
+	await get_tree().process_frame
+	rollbutton.button_pressed = Global.player.has_roll
+	wjbutton.button_pressed = Global.player.has_wall_jump
 
 func  _input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug"):
 		visible = !visible
 
 
-func _on_update_timer_timeout() -> void:
-	menu_update()
+func _on_save_pressed() -> void:
+	Global.save_progress()
+
+
+func _on_dashbutton_toggled(toggled_on: bool) -> void:
+	Global.player.has_roll = toggled_on
+
+
+func _on_wjbutton_toggled(toggled_on: bool) -> void:
+	Global.player.has_wall_jump = toggled_on
+
+
+func _on_quitwosave_pressed() -> void:
+	get_tree().quit(69)
