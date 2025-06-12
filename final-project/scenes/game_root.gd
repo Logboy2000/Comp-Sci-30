@@ -4,6 +4,7 @@ class_name GameRoot extends Node2D
 @onready var player: Player = $Player
 @onready var room_manager: RoomManager = $RoomManager
 @onready var death_screen_animation_player: AnimationPlayer = $OverlayLayer/Control/DeathScreen/DeathScreenAnimationPlayer
+@onready var save_indicator: Control = $OverlayLayer/Control/SaveIndicator
 
 func _ready() -> void:
 	Global.game_root = self

@@ -121,7 +121,6 @@ func save_settings() -> void:
 		config.set_value("settings", setting_name, _settings[setting_name]["value"])
 	config.save(SETTINGS_PATH)
 
-# Apply all settings (useful after loading)
 func apply_all_settings() -> void:
 	for setting_name in _settings.keys():
 		var s = _settings[setting_name]

@@ -51,6 +51,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "SAVE GAME"
 
+[node name="killyourself" type="Button" parent="DebugMenu/Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Kill Yourself"
+
 [node name="dashbutton" type="CheckButton" parent="DebugMenu/Panel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -63,5 +68,6 @@ text = "Has Wall Jump?"
 
 [connection signal="pressed" from="DebugMenu/Panel/VBoxContainer/quitwosave" to="DebugMenu" method="_on_quitwosave_pressed"]
 [connection signal="pressed" from="DebugMenu/Panel/VBoxContainer/save" to="DebugMenu" method="_on_save_pressed"]
+[connection signal="pressed" from="DebugMenu/Panel/VBoxContainer/killyourself" to="DebugMenu" method="_on_killyourself_pressed"]
 [connection signal="toggled" from="DebugMenu/Panel/VBoxContainer/dashbutton" to="DebugMenu" method="_on_dashbutton_toggled"]
 [connection signal="toggled" from="DebugMenu/Panel/VBoxContainer/wjbutton" to="DebugMenu" method="_on_wjbutton_toggled"]

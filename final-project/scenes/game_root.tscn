@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dykrla05monq3"]
+[gd_scene load_steps=43 format=3 uid="uid://dykrla05monq3"]
 
 [ext_resource type="Script" uid="uid://qh41ip6v0r4a" path="res://scenes/game_root.gd" id="1_nrhpl"]
 [ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://scenes/objects/player/player.tscn" id="2_uc526"]
@@ -11,9 +11,11 @@
 [ext_resource type="Script" uid="uid://b2tmulursfq46" path="res://scenes/transition_manager.gd" id="7_t6xqi"]
 [ext_resource type="Texture2D" uid="uid://dyis8kds5mb8x" path="res://sprites/bigrat.jpg" id="8_v5ckt"]
 [ext_resource type="Script" uid="uid://bg05oi26f4w61" path="res://scenes/ui/health_bar.gd" id="10_5dyip"]
+[ext_resource type="Texture2D" uid="uid://bxqcnwnrv0vsq" path="res://sprites/cheese_wheel.png" id="11_6puu6"]
 [ext_resource type="Script" uid="uid://cxh0fk7yl5cov" path="res://scenes/ui/pause_menu.gd" id="11_i7pw8"]
 [ext_resource type="Texture2D" uid="uid://cdarct5x6n1jg" path="res://sprites/cheese.png" id="11_ywsqi"]
 [ext_resource type="Texture2D" uid="uid://b21mvgyc8m3eb" path="res://sprites/missing_cheese.png" id="12_i7pw8"]
+[ext_resource type="Script" uid="uid://u1h8j7643wu0" path="res://scenes/save_indicator.gd" id="14_k6861"]
 [ext_resource type="Script" uid="uid://c3e28folvaxwk" path="res://scenes/shader_overlay.gd" id="15_x5456"]
 
 [sub_resource type="Resource" id="Resource_1ayw0"]
@@ -209,6 +211,98 @@ _data = {
 &"bigratjumpscare": SubResource("Animation_ywsqi"),
 &"fade": SubResource("Animation_t6xqi")
 }
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k6861"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x42w8"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1vvmy"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0aloa"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_35vvr"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_so1mv"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6y7e7"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ns5a"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfyj4"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3isrv"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r4kn7"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(320, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wt8xl"]
+atlas = ExtResource("11_6puu6")
+region = Rect2(352, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nj3bt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k6861")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x42w8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1vvmy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0aloa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_35vvr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_so1mv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6y7e7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ns5a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfyj4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3isrv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r4kn7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wt8xl")
+}],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_x5456"]
 shader = ExtResource("7_i7pw8")
@@ -516,6 +610,17 @@ grow_vertical = 2
 pivot_offset = Vector2(591, 344)
 mouse_filter = 2
 texture = ExtResource("8_v5ckt")
+
+[node name="SaveIndicator" type="Control" parent="OverlayLayer/Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("14_k6861")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="OverlayLayer/Control/SaveIndicator"]
+visible = false
+position = Vector2(1112.1, 606.956)
+scale = Vector2(1.94024, 1.94024)
+sprite_frames = SubResource("SpriteFrames_nj3bt")
 
 [node name="ShaderOverlay" type="ColorRect" parent="OverlayLayer"]
 visible = false

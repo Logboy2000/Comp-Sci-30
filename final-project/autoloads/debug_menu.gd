@@ -27,3 +27,7 @@ func _on_wjbutton_toggled(toggled_on: bool) -> void:
 
 func _on_quitwosave_pressed() -> void:
 	get_tree().quit(69)
+
+
+func _on_killyourself_pressed() -> void:
+	Global.player.die()

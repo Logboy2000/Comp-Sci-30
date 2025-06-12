@@ -294,7 +294,11 @@ func _process(_delta):
 
 func _physics_process(delta):
 	visible = !is_dead
-	if is_dead or Global.is_transitioning:
+	if is_dead:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+	if Global.is_transitioning:
 		move_and_slide()
 		return
 	if current_invincibility_frames > 0:
@@ -305,8 +309,6 @@ func _physics_process(delta):
 		for body in owie_box.get_overlapping_bodies():
 			if body is Enemy:
 				owie(body.contact_damage, body.global_position)
-	if is_dead:
-		return
 	if !dset:
 		gdelta = delta
 		dset = true
@@ -599,6 +601,8 @@ func owie(amount: int, damage_position: Vector2 = global_position):
 		Audio.play_sound(CLASSIC_HURT)
 
 func die():
+	if is_dead:
+		return
 	is_dead = true
 	velocity = Vector2.ZERO
 	Global.die()

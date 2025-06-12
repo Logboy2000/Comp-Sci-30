@@ -54,5 +54,5 @@ func save_progress():
 	SettingsManager.set_setting("max_hp", player.max_health)
 	SettingsManager.set_setting("has_wj", player.has_wall_jump)
 	print("game saved!")
-	print(player.has_roll)
+	Global.game_root.save_indicator.play()
 	SettingsManager.save_settings()
