@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NYT Puzzle Viewer</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f0f0; padding: 20px; }
+    input[type="date"] { padding: 5px; font-size: 1rem; }
+    button { padding: 5px 10px; font-size: 1rem; }
+    canvas { border: 1px solid #444; margin-top: 20px; display: block; }
+    #answers { margin-top: 20px; }
+    #status { margin-top: 10px; color: red; }
+  </style>
+</head>
+<body>
+  <h1>NYT Puzzle Viewer</h1>
+
+  <label for="dateInput">Pick a date:</label>
+  <input type="date" id="dateInput" value="2025-06-30" max="">
+  <button onclick="loadPuzzle()">Load Puzzle</button>
+  <div id="status"></div>
+
+  <canvas id="puzzleCanvas"></canvas>
+  <div id="answers"></div>
+
+  <script>
+    document.getElementById('dateInput').max = new Date().toISOString().split('T')[0];
+
+    async function loadPuzzle() {
+      const date = document.getElementById('dateInput').value;
+      if (!date) return;
+      document.getElementById('status').textContent = 'Loading...';
+      try {
+        const url = `https://www.nytimes.com/svc/strands/v2/${date}.json`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.status !== 'OK') throw new Error(data.status);
+        renderCanvas(data);
+        document.getElementById('status').textContent = '';
+      } catch (err) {
+        document.getElementById('status').textContent = `Error: ${err.message}`;
+      }
+    }
+
+    function renderCanvas(data) {
+      const { startingBoard, spangram, themeWords, spangramCoords, themeCoords } = data;
+      const matrix = startingBoard.map(row => row.split(''));
+      const rows = matrix.length;
+      const cols = matrix[0].length;
+
+      const canvas = document.getElementById('puzzleCanvas');
+      const ctx = canvas.getContext('2d');
+      const cellSize = 60;
+      canvas.width = cols * cellSize;
+      canvas.height = rows * cellSize;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw grid and letters
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '24px sans-serif';
+      matrix.forEach((row, y) => {
+        row.forEach((letter, x) => {
+          const px = x*cellSize, py = y*cellSize;
+          ctx.strokeStyle = '#999';
+          ctx.strokeRect(px, py, cellSize, cellSize);
+          ctx.fillStyle = 'black';
+          ctx.fillText(letter, px + cellSize/2, py + cellSize/2);
+        });
+      });
+
+      function getCenter(x, y) {
+        return { x: x*cellSize + cellSize/2, y: y*cellSize + cellSize/2 };
+      }
+
+      function drawPath(coords, color, width=3) {
+        ctx.beginPath();
+        coords.forEach((p, i) => {
+          const c = getCenter(p[0], p[1]);
+          i ? ctx.lineTo(c.x, c.y) : ctx.moveTo(c.x, c.y);
+        });
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+
+        coords.forEach(p => {
+          const c = getCenter(p[0], p[1]);
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, 5, 0, 2*Math.PI);
+          ctx.fillStyle = color;
+          ctx.fill();
+        });
+      }
+
+      // Draw spangram
+      drawPath(spangramCoords, 'gold', 4);
+
+      // Draw theme words
+      const colors = ['red','green','blue','orange','purple'];
+      themeWords.forEach((w, i) =>
+        drawPath(themeCoords[w], colors[i % colors.length], 2)
+      );
+
+      // Answers display
+      document.getElementById('answers').innerHTML = `
+        <h2>${data.printDate} Puzzle</h2>
+        <p><strong>Spangram:</strong> ${spangram}</p>
+        <p><strong>Themes:</strong> ${themeWords.join(', ')}</p>
+      `;
+    }
+
+    // Load default on page open
+    loadPuzzle();
+  </script>
+</body>
+</html>
