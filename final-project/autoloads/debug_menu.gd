@@ -31,3 +31,7 @@ func _on_quitwosave_pressed() -> void:
 
 func _on_killyourself_pressed() -> void:
 	Global.player.die()
+
+
+func _on_clearsave_pressed() -> void:
+	SettingsManager.reset_save()

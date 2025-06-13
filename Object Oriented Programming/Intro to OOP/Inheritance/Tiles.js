@@ -75,6 +75,7 @@ class StoneTile extends Tile {
 	constructor(x, y) {
 		super(x, y, 'stone', 'Stone Tile', 3, '#4f4f4f')
 		this.breakable = true
+		
 	}
 
 	interact() {

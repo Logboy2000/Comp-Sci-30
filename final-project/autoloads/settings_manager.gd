@@ -61,17 +61,15 @@ func _ready():
 	)
 	
 	#Player Save
-	
-	register_setting("has_roll", false, TYPE_BOOL)
 	register_setting("save_room", "", TYPE_STRING)
 	register_setting("save_entrance_id", 0, TYPE_INT)
 	register_setting("max_hp", 3, TYPE_INT)
+	register_setting("has_roll", false, TYPE_BOOL)
 	register_setting("has_wj", false, TYPE_BOOL)
 	
 	# Add more settings as needed
 	load_settings()
 	apply_all_settings()
-	
 
 
 # Register a new setting
@@ -141,3 +139,10 @@ func _get(property):
 	return get_setting(property)
 func _set(property, value):
 	set_setting(property, value)
+
+func reset_save():
+	reset_setting("has_roll")
+	reset_setting("save_room")
+	reset_setting("save_entrance_id")
+	reset_setting("max_hp")
+	reset_setting("has_wj")

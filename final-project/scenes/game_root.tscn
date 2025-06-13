@@ -327,6 +327,7 @@ follow_target = NodePath("../Player")
 zoom = Vector2(2, 2)
 tween_resource = SubResource("Resource_1ayw0")
 tween_on_load = false
+follow_damping = true
 draw_limits = true
 limit_left = -1590
 limit_margin = Vector4i(4, 4, 4, 4)
