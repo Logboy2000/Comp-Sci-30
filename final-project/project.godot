@@ -23,7 +23,6 @@ Global="*res://autoloads/global.gd"
 PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
 Audio="*res://autoloads/audio.tscn"
 SettingsManager="*res://autoloads/settings_manager.gd"
-DebugMenu="*res://autoloads/debug_menu.tscn"
 
 [display]
 

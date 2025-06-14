@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://dykrla05monq3"]
+[gd_scene load_steps=44 format=3 uid="uid://dykrla05monq3"]
 
 [ext_resource type="Script" uid="uid://qh41ip6v0r4a" path="res://scenes/game_root.gd" id="1_nrhpl"]
 [ext_resource type="PackedScene" uid="uid://b4hrdpl5dijvs" path="res://scenes/objects/player/player.tscn" id="2_uc526"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://b21mvgyc8m3eb" path="res://sprites/missing_cheese.png" id="12_i7pw8"]
 [ext_resource type="Script" uid="uid://u1h8j7643wu0" path="res://scenes/save_indicator.gd" id="14_k6861"]
 [ext_resource type="Script" uid="uid://c3e28folvaxwk" path="res://scenes/shader_overlay.gd" id="15_x5456"]
+[ext_resource type="PackedScene" uid="uid://du5mht80p2tkk" path="res://scenes/ui/debug_menu.tscn" id="18_x42w8"]
 
 [sub_resource type="Resource" id="Resource_1ayw0"]
 script = ExtResource("5_t6xqi")
@@ -635,6 +636,8 @@ grow_vertical = 2
 scale = Vector2(1, 0.995551)
 mouse_filter = 2
 script = ExtResource("15_x5456")
+
+[node name="DebugMenu" parent="." instance=ExtResource("18_x42w8")]
 
 [connection signal="new_room_loaded" from="RoomManager" to="." method="_on_room_manager_new_room_loaded"]
 [connection signal="pressed" from="OverlayLayer/Control/PauseMenu/ColorRect/CenterContainer/VBoxContainer/ResumeButton" to="OverlayLayer/Control/PauseMenu" method="_on_resume_button_pressed"]
