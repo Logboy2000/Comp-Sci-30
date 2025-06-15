@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://cr0yq67hcungo"]
+
+[ext_resource type="PackedScene" uid="uid://brcfr2vw38vbb" path="res://scenes/objects/interactable.tscn" id="1_1c3kw"]
+[ext_resource type="Texture2D" uid="uid://c151psq5h6dvw" path="res://sprites/kia.png" id="2_qex4f"]
+[ext_resource type="Script" uid="uid://c5fo8rbq2jkp" path="res://scenes/objects/rat_roll_upgrade.gd" id="2_sbm7n"]
+
+[node name="RatRollUpgrade" instance=ExtResource("1_1c3kw")]
+script = ExtResource("2_sbm7n")
+
+[node name="Sprite2D" parent="." index="0"]
+scale = Vector2(0.0260417, 0.0462963)
+texture = ExtResource("2_qex4f")
+
+[node name="Label" parent="." index="2"]
+text = "upgrade!"
